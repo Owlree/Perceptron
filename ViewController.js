@@ -15,6 +15,9 @@ class ViewController {
     // set model event callbacks
     this.m_GeometryModel.setChangedCallback((action) => this.__modelChanged(action));
 
+    // add resized callback to view
+    this.m_View.setResizedCallback(() => this.__viewResized());
+
     // nothing is learned in the beginning
     this.m_Learned = false;
 
@@ -28,6 +31,20 @@ class ViewController {
     this.m_GeometryModel.addPoint(0.49, 0.81, 1.0);
     this.m_GeometryModel.addPoint(0.64, 0.75, 1.0);
     this.__learn();
+  }
+
+  __viewResized() {
+    this.m_View.clear();
+    let points = this.m_GeometryModel.getPoints()
+    for (let i in points) {
+      let x = points[i].getX() * this.m_View.getWidth();
+      let y = this.m_View.getHeight() - points[i].getY() * this.m_View.getHeight();
+      if (points[i].getValue() == 0.0) {
+        this.m_View.addSquare(x, y);
+      } else if (points[i].getValue() == 1.0) {
+        this.m_View.addCircle(x, y);
+      }
+    }
   }
 
   __modelChanged(action) {

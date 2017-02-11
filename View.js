@@ -15,10 +15,13 @@ class View {
       }
     });
 
+    window.addEventListener("resize", () => { this.__resized() });
+
   }
 
   // virtual
-  __mousemoved() {}
+  __mousemoved()    {}
+  __resized() { console.log('woohoo'); }
 
   getMousePosition() {
     return this.m_Position;

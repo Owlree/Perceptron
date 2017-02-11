@@ -17,9 +17,22 @@ class SvgView extends View {
         square: "#880000",
         circle: "#008800",
         line  : "#000000"
+      },
+      callbackNames: {
+        resized: 'resized'
       }
     };
 
+    this.m_CallbackCaller = new Caller();
+
+  }
+
+  setResizedCallback(callback) {
+    this.m_CallbackCaller.setMethod(this.m_Options.callbackNames.resized, callback);
+  }
+
+  __resized() {
+    this.m_CallbackCaller.call(this.m_Options.callbackNames.resized, []);
   }
 
   // D3 objects getters
