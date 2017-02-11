@@ -56,7 +56,7 @@ class Matrix {
   getColumnsCount() { return this.m_ColumnsCount; }
 
   get(i, j) {
-    
+
     // check input
     {
       if ((typeof i !== 'number') || (typeof j !== 'number')) {
@@ -111,5 +111,25 @@ class Matrix {
       newData.push(newRow);
     }
     return new Matrix(newData);
+  }
+
+  addMatrixMut(matrix) {
+    for (let i = 0; i < this.getRowsCount(); ++i) {
+      for (let j = 0; j < this.getColumnsCount(); ++j) {
+        this.m_Data[i][j] += matrix.get(i, j);
+      }
+    }
+  }
+
+  multiplyScalarMut(scalar) {
+    for (let i = 0; i < this.getRowsCount(); ++i) {
+      for (let j = 0; j < this.getColumnsCount(); ++j) {
+        this.m_Data[i][j] *= scalar;
+      }
+    }
+  }
+
+  getMatrix() {
+    return this;
   }
 }

@@ -22,27 +22,45 @@ class ViewController {
     this.m_Learned = false;
 
     // add default points
-    this.m_GeometryModel.addPoint(0.28, 0.23, 0.0);
-    this.m_GeometryModel.addPoint(0.47, 0.18, 0.0);
-    this.m_GeometryModel.addPoint(0.66, 0.26, 0.0);
-    this.m_GeometryModel.addPoint(0.17, 0.36, 0.0);
-    this.m_GeometryModel.addPoint(0.22, 0.87, 1.0);
-    this.m_GeometryModel.addPoint(0.33, 0.82, 1.0);
-    this.m_GeometryModel.addPoint(0.49, 0.81, 1.0);
-    this.m_GeometryModel.addPoint(0.64, 0.75, 1.0);
+    this.m_GeometryModel.addPointWithValue(0.28, 0.23, 0.0);
+    this.m_GeometryModel.addPointWithValue(0.47, 0.18, 0.0);
+    this.m_GeometryModel.addPointWithValue(0.66, 0.26, 0.0);
+    this.m_GeometryModel.addPointWithValue(0.17, 0.36, 0.0);
+    this.m_GeometryModel.addPointWithValue(0.22, 0.87, 1.0);
+    this.m_GeometryModel.addPointWithValue(0.33, 0.82, 1.0);
+    this.m_GeometryModel.addPointWithValue(0.49, 0.81, 1.0);
+    this.m_GeometryModel.addPointWithValue(0.64, 0.75, 1.0);
     this.__learn();
   }
 
   __viewResized() {
     this.m_View.clear();
-    let points = this.m_GeometryModel.getPoints()
-    for (let i in points) {
-      let x = points[i].getX() * this.m_View.getWidth();
-      let y = this.m_View.getHeight() - points[i].getY() * this.m_View.getHeight();
-      if (points[i].getValue() == 0.0) {
-        this.m_View.addSquare(x, y);
-      } else if (points[i].getValue() == 1.0) {
-        this.m_View.addCircle(x, y);
+
+    // reconstruct the view based on the model
+    {
+      let points = this.m_GeometryModel.getPoints()
+      for (let i in points) {
+        let x = points[i].getX() * this.m_View.getWidth();
+        let y = this.m_View.getHeight() - points[i].getY() * this.m_View.getHeight();
+        if (points[i].getValue() == 0.0) {
+          this.m_View.addSquare(x, y);
+        } else if (points[i].getValue() == 1.0) {
+          this.m_View.addCircle(x, y);
+        }
+      }
+      let lines = this.m_GeometryModel.getLines();
+      for (let i in lines) {
+        let line = lines[i];
+        let x1 = -0.1;
+        let y1 = line.getY(-0.1);
+        let x2 = +1.1;
+        let y2 = line.getY(+1.1);
+        this.m_View.addLine(
+          x1 * this.m_View.getWidth(),
+          this.m_View.getHeight() - y1 * this.m_View.getHeight(),
+          x2 * this.m_View.getWidth(),
+          this.m_View.getHeight() - y2 * this.m_View.getHeight()
+        );
       }
     }
   }
@@ -58,6 +76,20 @@ class ViewController {
         } else if (action.point.getValue() == 1.0) {
           this.m_View.addCircle(x, y);
         }
+        break;
+      }
+      case 'addedLine':
+      {
+        let x1 = -0.1;
+        let y1 = action.line.getY(-0.1);
+        let x2 = +1.1;
+        let y2 = action.line.getY(+1.1);
+        this.m_View.addLine(
+          x1 * this.m_View.getWidth(),
+          this.m_View.getHeight() - y1 * this.m_View.getHeight(),
+          x2 * this.m_View.getWidth(),
+          this.m_View.getHeight() - y2 * this.m_View.getHeight()
+        );
         break;
       }
       case 'reset':
@@ -82,12 +114,10 @@ class ViewController {
     let geometryX = pos.x / this.m_View.getWidth();
     let geometryY = (this.m_View.getHeight() - pos.y) / this.m_View.getHeight();
 
-    console.log([geometryX, geometryY]);
-
     if (this.m_View.getButtonSquares().classed('active')) {
-      this.m_GeometryModel.addPoint(geometryX, geometryY, 0.0);
+      this.m_GeometryModel.addPointWithValue(geometryX, geometryY, 0.0);
     } else if (this.m_View.getButtonCircles().classed('active')) {
-      this.m_GeometryModel.addPoint(geometryX, geometryY, 1.0);
+      this.m_GeometryModel.addPointWithValue(geometryX, geometryY, 1.0);
     }
 
     if (this.m_GeometryModel.getPointsCount(0.0) > 0 &&
@@ -133,18 +163,11 @@ class ViewController {
       let b = weights[2];
       let c = weights[0];
 
-      let f = function(x) {
-        return - (c + a * x) / b;
-      }
+      let slope      = +(a / b);
+      let yIntercept = -(c / b);
 
-      let begin = -0.1;
-      let end   = +1.1;
+      this.m_GeometryModel.addLine(slope, yIntercept);
 
-      let x1 = begin * this.m_View.getWidth();
-      let y1 = this.m_View.getHeight() - f(begin) * this.m_View.getHeight();
-      let x2 = end   * this.m_View.getWidth();
-      let y2 = this.m_View.getHeight() - f(end)   * this.m_View.getHeight();
-      this.m_View.addLine(x1, y1, x2, y2);
       this.m_Learned = true;
     }
   }
