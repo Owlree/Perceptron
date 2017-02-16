@@ -51,7 +51,7 @@ class Matrix {
 
   }
 
-  // dimmentions getters
+  // dimension getters
   getRowsCount()    { return this.m_RowsCount;    }
   getColumnsCount() { return this.m_ColumnsCount; }
 
