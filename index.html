@@ -1,102 +1,10 @@
+<!doctype html>
 <html>
   <head>
-    <style>
-
-      body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-      }
-
-      button {
-        padding: 1ch;
-        background-color: white;
-        color: black;
-        border: none;
-        border: 1px solid black;
-        font-size: 0.5em;
-      }
-
-      button:hover, button.active {
-        background-color: black;
-        color: white;
-      }
-
-      button.special {
-        border-color: #880000;
-        color: #880000;
-      }
-
-      button.special:hover {
-        background-color: #880000;
-        color: white;
-      }
-
-      button:disabled, button:disabled:hover {
-        color: grey;
-        border-color: grey;
-        background-color: white;
-      }
-
-
-      #board {
-        width:  100vw;
-        height: 100vh;
-      }
-
-      #controls {
-        position: absolute;
-        left: 1ch;
-        top: 1ch;
-      }
-
-      #equation {
-        position: absolute;
-        bottom: 2vh;
-        font-family: monospace;
-        width: 100vw;
-        text-align: center;
-        font-size: 1.2em;
-      }
-
-      #error {
-        width: 100vw;
-        background-color: red;
-        color: white;
-        padding: 3ch 0px;
-        text-align: center;
-        font-family: sans-serif;
-        position: absolute;
-        bottom: 0;
-      }
-
-    </style>
+    <title>Getting Started</title>
+    <script src="https://unpkg.com/lodash@4.16.6"></script>
   </head>
   <body>
-    <div id='controls'>
-      <button id='button-squares' class='active'>ADD SQUARES</button>
-      <button id='button-circles'>ADD CIRCLES</button>
-      <button id='button-learn' class='special' disabled>LEARN</button>
-    </div>
-    <div id='error' hidden>Time limit exceded. Data might not be linearly separable.</div>
-    <svg id='board'>
-      <g id='squares'></g>
-      <g id='circles'></g>
-    </svg>
-    <!-- <div id='equation'>ax + by + c = 0</div> -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.5.0/d3.js'></script>
-
-    <script src='Matrix.js'></script>
-    <script src='Vector.js'></script>
-    <script src='Point2D.js'></script>
-    <script src='Point2DWithValue.js'></script>
-    <script src='Line2D.js'></script>
-    <script src='Caller.js'></script>
-    <script src='Counter.js'></script>
-    <script src='View.js'></script>
-    <script src='Perceptron.js'></script>
-    <script src='GeometryModel.js'></script>
-    <script src='SvgView.js'></script>
-    <script src='ViewController.js'></script>
+    <script src="dist/main.js"></script>
   </body>
 </html>
