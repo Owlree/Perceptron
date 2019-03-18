@@ -7,9 +7,12 @@ interface Drawable {
 class View {
     private mDrawables: Drawable[] = []
     private mCanvasContext: CanvasRenderingContext2D;
+    private mCanvasElement: HTMLCanvasElement;
     
-     constructor(canvasContext: CanvasRenderingContext2D) {
-         this.mCanvasContext = canvasContext;
+     constructor(canvasElement: HTMLCanvasElement) {
+         this.mCanvasElement = canvasElement;
+         this.mCanvasContext = canvasElement.getContext('2d');
+         this.mCanvasContext.translate(canvas.width / 2, canvas.height / 2);
      }
     
     public Draw() {
@@ -23,8 +26,7 @@ class View {
     }
     
     public Clear() {
-        this.mCanvasContext.fillStyle = 'white';
-        this.mCanvasContext.fillRect(0, 0, 5000, 5000);
+        this.mCanvasContext.clearRect(-2500, -2500, 5000, 5000);
     }
 }
 
@@ -37,7 +39,7 @@ class Square implements Drawable {
     public mWidth: number = 0;
     
     public Draw(canvasContext: CanvasRenderingContext2D): void {
-        context.beginPath();
+        canvasContext.beginPath();
         canvasContext.translate(
             this.mX, 
             this.mY);
@@ -60,15 +62,15 @@ canvas.height = window.innerHeight * 0.9;
 canvas.style.backgroundColor = 'white';
 canvas.style.margin = 'auto';
 
-let context: CanvasRenderingContext2D = canvas.getContext('2d');
-
 document.body.appendChild(canvas);
-let view: View = new View(context);
+
+let view: View = new View(canvas);
 let square = new Square();
+
 view.AddDrawable(square);
 
-square.mX = canvas.width / 2;
-square.mY = canvas.height / 2;
+square.mX = 0;
+square.mY = 0;
 square.mHeight = canvas.height * 0.9;
 square.mWidth = canvas.width * 0.9;
 
