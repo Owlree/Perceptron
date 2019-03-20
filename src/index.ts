@@ -1,29 +1,22 @@
-import { View } from './view';
-import { Square } from './square';
+import * as paper from 'paper'
 
-let canvas: HTMLCanvasElement = document.createElement('canvas');
-canvas.width  = window.innerWidth * 0.9;
-canvas.height = window.innerHeight * 0.9;
-canvas.style.backgroundColor = 'white';
-canvas.style.margin = 'auto';
+window.onload = function() {
+    paper.setup('myCanvas');
 
-document.body.appendChild(canvas);
+    const path = new paper.Path();
 
-let view: View = new View(canvas);
-let square = new Square();
+    path.strokeColor = '#3fe3ef';
 
-view.AddDrawable(square);
-
-square.mX = 0;
-square.mY = 0;
-square.mHeight = 200;
-square.mWidth = 200;
-
-function Loop(timestamp: number): void {
-    view.Clear();
-    square.mRotation = (timestamp % 10000) / 9999 * Math.PI;
-    view.Draw();
-    window.requestAnimationFrame(Loop);
+    const square = paper.Shape.Rectangle(
+        new paper.Point(-100, -100), 
+        new paper.Point(100, 100));
+        
+    square.strokeColor = '#3fe3ef';
+    
+    paper.view.onFrame = function(event: paper.IFrameEvent): void {
+        square.rotate(event.delta * 10);
+    }
+    
+    paper.project.activeLayer.transform(
+        new paper.Matrix(1,0,0,-1,paper.view.center.x, paper.view.center.y));
 }
-
-Loop(0);
