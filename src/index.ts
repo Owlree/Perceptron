@@ -16,7 +16,8 @@ window.onload = function(): void {
     
     paper.project.activeLayer.transform(
         new paper.Matrix(
-            1, 0, 0, -1,
+            1,  0, 
+            0, -1,
             paper.view.center.x, 
             paper.view.center.y));
 }
