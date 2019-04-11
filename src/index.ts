@@ -34,13 +34,39 @@ window.onload = function(): void {
     let tangentView: paper.Path = 
         new paper.Path(
             GetPoints(
-                GetApproximateTangent(0, sinusoidal)));
+                GetApproximateTangent(100, sinusoidal)));
     tangentView.strokeColor = '#FFDDBB';
+    
+    let globalX: number = 0;
+    
+    const transform: paper.Matrix = new paper.Matrix(
+        +1,  0,
+         0, -1,
+         paper.view.center.x,
+         paper.view.center.y);
+         
+    const inverse: paper.Matrix = new paper.Matrix(
+        +1,  0,
+         0, -1,
+         -paper.view.center.x,
+         paper.view.center.y);
+    
+    paper.view.onMouseMove = function(event: paper.MouseEvent): void {
+        globalX = inverse.transform(event.point).x;
+    };
+    
+    paper.view.onFrame = function(event: paper.IFrameEvent): void {
+        
+        // Inverse transform the layer
+        paper.project.activeLayer.transform(inverse);
+        
+        tangentView.removeSegments();
+        tangentView.addSegments(
+            GetPoints(
+                GetApproximateTangent(globalX, sinusoidal)));
+                
+        paper.project.activeLayer.transform(transform);
+    };
 
-    paper.project.activeLayer.transform(
-        new paper.Matrix(
-            1,  0,
-            0, -1,
-            paper.view.center.x,
-            paper.view.center.y));
+    paper.project.activeLayer.transform(transform);
 }
