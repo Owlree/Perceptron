@@ -8,7 +8,9 @@ function GetPoints(f: (x: number) => number): Array<paper.Point> {
     return points;
 }
 
-function GetApproximateTangent(x: number, f: (x: number) => number): ((x: number) => number) {
+function GetApproximateTangent(
+    x: number, 
+    f: (x: number) => number): ((x: number) => number) {
     const delta = 0.1;
     const a = new paper.Point(x - delta, f(x - delta));
     const b = new paper.Point(x + delta, f(x + delta));
