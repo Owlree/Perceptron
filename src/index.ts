@@ -38,6 +38,7 @@ window.onload = function(): void {
     tangentView.strokeColor = '#FFDDBB';
     
     let globalX: number = 0;
+    let globalY: number = 0;
     
     const transform: paper.Matrix = new paper.Matrix(
         +1,  0,
@@ -52,7 +53,8 @@ window.onload = function(): void {
          paper.view.center.y);
     
     paper.view.onMouseMove = function(event: paper.MouseEvent): void {
-        globalX = inverse.transform(event.point).x;
+        globalX = inverse.transform(event.point).x
+        globalY = inverse.transform(event.point).y;
     };
     
     paper.view.onFrame = function(event: paper.IFrameEvent): void {
@@ -60,10 +62,13 @@ window.onload = function(): void {
         // Inverse transform the layer
         paper.project.activeLayer.transform(inverse);
         
-        tangentView.removeSegments();
-        tangentView.addSegments(
-            GetPoints(
-                GetApproximateTangent(globalX, sinusoidal)));
+        if (globalY - 50 < sinusoidal(globalX) && 
+            sinusoidal(globalX) < globalY + 50) {
+            tangentView.removeSegments();
+            tangentView.addSegments(
+                GetPoints(
+                    GetApproximateTangent(globalX, sinusoidal)));
+        }
                 
         paper.project.activeLayer.transform(transform);
     };
