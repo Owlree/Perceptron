@@ -52,25 +52,34 @@ window.onload = function(): void {
          -paper.view.center.x,
          paper.view.center.y);
     
-    paper.view.onMouseMove = function(event: paper.MouseEvent): void {
+    paper.view.onMouseDrag = function(event: paper.MouseEvent): void {
         globalX = inverse.transform(event.point).x
         globalY = inverse.transform(event.point).y;
+        
+        paper.project.activeLayer.transform(inverse);
+        
+        tangentView.removeSegments();
+        tangentView.addSegments(
+            GetPoints(
+                GetApproximateTangent(globalX, sinusoidal)));
+        
+        paper.project.activeLayer.transform(transform);
     };
     
     paper.view.onFrame = function(event: paper.IFrameEvent): void {
         
         // Inverse transform the layer
-        paper.project.activeLayer.transform(inverse);
+        // paper.project.activeLayer.transform(inverse);
         
-        if (globalY - 50 < sinusoidal(globalX) && 
-            sinusoidal(globalX) < globalY + 50) {
-            tangentView.removeSegments();
-            tangentView.addSegments(
-                GetPoints(
-                    GetApproximateTangent(globalX, sinusoidal)));
-        }
+        // if (globalY - 50 < sinusoidal(globalX) && 
+        //     sinusoidal(globalX) < globalY + 50) {
+        //     tangentView.removeSegments();
+        //     tangentView.addSegments(
+        //         GetPoints(
+        //             GetApproximateTangent(globalX, sinusoidal)));
+        // }
                 
-        paper.project.activeLayer.transform(transform);
+        // paper.project.activeLayer.transform(transform);
     };
 
     paper.project.activeLayer.transform(transform);
