@@ -1,5 +1,10 @@
 import * as paper from 'paper'
 
+enum Color {
+    Frangipani  = '#FFDDBB',
+    SpringGreen = '#33FFAA'
+}
+
 function GetPoints(f: (x: number) => number): Array<paper.Point> {
     let points: Array<paper.Point> = [];
     for (let i = -1000; i < +1000; ++i) {
@@ -29,13 +34,13 @@ window.onload = function(): void {
 
     const sinusoidalView: paper.Path = 
         new paper.Path(GetPoints(sinusoidal));
-    sinusoidalView.strokeColor = '#33FFAA';
+    sinusoidalView.strokeColor = Color.SpringGreen;
     
     let tangentView: paper.Path = 
         new paper.Path(
             GetPoints(
                 GetApproximateTangent(100, sinusoidal)));
-    tangentView.strokeColor = '#FFDDBB';
+    tangentView.strokeColor = Color.Frangipani;
     
     let globalX: number = 0;
     let globalY: number = 0;
@@ -64,22 +69,6 @@ window.onload = function(): void {
                 GetApproximateTangent(globalX, sinusoidal)));
         
         paper.project.activeLayer.transform(transform);
-    };
-    
-    paper.view.onFrame = function(event: paper.IFrameEvent): void {
-        
-        // Inverse transform the layer
-        // paper.project.activeLayer.transform(inverse);
-        
-        // if (globalY - 50 < sinusoidal(globalX) && 
-        //     sinusoidal(globalX) < globalY + 50) {
-        //     tangentView.removeSegments();
-        //     tangentView.addSegments(
-        //         GetPoints(
-        //             GetApproximateTangent(globalX, sinusoidal)));
-        // }
-                
-        // paper.project.activeLayer.transform(transform);
     };
 
     paper.project.activeLayer.transform(transform);
