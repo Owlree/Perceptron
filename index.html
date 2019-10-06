@@ -4,27 +4,37 @@
 <head>
     <title>Perceptron</title>
     <style>
-        canvas {
+        #myCanvas {
             position: absolute;
             top:0;
             bottom: 0;
             left: 0;
             right: 0;
 
-            height: 90vh;
-            width: 90vw;
+            height: 100vh;
+            width: 100vw;
 
             margin: auto;
         }
-        
+
         body {
             background: white;
+
+            font-family: serif;
         }
     </style>
 </head>
 
 <body>
+    <center style='font-size: 1.5em; margin-top: 1em'>
+        Click anywhere to set the <i>abscissa</i> of the tangent point.
+    </center>
     <canvas id='myCanvas' resize='true'></canvas>
+    <p style='position: absolute; bottom: 0; right: 1em; opacity: .5'>
+        Built with <a href='http://paperjs.org/'>Paper.js</a>,
+        <a href='http://www.typescriptlang.org/'>TypeScript</a>, and love for
+        mathematics.
+    </p>
     <script src='dist/index.js' charset='utf-8'></script>
 </body>
 
