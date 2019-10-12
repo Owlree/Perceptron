@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Perceptron—Sinusoidal Tangent</title>
+    <style>
+        #canvas {
+            position: fixed;
+            top:0;
+            left: 0;
+
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #canvas:active {
+            cursor: move;
+        }
+
+        body {
+            background: white;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+
+            font-family: serif;
+        }
+    </style>
+</head>
+
+<body>
+    <center style='margin-top: 1em'>
+        Click anywhere to set the <i>abscissa</i> of the tangent point.
+    </center>
+    <canvas id='canvas' resize='true'></canvas>
+    <p style='position: absolute; bottom: 0; right: 1em; opacity: .5'>
+        Built with <a href='http://paperjs.org/'>Paper.js</a>,
+        <a href='http://www.typescriptlang.org/'>TypeScript</a>, and love for
+        mathematics.
+    </p>
+    <script src='dist/index.js' charset='utf-8'></script>
+</body>
+
+</html>
