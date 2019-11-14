@@ -4,10 +4,10 @@ import * as paper from 'paper';
  * Returns a subset of the graph of a given one variable function, with points
  * having equally spaced abscissae.
  *
- * @param f {Function} The function to compute the points for
- * @param from {number} Minimum abscissa of a point in the set
- * @param to {number} Maximum absissa of a point in the set
- * @param resolution {nunber} Distance between two consecutive points, defaults
+ * @param f The function to compute the points for
+ * @param from Minimum abscissa of a point in the set
+ * @param to Maximum absissa of a point in the set
+ * @param resolution Distance between two consecutive points, defaults
  *                            to (to - from) / 100
  */
 export function GetPoints(
@@ -28,9 +28,9 @@ export function GetPoints(
  * Returns a one variable function representing the approximation of the tanget
  * of the given function at the given point.
  *
- * @param f {Function} The function to compute the tangent for
- * @param x {number} The point at which to compute the tangent
- * @param delta {number} Distance between approxiation points
+ * @param f The function to compute the tangent for
+ * @param x The point at which to compute the tangent
+ * @param delta Distance between approxiation points
  */
 export function GetApproximateTangent(
     f: (x: number) => number,
