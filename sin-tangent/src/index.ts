@@ -4,10 +4,10 @@ import { GetPoints, GetApproximateTangent } from './numerical';
 
 const render = () => {
 
-  paper.setup('canvas');
+  paper.setup('tangent');
 
+  // Construct sinusoidal
   {
-    // Construct sinusoidal
     const path = new paper.Path();
     path.strokeColor = Colors.Frangipan;
     path.strokeWidth = 1e-2;
@@ -31,8 +31,8 @@ const render = () => {
     setup();
   }
 
+  // Construct tangent
   {
-    // Construct tangent
     const path = new paper.Path(
       GetPoints(
         GetApproximateTangent(Math.sin, 0, 1),
@@ -54,8 +54,8 @@ const render = () => {
     paper.view.on('mousedown', handle);
   }
 
+  // Construct indicator line
   {
-    // Construct indicator line
     const path = new paper.Path();
     path.strokeColor = Colors.Black;
     path.strokeWidth = paper.view.bounds.height / 1000;
@@ -73,8 +73,8 @@ const render = () => {
     paper.view.on('mouseup', () => {path.removeSegments()});
   }
 
+  // Construct tangent point
   {
-    // Construct tangent point
     const path = new paper.Path.Circle(paper.view.center, 0.03);
     path.fillColor = Colors.SpringGreen;
     path.visible = false;
