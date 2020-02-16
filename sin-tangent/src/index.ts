@@ -1,93 +1,150 @@
 import * as paper from 'paper';
-import { Colors } from './colors';
-import { GetPoints, GetApproximateTangent } from './numerical';
+import * as math from 'mathjs';
 
-const render = () => {
+import * as themes from './themes';
 
-  paper.setup('tangent');
+paper.setup('canvas');
 
-  // Construct sinusoidal
-  {
-    const path = new paper.Path();
-    path.strokeColor = Colors.Frangipan;
-    path.strokeWidth = 1e-2;
+const functionPath: paper.Path = new paper.Path();
+const tangentPath: paper.Path = new paper.Path();
+const fn: math.EvalFunction = math.parse('sin(x)').compile();
+const dr: math.EvalFunction = math.derivative('sin(x)', 'x');
+const line: math.EvalFunction = math.parse('m * x + b');
+const backgroundRectangle: paper.Rectangle = new paper.Rectangle(
+ new paper.Point(0, 0), new paper.Point(100, 100));
+const backgroundPath: paper.Shape.Rectangle =
+  new paper.Shape.Rectangle(backgroundRectangle);
+backgroundPath.sendToBack();
+let mousePosition: paper.Point = new paper.Point(0, 0);
 
-    const setup = () => {
-      const size = Math.min(
-        paper.view.viewSize.width, paper.view.viewSize.height);
-      paper.view.transform(paper.view.matrix.inverted());
-      paper.view.transform(new paper.Matrix(
-        size / (2 * Math.PI), 0,
-        0, -size / (2 * Math.PI),
-        paper.view.viewSize.width / 2, paper.view.viewSize.height / 2));
+/**
+ * @param fn Function to evaluate
+ * @param from First point to evaluate
+ * @param to Last point to evaluate
+ * @count How many points to evaluate
+ * @scope Scope to pass through to the function (x will be overriden)
+ * @returns A list of values of function {@code fn} evaluated at {@code count}
+ */
+function getSegments(
+  fn: math.EvalFunction, from: number, to: number, count: number,
+  scope: object = {}): paper.Segment[] {
 
-      path.removeSegments();
-      path.add(
-        ...GetPoints(
-          Math.sin, paper.view.bounds.left, paper.view.bounds.right));
+  const segments: paper.Segment[] = [];
+  for (let x = from; x <= to; x += (to - from) / count) {
+    const y: number = fn.evaluate({...scope, x: x});
+    const point: paper.Point = new paper.Point(x, y);
+    segments.push(new paper.Segment(point));
+  }
+  return segments;
+}
+
+/**
+ * Sets up the path of the main function.
+ */
+function setupFunction(): void {
+  functionPath.strokeWidth = 1 / paper.view.viewSize.height * 2;
+  functionPath.removeSegments();
+  const left: number = paper.view.bounds.left;
+  const right: number = paper.view.bounds.right;
+  functionPath.addSegments(getSegments(fn, left, right, 100));
+}
+
+/**
+ * Sets up the path of the tangent.
+ * @param point Where to compute the tangent on the main function
+ */
+function setupTangent(): void {
+  tangentPath.strokeWidth = 1 / paper.view.viewSize.height * 2;
+  tangentPath.removeSegments();
+  const left: number = paper.view.bounds.left;
+  const right: number = paper.view.bounds.right;
+  const slope: number = dr.evaluate({x: mousePosition.x});
+  tangentPath.addSegments(getSegments(line, left, right, 2, {
+    m: slope,
+    b: fn.evaluate({x: mousePosition.x}) - slope * mousePosition.x
+  }));
+}
+
+/**
+ * Performs initial / resize setup.
+ */
+function setup() {
+  const width: number = paper.view.viewSize.width;
+  const height: number = paper.view.viewSize.height;
+  const size: number = Math.min(width, height);
+  paper.view.transform(paper.view.matrix.inverted());
+  paper.view.transform(new paper.Matrix(
+    size / Math.PI, 0,
+    0, -size / Math.PI,
+    width / 2, height / 2
+  ));
+
+  setupFunction();
+  setupTangent();
+
+  backgroundPath.position = paper.view.bounds.center;
+  backgroundPath.size = paper.view.size;
+}
+
+/**
+ * @param theme Theme to activate
+ */
+function activateTheme(theme: themes.Theme): void {
+  functionPath.strokeColor = theme.Main;
+  tangentPath.strokeColor = theme.Blue;
+  backgroundPath.fillColor = theme.Background;
+}
+
+/**
+ * Activates dark mode.
+ */
+function activateDarkMode(): void {
+  activateTheme(themes.DarkTheme);
+}
+
+/**
+ * Activates light mode.
+ */
+function activateLightMode(): void {
+  activateTheme(themes.LightTheme);
+}
+
+// Setup light / dark mode based on client preference
+(function(): void {
+  const isDarkMode =
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  const isLightMode =
+    window.matchMedia("(prefers-color-scheme: light)").matches
+  const isNotSpecified =
+    window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified;
+  window.matchMedia("(prefers-color-scheme: dark)")
+    .addListener(e => e.matches && activateDarkMode());
+  window.matchMedia("(prefers-color-scheme: light)")
+    .addListener(e => e.matches && activateLightMode());
+  if(isDarkMode) activateDarkMode()
+  if(isLightMode) activateLightMode()
+  if(isNotSpecified || hasNoSupport) {
+    const now = new Date();
+    const hour = now.getHours();
+    if (hour < 4 || hour >= 16) {
+      activateDarkMode();
     }
-
-    window.addEventListener('resize', setup);
-    setup();
   }
+})();
 
-  // Construct tangent
-  {
-    const path = new paper.Path(
-      GetPoints(
-        GetApproximateTangent(Math.sin, 0, 1),
-        paper.view.bounds.left, paper.view.bounds.right));
-    path.strokeColor = Colors.SpringGreen;
-    path.strokeWidth = 1e-2;
+paper.view.on('resize', setup);
+setup();
 
-    const handle = (e: paper.MouseEvent) => {
-
-      // Update tangent
-      path.removeSegments();
-      path.add(
-        ...GetPoints(
-          GetApproximateTangent(Math.sin, e.point.x, 1e-2),
-          paper.view.bounds.left, paper.view.bounds.right));
-    };
-
-    paper.view.on('mousedrag', handle);
-    paper.view.on('mousedown', handle);
+let mouseDown: boolean = false;
+paper.view.on('mousedown', () => {
+  setupTangent();
+  mouseDown = true;
+});
+paper.view.on('mouseup', () => { mouseDown = false; });
+paper.view.on('mousemove', (event: paper.MouseEvent) => {
+  mousePosition = event.point;
+  if (mouseDown === true) {
+    setupTangent();
   }
-
-  // Construct indicator line
-  {
-    const path = new paper.Path();
-    path.strokeColor = Colors.Black;
-    path.strokeWidth = paper.view.bounds.height / 1000;
-    path.dashArray = [0.05, 0.02];
-
-    const handle = (e: paper.MouseEvent) => {
-
-      path.removeSegments();
-      path.add(new paper.Point(e.point.x, paper.view.bounds.top));
-      path.add(new paper.Point(e.point.x, paper.view.bounds.bottom));
-    }
-
-    paper.view.on('mousedrag', handle);
-    paper.view.on('mousedown', handle);
-    paper.view.on('mouseup', () => {path.removeSegments()});
-  }
-
-  // Construct tangent point
-  {
-    const path = new paper.Path.Circle(paper.view.center, 0.03);
-    path.fillColor = Colors.SpringGreen;
-    path.visible = false;
-
-    const handle = (e: paper.MouseEvent) => {
-      path.position = new paper.Point(e.point.x, Math.sin(e.point.x));
-      path.visible = true;
-    }
-
-    paper.view.on('mousedrag', handle);
-    paper.view.on('mousedown', handle);
-    paper.view.on('mouseup', () => {path.visible = false});
-  }
-};
-
-window.addEventListener('load', render);
+});
