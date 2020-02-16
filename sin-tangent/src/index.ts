@@ -5,17 +5,16 @@ import * as themes from './themes';
 
 paper.setup('canvas');
 
+const backgroundPath: paper.Shape.Rectangle =
+  new paper.Shape.Rectangle(paper.view.bounds);
 const functionPath: paper.Path = new paper.Path();
 const tangentPath: paper.Path = new paper.Path();
 const fn: math.EvalFunction = math.parse('sin(x)').compile();
 const dr: math.EvalFunction = math.derivative('sin(x)', 'x');
 const line: math.EvalFunction = math.parse('m * x + b');
-const backgroundRectangle: paper.Rectangle = new paper.Rectangle(
- new paper.Point(0, 0), new paper.Point(100, 100));
-const backgroundPath: paper.Shape.Rectangle =
-  new paper.Shape.Rectangle(backgroundRectangle);
-backgroundPath.sendToBack();
+let pixelUnit: number = 1;
 let mousePosition: paper.Point = new paper.Point(0, 0);
+const pointPath: paper.Path.Circle = new paper.Path.Circle(mousePosition, 3 * pixelUnit);
 
 /**
  * @param fn Function to evaluate
@@ -42,7 +41,7 @@ function getSegments(
  * Sets up the path of the main function.
  */
 function setupFunction(): void {
-  functionPath.strokeWidth = 1 / paper.view.viewSize.height * 2;
+  functionPath.strokeWidth = pixelUnit;
   functionPath.removeSegments();
   const left: number = paper.view.bounds.left;
   const right: number = paper.view.bounds.right;
@@ -54,15 +53,19 @@ function setupFunction(): void {
  * @param point Where to compute the tangent on the main function
  */
 function setupTangent(): void {
-  tangentPath.strokeWidth = 1 / paper.view.viewSize.height * 2;
+  tangentPath.strokeWidth = 2 * pixelUnit;
   tangentPath.removeSegments();
   const left: number = paper.view.bounds.left;
   const right: number = paper.view.bounds.right;
+  const point: paper.Point = new paper.Point(
+    mousePosition.x, fn.evaluate({x: mousePosition.x}));
   const slope: number = dr.evaluate({x: mousePosition.x});
   tangentPath.addSegments(getSegments(line, left, right, 2, {
     m: slope,
-    b: fn.evaluate({x: mousePosition.x}) - slope * mousePosition.x
+    b: point.y - slope * point.x
   }));
+  pointPath.position = point;
+  pointPath.scale(20 * pixelUnit / (pointPath.bounds.width / 2));
 }
 
 /**
@@ -71,8 +74,9 @@ function setupTangent(): void {
 function setup() {
   const width: number = paper.view.viewSize.width;
   const height: number = paper.view.viewSize.height;
-  const size: number = Math.min(width, height);
+  const size: number = Math.min(width / 2, height);
   paper.view.transform(paper.view.matrix.inverted());
+  pixelUnit = 1 / size;
   paper.view.transform(new paper.Matrix(
     size / Math.PI, 0,
     0, -size / Math.PI,
@@ -93,6 +97,7 @@ function activateTheme(theme: themes.Theme): void {
   functionPath.strokeColor = theme.Main;
   tangentPath.strokeColor = theme.Blue;
   backgroundPath.fillColor = theme.Background;
+  pointPath.fillColor = theme.Blue;
 }
 
 /**
@@ -137,14 +142,15 @@ paper.view.on('resize', setup);
 setup();
 
 let mouseDown: boolean = false;
-paper.view.on('mousedown', () => {
-  setupTangent();
+paper.view.on('mousedown', (event: paper.MouseEvent) => {
+  mousePosition = event.point;
   mouseDown = true;
+  setupTangent();
 });
 paper.view.on('mouseup', () => { mouseDown = false; });
 paper.view.on('mousemove', (event: paper.MouseEvent) => {
-  mousePosition = event.point;
   if (mouseDown === true) {
+    mousePosition = event.point;
     setupTangent();
   }
 });
