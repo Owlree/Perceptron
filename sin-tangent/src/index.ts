@@ -14,7 +14,8 @@ const dr: math.EvalFunction = math.derivative('sin(x)', 'x');
 const line: math.EvalFunction = math.parse('m * x + b');
 let pixelUnit: number = 1;
 let mousePosition: paper.Point = new paper.Point(0, 0);
-const pointPath: paper.Path.Circle = new paper.Path.Circle(mousePosition, 3 * pixelUnit);
+const pointPath: paper.Path.Circle = new paper.Path.Circle(
+  mousePosition, 3 * pixelUnit);
 
 /**
  * @param fn Function to evaluate
