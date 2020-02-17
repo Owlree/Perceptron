@@ -7,7 +7,7 @@ import Variable from './variable';
 const graphingCalculator = new GraphingCalculator('canvas');
 
 // Create the main function
-const curve: FunctionGraphic = new FunctionGraphic('sin(x)', 'x');
+const curve: FunctionGraphic = new FunctionGraphic('sin(x)');
 
 // Create a tangent line at a variable point
 const variable: Variable<number> = new Variable<number>(0);
