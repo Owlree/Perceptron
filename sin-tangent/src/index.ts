@@ -23,3 +23,5 @@ graphingCalculator.add(tangent);
 paper.view.on('mousemove', (event: paper.MouseEvent) => {
   variable.value = event.point.x;
 });
+
+tangent.color = new paper.Color('salmon');

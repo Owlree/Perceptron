@@ -10,6 +10,22 @@ import Graphic from './graphic';
 export default abstract class CurveGraphic extends Graphic {
   protected _color: paper.Color = new paper.Color('black');
   protected _width: number = 0.01;
+  constructor({
+    strokeColor = new paper.Color('black'),
+    strokeWidth = 0.01
+  }: {
+    strokeColor?: paper.Color,
+    strokeWidth?: number
+  } = {}) {
+    super();
+
+    // Create the path (but do not insert)
+    this._path = new paper.Path({
+      insert: false,
+      strokeColor: strokeColor,
+      strokeWidth: strokeWidth
+    });
+  }
   public set color(color: paper.Color) {
     this._color = color;
     if (this._path !== undefined) {

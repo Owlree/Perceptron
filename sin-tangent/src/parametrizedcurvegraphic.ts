@@ -21,7 +21,7 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
   protected _to: number = 1;
 
   constructor(xFuncStr: string, yFuncStr: string,
-    options: ParametrizedCurveGraphicOptions = {from: 0, to: 1}) {
+    {from, to, variables = {}, varStr = 'x'}: ParametrizedCurveGraphicOptions = {from: 0, to: 1}) {
 
     super();
 
@@ -29,24 +29,9 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
     this._xfn = math.parse(xFuncStr).compile();
     this._yfn = math.parse(yFuncStr).compile();
 
-    if (options.varStr !== undefined) {
-      this._varStr = options.varStr;
-    } else {
-      this._varStr = 'x';
-    }
-
-    this._from = options.from;
-    this._to = options.to;
-
-    if (options.variables !== undefined) {
-      this._variables = options.variables;
-    }
-
-    this._path = new paper.Path({
-      insert: false,
-      strokeColor: this._color,
-      strokeWidth: this._width
-    });
+    // Set necessary options
+    [this._varStr, this._from, this._to, this._variables] =
+      [varStr, from, to, variables];
 
     // Register self as a subscribed to changing variables
     for (let key in this._variables) {
