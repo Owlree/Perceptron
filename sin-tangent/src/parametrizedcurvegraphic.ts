@@ -1,4 +1,5 @@
 import * as math from 'mathjs';
+import * as paper from 'paper';
 
 import CurveGraphic from './curvegraphic';
 import FunctionScope from './functionscope';
@@ -39,7 +40,7 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
     }
   }
 
-  constructor(xFuncStr: string, yFuncStr: string, varStr: string = 'x',
+  constructor(xFuncStr: string, yFuncStr: string,
     options: ParametrizedCurveGraphicOptions = {from: 0, to: 1}) {
 
     super();
@@ -47,7 +48,12 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
     // Compile math functions
     this._xfn = math.parse(xFuncStr).compile();
     this._yfn = math.parse(yFuncStr).compile();
-    this._varStr = varStr;
+
+    if (options.varStr !== undefined) {
+      this._varStr = options.varStr;
+    } else {
+      this._varStr = 'x';
+    }
 
     this._from = options.from;
     this._to = options.to;

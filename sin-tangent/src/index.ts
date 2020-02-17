@@ -11,10 +11,9 @@ const curve: FunctionGraphic = new FunctionGraphic('sin(x)');
 
 // Create a tangent line at a variable point
 const variable: Variable<number> = new Variable<number>(0);
-const tangent: FunctionGraphic =
-  new FunctionGraphic('cos(p) * x + sin(p) - cos(p) * p', 'x', {
-    variables: {p: variable}
-  });
+const tangent: FunctionGraphic = new FunctionGraphic(
+  'cos(p) * x + sin(p) - cos(p) * p',
+  {variables: {p: variable}});
 
 // Add both of them to the graphing calculator
 graphingCalculator.add(curve);

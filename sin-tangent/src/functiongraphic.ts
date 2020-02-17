@@ -6,8 +6,7 @@ import ParametrizedCurveGraphic from './parametrizedcurvegraphic';
  * Object that represents the graph of an one variable function.
  */
 export default class FunctionGraphic extends ParametrizedCurveGraphic implements BoundsSubscriber {
-  constructor(yFuncStr: string, varStr: string = 'x',
-    options: FunctionGraphicOptions = {}) {
+  constructor(yFuncStr: string, options: FunctionGraphicOptions = {}) {
 
     if (options.from !== undefined) {
       var from = options.from;
@@ -21,10 +20,17 @@ export default class FunctionGraphic extends ParametrizedCurveGraphic implements
       var to = 1;
     }
 
-    super('x', yFuncStr, varStr, {
+    if (options.varStr !== undefined) {
+      var varStr = options.varStr;
+    } else {
+      var varStr = 'x';
+    }
+
+    super(varStr, yFuncStr, {
       from: from,
       to: to,
-      variables: options.variables
+      variables: options.variables,
+      varStr: varStr
     });
   }
 

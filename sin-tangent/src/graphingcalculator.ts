@@ -1,3 +1,5 @@
+import * as paper from 'paper';
+
 import BoundsSubscriber from './boundssubscriber';
 import Graphic from './graphic';
 

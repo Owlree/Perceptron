@@ -1,4 +1,7 @@
+import * as paper from 'paper';
+
 import Graphic from './graphic';
+
 
 /**
  * Abstract class for a curve graphic. Deals with all visual options. It can't
