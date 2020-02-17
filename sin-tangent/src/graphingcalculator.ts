@@ -72,7 +72,6 @@ export default class GraphingCalculator {
     } else {
       this._backgroundPath.fillColor = color;
     }
-
   }
 
   public add(graphic: Graphic): void {
