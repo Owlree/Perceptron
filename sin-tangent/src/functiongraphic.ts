@@ -5,7 +5,10 @@ import ParametrizedCurveGraphic from './parametrizedcurvegraphic';
 /**
  * Object that represents the graph of an one variable function.
  */
-export default class FunctionGraphic extends ParametrizedCurveGraphic implements BoundsSubscriber {
+export default class FunctionGraphic
+  extends ParametrizedCurveGraphic
+  implements BoundsSubscriber {
+
   constructor(yFuncStr: string, {
     from = 0, to = 1, varStr = 'x', variables = {}
   }: FunctionGraphicOptions = {}) {
