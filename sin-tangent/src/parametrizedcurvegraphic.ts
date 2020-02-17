@@ -20,26 +20,6 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
   protected _from: number = 0;
   protected _to: number = 1;
 
-  private getX(i: number): number {
-    if (this._xfn !== undefined) {
-      const scope: { [key: string]: number; } = this.getScope();
-      scope[this._varStr] = i;
-      return this._xfn.evaluate(scope);
-    } else {
-      throw('Missing x coordinate function');
-    }
-  }
-
-  private getY(i: number): number {
-    if (this._yfn !== undefined) {
-      const scope: { [key: string]: number; } = this.getScope();
-      scope[this._varStr] = i;
-      return this._yfn.evaluate(scope);
-    } else {
-      throw('Missing y coordinate function');
-    }
-  }
-
   constructor(xFuncStr: string, yFuncStr: string,
     options: ParametrizedCurveGraphicOptions = {from: 0, to: 1}) {
 
@@ -77,6 +57,26 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
     }
 
     this.build();
+  }
+
+  private getX(i: number): number {
+    if (this._xfn !== undefined) {
+      const scope: { [key: string]: number; } = this.getScope();
+      scope[this._varStr] = i;
+      return this._xfn.evaluate(scope);
+    } else {
+      throw('Missing x coordinate function');
+    }
+  }
+
+  private getY(i: number): number {
+    if (this._yfn !== undefined) {
+      const scope: { [key: string]: number; } = this.getScope();
+      scope[this._varStr] = i;
+      return this._yfn.evaluate(scope);
+    } else {
+      throw('Missing y coordinate function');
+    }
   }
 
   /**
