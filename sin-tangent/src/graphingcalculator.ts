@@ -3,6 +3,7 @@ import * as paper from 'paper';
 import BoundsSubscriber from './boundssubscriber';
 import Graphic from './graphic';
 
+
 export default class GraphingCalculator {
   private _graphics: Array<Graphic> = [];
   private _bounds: paper.Rectangle = new paper.Rectangle(

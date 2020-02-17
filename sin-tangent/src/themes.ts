@@ -1,5 +1,6 @@
 import * as paper from 'paper';
 
+
 export interface Theme {
   Red: paper.Color,
   Blue: paper.Color,
