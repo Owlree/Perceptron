@@ -20,8 +20,12 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
   protected _from: number = 0;
   protected _to: number = 1;
 
-  constructor(xFuncStr: string, yFuncStr: string,
-    {from, to, variables = {}, varStr = 'x'}: ParametrizedCurveGraphicOptions = {from: 0, to: 1}) {
+  constructor(xFuncStr: string, yFuncStr: string, {
+    from = 0,
+    to = 1,
+    variables = {},
+    varStr = 'x'
+  }: ParametrizedCurveGraphicOptions = {}) {
 
     super();
 

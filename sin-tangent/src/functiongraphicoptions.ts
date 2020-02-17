@@ -1,9 +1,5 @@
-import VariablesDictionary from './variablesdictionary';
+import ParametrizedCurveGraphicOptions from './parametrizedcurvegraphicoptions';
 
 
-export default interface FunctionGraphicOptions {
-  from?: number,
-  to?: number,
-  variables?: VariablesDictionary,
-  varStr?: string
-}
+export default interface FunctionGraphicOptions
+  extends ParametrizedCurveGraphicOptions {}

@@ -1,5 +1,6 @@
 import * as paper from 'paper';
 
+import CurveGraphicOptions from './curvegraphicoptions';
 import Graphic from './graphic';
 
 
@@ -13,10 +14,7 @@ export default abstract class CurveGraphic extends Graphic {
   constructor({
     strokeColor = new paper.Color('black'),
     strokeWidth = 0.01
-  }: {
-    strokeColor?: paper.Color,
-    strokeWidth?: number
-  } = {}) {
+  }: CurveGraphicOptions = {}) {
     super();
 
     // Create the path (but do not insert)
