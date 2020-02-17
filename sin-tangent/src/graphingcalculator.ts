@@ -2,9 +2,14 @@ import * as paper from 'paper';
 
 import BoundsSubscriber from './boundssubscriber';
 import Graphic from './graphic';
+import Variable from './variable';
 
 
 export default class GraphingCalculator {
+  private _backgroundPath: paper.Path.Rectangle | undefined = undefined;
+  private _backgroundColorVariable: Variable<paper.Color> | undefined = undefined;
+  private _backgroundColorVariableChangedCallback:
+    ((variable: Variable<paper.Color>) => void) | undefined;
   private _graphics: Array<Graphic> = [];
   private _bounds: paper.Rectangle = new paper.Rectangle(
     new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
@@ -26,6 +31,20 @@ export default class GraphingCalculator {
       0, 1,
       -this._bounds.center.x, -this._bounds.center.y
     ));
+  }
+
+  constructor(canvasId: string) {
+    paper.setup(canvasId);
+    this._backgroundPath = new paper.Path.Rectangle(this._bounds);
+    this._backgroundPath.fillColor = new paper.Color('pink');
+    paper.view.on('resize', () => { this.setup() });
+    this.setup();
+  }
+
+  public set bounds(bounds: paper.Rectangle) {
+    this._bounds = bounds;
+    this._backgroundPath.bounds = bounds;
+    this.setup();
 
     // Notify the bounds update on all objects that implement the subscriber
     // interface
@@ -38,10 +57,22 @@ export default class GraphingCalculator {
     }
   }
 
-  constructor(canvasId: string) {
-    paper.setup(canvasId);
-    paper.view.on('resize', () => { this.setup() });
-    this.setup();
+  public set backgroundColor(color: Variable<paper.Color> | paper.Color) {
+    if (this._backgroundColorVariable !== undefined) {
+      this._backgroundColorVariable.unregister(this._backgroundColorVariableChangedCallback);
+      this._backgroundColorVariableChangedCallback = undefined;
+    }
+
+    if (color instanceof Variable) {
+      this._backgroundColorVariable = color;
+      this._backgroundColorVariableChangedCallback = (variable: Variable<paper.Color>) => {
+        this._backgroundPath.fillColor = variable.value;
+      }
+      this._backgroundColorVariable.register(this._backgroundColorVariableChangedCallback);
+    } else {
+      this._backgroundPath.fillColor = color;
+    }
+
   }
 
   public add(graphic: Graphic): void {
