@@ -1,5 +1,5 @@
-import ParametrizedCurveGraphicOptions from './parametrizedcurvegraphicoptions';
+import ParametricCurveGraphicOptions from './parametriccurvegraphicoptions';
 
 
 export default interface FunctionGraphicOptions
-  extends ParametrizedCurveGraphicOptions {}
+  extends ParametricCurveGraphicOptions {}

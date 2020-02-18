@@ -1,12 +1,12 @@
 import BoundsSubscriber from './boundssubscriber';
 import FunctionGraphicOptions from './functiongraphicoptions';
-import ParametrizedCurveGraphic from './parametrizedcurvegraphic';
+import ParametricCurveGraphic from './parametriccurvegraphic';
 
 /**
  * Object that represents the graph of an one variable function.
  */
 export default class FunctionGraphic
-  extends ParametrizedCurveGraphic
+  extends ParametricCurveGraphic
   implements BoundsSubscriber {
 
   constructor(yFuncStr: string, {

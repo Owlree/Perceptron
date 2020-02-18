@@ -1,7 +1,7 @@
 import CurveGraphicOptions from './curvegraphicoptions';
 import VariablesDictionary from './variablesdictionary';
 
-export default interface ParametrizedCurveGraphicOptions
+export default interface ParametricCurveGraphicOptions
   extends CurveGraphicOptions {
 
   from?: number,

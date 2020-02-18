@@ -3,7 +3,7 @@ import * as paper from 'paper';
 
 import CurveGraphic from './curvegraphic';
 import FunctionScope from './functionscope';
-import ParametrizedCurveGraphicOptions from './parametrizedcurvegraphicoptions';
+import ParametricCurveGraphicOptions from './parametriccurvegraphicoptions';
 import Variable from './variable';
 import VariablesDictionary from './variablesdictionary';
 
@@ -12,7 +12,7 @@ import VariablesDictionary from './variablesdictionary';
 /**
  * Object that represent the graph of a parametrized curve.
  */
-export default class ParametrizedCurveGraphic extends CurveGraphic {
+export default class ParametricCurveGraphic extends CurveGraphic {
 
   private _xfn: math.EvalFunction | undefined = undefined;
   private _yfn: math.EvalFunction | undefined = undefined;
@@ -27,7 +27,7 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
     variables = {},
     varStr = 'x',
     ...options
-  }: ParametrizedCurveGraphicOptions = {}) {
+  }: ParametricCurveGraphicOptions = {}) {
 
     super(options);
 
