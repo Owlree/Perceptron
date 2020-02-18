@@ -7,10 +7,9 @@ import ParametricCurveGraphicOptions from './parametriccurvegraphicoptions';
 import Variable from './variable';
 import VariablesDictionary from './variablesdictionary';
 
-// TODO (Owlree) change 'parametrized' to 'parametric'
 
 /**
- * Object that represent the graph of a parametrized curve.
+ * Object that represent the graph of a parametric curve.
  */
 export default class ParametricCurveGraphic extends CurveGraphic {
 
