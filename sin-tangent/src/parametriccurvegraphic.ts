@@ -97,5 +97,8 @@ export default class ParametricCurveGraphic extends CurveGraphic {
       const segment = new paper.Segment(point);
       this._path.add(segment);
     }
+    const point = new paper.Point(this.getX(this._to), this.getY(this._to));
+    const segment = new paper.Segment(point);
+    this._path.add(segment)
   }
 }
