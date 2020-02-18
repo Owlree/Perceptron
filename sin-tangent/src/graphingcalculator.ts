@@ -2,6 +2,7 @@ import * as paper from 'paper';
 
 import BoundsSubscriber from './boundssubscriber';
 import Graphic from './graphic';
+import ScreenTransformSubscriber from './screentransformsubscriber';
 import Variable from './variable';
 
 
@@ -30,6 +31,14 @@ export default class GraphingCalculator {
       0, 1,
       -this._bounds.center!.x!, -this._bounds.center!.y!
     ));
+
+    for (let graphic of this._graphics) {
+      const graphicAny: any = graphic as any;
+      if ('onScreenTransformUpdated' in graphicAny) {
+        const updateable: ScreenTransformSubscriber  = graphicAny as ScreenTransformSubscriber;
+        updateable.onScreenTransformUpdated(paper.view.matrix!);
+      }
+    }
   }
 
   constructor(canvasId: string) {
@@ -82,6 +91,11 @@ export default class GraphingCalculator {
     if ('onBoundsUpdated' in graphicAny) {
       const updateable: BoundsSubscriber  = graphicAny as BoundsSubscriber;
       updateable.onBoundsUpdated(this._bounds);
+    }
+
+    if ('onScreenTransformUpdated' in graphicAny) {
+      const updateable: ScreenTransformSubscriber  = graphicAny as ScreenTransformSubscriber;
+      updateable.onScreenTransformUpdated(paper.view.matrix!);
     }
 
     this._graphics.push(graphic);
