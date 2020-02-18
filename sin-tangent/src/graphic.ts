@@ -8,8 +8,9 @@ export default abstract class Graphic {
    * Removes the underlying graphic from its parent.
    */
   public remove() {
-    if (this._path)
-    this._path.remove();
+    if (this._path !== undefined) {
+      this._path.remove();
+    }
   }
 
   /**
@@ -19,7 +20,7 @@ export default abstract class Graphic {
   public addTo(owner: paper.Project | paper.Layer | paper.Group |
     paper.CompoundPath) {
 
-    if (this._path != undefined) {
+    if (this._path !== undefined) {
       this._path.addTo(owner);
     }
   }
