@@ -39,7 +39,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     [this._varStr, this._from, this._to, this._variables] =
       [varStr, from, to, variables];
 
-    // Register self as a subscribed to changing variables
+    // Register self as a subscriber to changing variables
     for (let key in this._variables) {
       const variable: Variable<number> | number = this._variables[key];
       if (variable instanceof Variable) {
