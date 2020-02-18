@@ -28,6 +28,11 @@ export default abstract class CurveGraphic extends Graphic {
     this.color = strokeColor;
   }
   public set color(color: paper.Color | Variable<paper.Color>) {
+    if (this._colorVariable !== undefined) {
+      this._colorVariable.unregister(this._colorVariableChangedCallback);
+      this._colorVariable = undefined;
+      this._colorVariableChangedCallback = undefined;
+    }
     if (color instanceof Variable) {
       this._path.strokeColor = color.value;
       this._colorVariable = color;
@@ -36,11 +41,6 @@ export default abstract class CurveGraphic extends Graphic {
       }
       this._colorVariable.register(this._colorVariableChangedCallback);
     } else if (color instanceof paper.Color) {
-      if (this._colorVariable !== undefined) {
-        this._colorVariable.unregister(this._colorVariableChangedCallback);
-        this._colorVariableChangedCallback = undefined;
-        this._colorVariable = undefined;
-      }
       this._path.strokeColor = color;
     }
   }
