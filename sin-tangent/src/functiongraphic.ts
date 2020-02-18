@@ -26,4 +26,8 @@ export default class FunctionGraphic
     this._to = bounds.right!;
     this.build()
   }
+
+  public yAtX(x: number): number {
+    return this.getY(x);
+  }
 }

@@ -51,7 +51,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     this.build();
   }
 
-  private getX(i: number): number {
+  protected getX(i: number): number {
     if (this._xfn !== undefined) {
       const scope: { [key: string]: number; } = this.getScope();
       scope[this._varStr] = i;
@@ -61,7 +61,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     }
   }
 
-  private getY(i: number): number {
+  protected getY(i: number): number {
     if (this._yfn !== undefined) {
       const scope: { [key: string]: number; } = this.getScope();
       scope[this._varStr] = i;
