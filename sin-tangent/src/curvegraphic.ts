@@ -1,5 +1,6 @@
 import * as paper from 'paper';
 
+import Colors from './colors';
 import CurveGraphicOptions from './curvegraphicoptions';
 import Graphic from './graphic';
 import Variable from './variable';
@@ -15,7 +16,7 @@ export default abstract class CurveGraphic extends Graphic {
   protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void) = undefined;
 
   constructor({
-    strokeColor = new paper.Color('black'),
+    strokeColor = Colors.mainColor,
     strokeWidth = 0.01
   }: CurveGraphicOptions = {}) {
     super();

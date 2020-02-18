@@ -1,6 +1,7 @@
 import * as paper from 'paper';
 
 import BoundsSubscriber from './boundssubscriber';
+import Colors from './colors';
 import Graphic from './graphic';
 import ScreenTransformSubscriber from './screentransformsubscriber';
 import Variable from './variable';
@@ -44,7 +45,7 @@ export default class GraphingCalculator {
   constructor(canvasId: string) {
     paper.setup(canvasId);
     this._backgroundPath = new paper.Path.Rectangle(this._bounds);
-    this._backgroundPath.fillColor = new paper.Color('pink');
+    this.backgroundColor = Colors.backgroundColor;
     paper.view.on('resize', () => { this.setup() });
     this.setup();
   }
