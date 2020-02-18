@@ -9,7 +9,9 @@ import VariablesDictionary from './variablesdictionary';
 
 
 /**
- * Object that represent the graph of a parametric curve.
+ * Class that represents a parametric curve graphic. Store data about the
+ * mathematical functions that describe the curve. Visual information is store
+ * in the parent class, {@link CurveGraphic}.
  */
 export default class ParametricCurveGraphic extends CurveGraphic {
 
