@@ -7,6 +7,7 @@ import ParametrizedCurveGraphicOptions from './parametrizedcurvegraphicoptions';
 import Variable from './variable';
 import VariablesDictionary from './variablesdictionary';
 
+// TODO (Owlree) change 'parametrized' to 'parametric'
 
 /**
  * Object that represent the graph of a parametrized curve.
@@ -24,10 +25,11 @@ export default class ParametrizedCurveGraphic extends CurveGraphic {
     from = 0,
     to = 1,
     variables = {},
-    varStr = 'x'
+    varStr = 'x',
+    ...options
   }: ParametrizedCurveGraphicOptions = {}) {
 
-    super();
+    super(options);
 
     // Compile math functions
     this._xfn = math.parse(xFuncStr).compile();

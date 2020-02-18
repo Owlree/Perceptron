@@ -10,14 +10,14 @@ export default class FunctionGraphic
   implements BoundsSubscriber {
 
   constructor(yFuncStr: string, {
-    from = 0, to = 1, varStr = 'x', variables = {}
+    from = 0, to = 1, varStr = 'x', variables = {}, ...others
   }: FunctionGraphicOptions = {}) {
-
     super(varStr, yFuncStr, {
       from: from,
       to: to,
       variables: variables,
-      varStr: varStr
+      varStr: varStr,
+      ...others
     });
   }
 

@@ -1,14 +1,8 @@
 export default class Variable<T> {
-  private _value: T | undefined = undefined;
-  private _subscribers: Array<(self: Variable<T>) => void> = []
+  protected _value: T | undefined = undefined;
+  protected _subscribers: Array<(self: Variable<T>) => void> = []
   constructor(value: T | undefined = undefined) {
     this._value = value;
-  }
-  set value(value: T) {
-    this._value = value;
-    for (let subscriber of this._subscribers) {
-      subscriber(this);
-    }
   }
   get value(): T | undefined {
     return this._value;

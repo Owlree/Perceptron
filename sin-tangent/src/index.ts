@@ -1,19 +1,27 @@
 import * as paper from 'paper';
 
+// import Colors from './colors';
 import FunctionGraphic from './functiongraphic';
 import GraphingCalculator from './graphingcalculator';
+import WritableVariable from './writeablevariable';
 import Variable from './variable';
+import Colors from './colors';
 
 const graphingCalculator = new GraphingCalculator('canvas');
+graphingCalculator.backgroundColor = Colors.backgroundColor;
 
 // Create the main function
-const curve: FunctionGraphic = new FunctionGraphic('sin(x)');
+const curve: FunctionGraphic = new FunctionGraphic('sin(x)', {
+  strokeColor: Colors.mainColor
+});
 
 // Create a tangent line at a variable point
-const variable: Variable<number> = new Variable<number>(0);
+const variable: WritableVariable<number> = new WritableVariable<number>(0);
 const tangent: FunctionGraphic = new FunctionGraphic(
-  'cos(p) * x + sin(p) - cos(p) * p',
-  {variables: {p: variable}});
+  'cos(p) * x + sin(p) - cos(p) * p', {
+    variables: {p: <Variable<number>>variable},
+    strokeColor: Colors.mainColor
+  });
 
 // Add both of them to the graphing calculator
 graphingCalculator.add(curve);
