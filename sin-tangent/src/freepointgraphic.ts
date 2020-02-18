@@ -9,11 +9,14 @@ export default class FreePointGraphic extends PointGraphic {
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
 
-  constructor({...options}: FreePointGraphicOptions = {}) {
+  constructor({x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
     super(options);
 
     this._path.shadowColor = new paper.Color('salmon');
     this._path.shadowBlur = 0;
+
+    this.x = x;
+    this.y = y;
 
     this._path.on('mouseenter', () => {
       this._mouseOver = true;
