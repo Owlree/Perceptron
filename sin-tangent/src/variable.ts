@@ -1,11 +1,11 @@
 export default class Variable<T> {
-  protected _value: T | undefined = undefined;
+  protected _value?: T = undefined;
   protected _subscribers: Array<(self: Variable<T>) => void> = []
   constructor(value: T | undefined = undefined) {
     this._value = value;
   }
-  get value(): T | undefined {
-    return this._value;
+  get value(): T {
+    return this._value!;
   }
   public register(callback: (self: Variable<T>) => void): void {
     this._subscribers.push(callback);

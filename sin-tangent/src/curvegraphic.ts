@@ -11,24 +11,18 @@ import Variable from './variable';
  */
 export default abstract class CurveGraphic extends Graphic {
   protected _width: number = 0.01;
-  protected _colorVariable: Variable<paper.Color> | undefined = undefined;
-  protected _colorVariableChangedCallback: ((variable: Variable<paper.Color>) => void) | undefined;
+  protected _colorVariable?: Variable<paper.Color> = undefined;
+  protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void) = undefined;
   constructor({
     strokeColor = new paper.Color('black'),
     strokeWidth = 0.01
   }: CurveGraphicOptions = {}) {
     super();
-
-    // Create the path (but do not insert)
-    this._path = new paper.Path({
-      insert: false,
-      strokeWidth: strokeWidth
-    });
-
+    this._path.strokeWidth = strokeWidth;
     this.color = strokeColor;
   }
   public set color(color: paper.Color | Variable<paper.Color>) {
-    if (this._colorVariable !== undefined) {
+    if (this._colorVariable !== undefined && this._colorVariableChangedCallback !== undefined) {
       this._colorVariable.unregister(this._colorVariableChangedCallback);
       this._colorVariable = undefined;
       this._colorVariableChangedCallback = undefined;

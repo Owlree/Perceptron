@@ -1,16 +1,17 @@
+import * as paper from 'paper';
+
+
 /**
  * Base abstract class for all drawable mathematicall objects.
  */
 export default abstract class Graphic {
-  protected _path?: paper.Path = undefined;
+  protected _path: paper.Path;
 
   /**
    * Removes the underlying graphic from its parent.
    */
   public remove() {
-    if (this._path !== undefined) {
-      this._path.remove();
-    }
+    this._path.remove();
   }
 
   /**
@@ -20,8 +21,10 @@ export default abstract class Graphic {
   public addTo(owner: paper.Project | paper.Layer | paper.Group |
     paper.CompoundPath) {
 
-    if (this._path !== undefined) {
-      this._path.addTo(owner);
-    }
+    this._path.addTo(owner);
+  }
+
+  constructor() {
+    this._path = new paper.Path({insert: false});
   }
 }

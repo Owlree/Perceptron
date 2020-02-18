@@ -27,7 +27,15 @@ const tangent: FunctionGraphic = new FunctionGraphic(
 graphingCalculator.add(curve);
 graphingCalculator.add(tangent);
 
+// let x = new WritableVariable<number>(0);
+// let y = new WritableVariable<number>(0);
+// let freePoint = new freePoint();
+// let functionPoint = new FunctionPoint(curve, <Variable<number>>x);
+
+// graphingCalculator.add(point);
+// graphingCalculator.add(freePoint);
+
 // Update the tanget point on mouse move
 paper.view.on('mousemove', (event: paper.MouseEvent) => {
-  variable.value = event.point.x;
+  variable.value = event.point!.x!;
 });

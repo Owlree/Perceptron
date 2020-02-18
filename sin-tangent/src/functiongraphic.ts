@@ -22,8 +22,8 @@ export default class FunctionGraphic
   }
 
   public onBoundsUpdated(bounds: paper.Rectangle) {
-    this._from = bounds.left;
-    this._to = bounds.right;
+    this._from = bounds.left!;
+    this._to = bounds.right!;
     this.build()
   }
 }
