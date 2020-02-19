@@ -1,9 +1,11 @@
+/* eslint-disable */
+
 const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const sinTangentConfig = {
   entry: {
-    main: './sin-tangent/src/index.ts'
+    main: './src/sin-tangent/index.ts'
   },
   output: {
     filename: 'sin-tangent/script.js',
@@ -13,7 +15,7 @@ const sinTangentConfig = {
   module: {
     rules: [{
       test: /\.tsx?$/,
-      loader: "ts-loader",
+      loader: 'ts-loader',
     }]
   },
   resolve: {

@@ -1,7 +1,7 @@
 import * as paper from 'paper';
 
 import Variable from './variable';
-import WritableVariable from "./writeablevariable";
+import WritableVariable from './writeablevariable';
 
 
 const _mainColor: WritableVariable<paper.Color> =
@@ -20,18 +20,22 @@ function activateLightMode() {
 }
 
 function setColorScheme() {
-  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
-  const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
-  const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches;
   const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified;
 
-  window.matchMedia("(prefers-color-scheme: dark)").addListener(
-    (event: MediaQueryListEvent) => {event.matches && activateDarkMode()});
-  window.matchMedia("(prefers-color-scheme: light)").addListener(
-    (event: MediaQueryListEvent) => {event.matches && activateLightMode()});
+  window.matchMedia('(prefers-color-scheme: dark)').addListener(
+    (event: MediaQueryListEvent) => {
+      event.matches && activateDarkMode();
+    });
+  window.matchMedia('(prefers-color-scheme: light)').addListener(
+    (event: MediaQueryListEvent) => {
+      event.matches && activateLightMode();
+    });
 
-  if(isDarkMode) activateDarkMode()
-  if(isLightMode) activateLightMode()
+  if(isDarkMode) activateDarkMode();
+  if(isLightMode) activateLightMode();
   if(isNotSpecified || hasNoSupport) {
     const now: Date = new Date();
     const hour: number = now.getHours();

@@ -36,7 +36,7 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
     this._path.on('mouseleave', () => {
       this._mouseOver = false;
       this.updateStyle();
-    })
+    });
 
     this._path.on('mousedown', () => {
       this._mouseDown = true;

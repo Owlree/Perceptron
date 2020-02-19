@@ -26,7 +26,7 @@ export default class GraphingCalculator {
     paper.setup(canvasId);
     this._backgroundPath = new paper.Path.Rectangle(this._bounds);
     this.backgroundColor = Colors.backgroundColor;
-    paper.view.on('resize', () => { this.setup() });
+    paper.view.on('resize', () => { this.setup(); });
     this.setup();
   }
 
@@ -87,7 +87,7 @@ export default class GraphingCalculator {
       this._backgroundColorVariable = color;
       this._backgroundColorVariableChangedCallback = (variable: Variable<paper.Color>) => {
         this._backgroundPath.fillColor = variable.value;
-      }
+      };
       this._backgroundColorVariable.register(this._backgroundColorVariableChangedCallback);
     } else {
       this._backgroundPath.fillColor = color;

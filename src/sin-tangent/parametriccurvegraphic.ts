@@ -44,7 +44,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     for (let key in this._variables) {
       const variable: Variable<number> | number = this._variables[key];
       if (variable instanceof Variable) {
-        variable.register(() => {this.build()})
+        variable.register(() => { this.build(); });
       }
     }
 
@@ -101,6 +101,6 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     }
     const point = new paper.Point(this.getX(this._to), this.getY(this._to));
     const segment = new paper.Segment(point);
-    this._path.add(segment)
+    this._path.add(segment);
   }
 }

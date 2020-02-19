@@ -1,9 +1,9 @@
 import * as paper from 'paper';
 
-import Graphic from "./graphic";
+import Graphic from './graphic';
 import PointGraphicOptions from './pointgraphicoptions';
 import ScreenTransformSubscriber from './screentransformsubscriber';
-import Variable from "./variable";
+import Variable from './variable';
 import WritableVariable from './writeablevariable';
 import Colors from './colors';
 
@@ -48,7 +48,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
       this._colorVariable = color;
       this._colorVariableChangedCallback = (variable: Variable<paper.Color>) => {
         this._path.fillColor = variable.value;
-      }
+      };
       this._colorVariable.register(this._colorVariableChangedCallback);
     } else if (color instanceof paper.Color) {
       this._path.fillColor = color;

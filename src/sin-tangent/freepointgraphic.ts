@@ -30,7 +30,7 @@ export default class FreePointGraphic extends PointGraphic {
     this._path.on('mouseleave', () => {
       this._mouseOver = false;
       this.updateStyle();
-    })
+    });
 
     this._path.on('mousedown', () => {
       this._mouseDown = true;

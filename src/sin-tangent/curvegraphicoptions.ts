@@ -1,6 +1,6 @@
 import * as paper from 'paper';
 
-import Variable from "./variable";
+import Variable from './variable';
 
 
 /**

@@ -6,7 +6,7 @@
  */
 export default class Variable<T> {
   protected _value?: T = undefined;
-  protected _subscribers: Array<(self: Variable<T>) => void> = []
+  protected _subscribers: Array<(self: Variable<T>) => void> = [];
   constructor(value: T | undefined = undefined) {
     this._value = value;
   }

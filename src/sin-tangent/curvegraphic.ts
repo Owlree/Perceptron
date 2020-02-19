@@ -35,7 +35,7 @@ export default abstract class CurveGraphic extends Graphic {
       this._colorVariable = color;
       this._colorVariableChangedCallback = (variable: Variable<paper.Color>) => {
         this._path.strokeColor = variable.value;
-      }
+      };
       this._colorVariable.register(this._colorVariableChangedCallback);
     } else if (color instanceof paper.Color) {
       this._path.strokeColor = color;
