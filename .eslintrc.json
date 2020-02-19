@@ -46,10 +46,39 @@
                 "ignoreRestSiblings": false
             }
         ],
-        "@typescript-eslint/array-type": [ "error", {
-            "default": "generic"
-        }],
+        "@typescript-eslint/array-type": [
+            "error",
+            {
+                "default": "generic"
+            }
+        ],
         "brace-style": "off",
-        "@typescript-eslint/brace-style": ["error"]
+        "@typescript-eslint/brace-style": [
+            "error"
+        ],
+        "camelcase": "off",
+        "@typescript-eslint/camelcase": [
+            "error",
+            {
+                "properties": "always",
+                "genericType": "always",
+                "ignoreDestructuring": false
+            }
+        ],
+        "@typescript-eslint/class-name-casing": [
+            "error",
+            {
+                "allowUnderscorePrefix": false
+            }
+        ],
+        "comma-spacing": "off",
+        "@typescript-eslint/comma-spacing": ["error", {
+            "after": true,
+            "before": false
+        }],
+        "@typescript-eslint/consistent-type-assertions": ["error", {
+            "assertionStyle": "as",
+            "objectLiteralTypeAssertions": "never"
+        }]
     }
 }

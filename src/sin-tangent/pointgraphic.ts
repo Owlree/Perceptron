@@ -84,11 +84,11 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
   }
 
   public get xVariable(): Variable<number> {
-    return <Variable<number>>this._xVariable;
+    return this._xVariable as Variable<number>;
   }
 
   public get yVariable(): Variable<number> {
-    return <Variable<number>>this._yVariable;
+    return this._yVariable as Variable<number>;
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix) {
