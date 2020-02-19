@@ -6,6 +6,6 @@ import IPointGraphicOptions from './ipointgraphicoptions';
  * {@link FreePointGraphic} accepts as input.
  */
 export default interface IFreePointGraphicOptions extends IPointGraphicOptions {
-  x?: number,
-  y?: number
+  x?: number;
+  y?: number;
 }

@@ -6,5 +6,5 @@ import IPointGraphicOptions from './ipointgraphicoptions';
  * {@link ConstrainedPointFunctionGraphic} accepts as input.
  */
 export default interface IConstrainedPointFunctionGraphicOptions extends IPointGraphicOptions {
-  x?: number
+  x?: number;
 }

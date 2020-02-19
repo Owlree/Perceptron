@@ -6,5 +6,5 @@ import Variable from './variable';
  * formula for a {@link ParametricCurve}.
  */
 export default interface IVariablesDictionary {
-  [key: string]: number | Variable<number>
+  [key: string]: number | Variable<number>;
 }

@@ -9,8 +9,8 @@ import VariablesDictionary from './ivariablesdictionary';
 export default interface IParametricCurveGraphicOptions
   extends ICurveGraphicOptions {
 
-  from?: number,
-  to?: number,
-  variables?: VariablesDictionary,
-  varStr?: string
+  from?: number;
+  to?: number;
+  variables?: VariablesDictionary;
+  varStr?: string;
 }

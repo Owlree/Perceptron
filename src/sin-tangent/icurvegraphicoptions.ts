@@ -8,6 +8,6 @@ import Variable from './variable';
  * {@link CurveGraphic} accepts as input.
  */
 export default interface ICurveGraphicOptions {
-  strokeColor?: paper.Color | Variable<paper.Color>,
-  strokeWidth?: number
+  strokeColor?: paper.Color | Variable<paper.Color>;
+  strokeWidth?: number;
 }

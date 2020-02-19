@@ -6,6 +6,6 @@ import Variable from './variable';
  * {@link PointGraphic} accepts as input.
  */
 export default interface IPointGraphicOptions {
-  color?: paper.Color | Variable<paper.Color>,
-  radius?: number
+  color?: paper.Color | Variable<paper.Color>;
+  radius?: number;
 }
