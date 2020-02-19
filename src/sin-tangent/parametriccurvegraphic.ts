@@ -44,7 +44,9 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     for (let key in this._variables) {
       const variable: Variable<number> | number = this._variables[key];
       if (variable instanceof Variable) {
-        variable.register(() => { this.build(); });
+        variable.register(() => {
+          this.build();
+        });
       }
     }
 

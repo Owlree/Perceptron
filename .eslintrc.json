@@ -48,6 +48,8 @@
         ],
         "@typescript-eslint/array-type": [ "error", {
             "default": "generic"
-        }]
+        }],
+        "brace-style": "off",
+        "@typescript-eslint/brace-style": ["error"]
     }
 }
