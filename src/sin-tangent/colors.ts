@@ -9,28 +9,28 @@ const _mainColor: WritableVariable<paper.Color> =
 const _backgroundColor: WritableVariable<paper.Color> =
   new WritableVariable(new paper.Color('black'));
 
-function activateDarkMode() {
+function activateDarkMode(): void {
   _mainColor.value = new paper.Color('#FAFAFA');
   _backgroundColor.value = new paper.Color('#121212');
 }
 
-function activateLightMode() {
+function activateLightMode(): void {
   _mainColor.value = new paper.Color('black');
   _backgroundColor.value = new paper.Color('white');
 }
 
-function setColorScheme() {
+function setColorScheme(): void {
   const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
   const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches;
   const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified;
 
   window.matchMedia('(prefers-color-scheme: dark)').addListener(
-    (event: MediaQueryListEvent) => {
+    (event: MediaQueryListEvent): void => {
       event.matches && activateDarkMode();
     });
   window.matchMedia('(prefers-color-scheme: light)').addListener(
-    (event: MediaQueryListEvent) => {
+    (event: MediaQueryListEvent): void => {
       event.matches && activateLightMode();
     });
 
@@ -53,10 +53,10 @@ setColorScheme();
  * preferences of the user or time of day, in case there are no preferences.
  */
 export default class Colors {
-  static get backgroundColor(): Variable<paper.Color> {
+  public static get backgroundColor(): Variable<paper.Color> {
     return _backgroundColor;
   }
-  static get mainColor(): Variable<paper.Color> {
+  public static get mainColor(): Variable<paper.Color> {
     return _mainColor;
   }
 }

@@ -20,7 +20,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
   protected _xVariable: WritableVariable<number>;
   protected _yVariable: WritableVariable<number>;
 
-  constructor({
+  public constructor({
     color = Colors.mainColor,
     radius = 10
   }: PointGraphicOptions = {}) {
@@ -46,7 +46,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     if (color instanceof Variable) {
       this._path.fillColor = color.value;
       this._colorVariable = color;
-      this._colorVariableChangedCallback = (variable: Variable<paper.Color>) => {
+      this._colorVariableChangedCallback = (variable: Variable<paper.Color>): void => {
         this._path.fillColor = variable.value;
       };
       this._colorVariable.register(this._colorVariableChangedCallback);
@@ -91,7 +91,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     return this._yVariable as Variable<number>;
   }
 
-  public onScreenTransformUpdated(matrix: paper.Matrix) {
+  public onScreenTransformUpdated(matrix: paper.Matrix): void {
     const oldPosition: paper.Point = this._path.position!;
     this._path.transform(this._path.matrix!.inverted());
     this._path.transform(matrix.inverted());

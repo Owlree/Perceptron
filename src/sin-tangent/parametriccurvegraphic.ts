@@ -22,7 +22,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
   protected _from: number = 0;
   protected _to: number = 1;
 
-  constructor(xFuncStr: string, yFuncStr: string, {
+  public constructor(xFuncStr: string, yFuncStr: string, {
     from = 0,
     to = 1,
     variables = {},
@@ -44,7 +44,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     for (let key in this._variables) {
       const variable: Variable<number> | number = this._variables[key];
       if (variable instanceof Variable) {
-        variable.register(() => {
+        variable.register((): void => {
           this.build();
         });
       }
@@ -94,7 +94,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
    * Computes all the points in the curve path based on {@code this._xfn} and
    * {@code this._yfn}.
    */
-  protected build() {
+  protected build(): void {
     this._path.removeSegments();
     for (let i = this._from; i <= this._to; i += 0.1) {
       const point = new paper.Point(this.getX(i), this.getY(i));

@@ -10,7 +10,7 @@ export default class FunctionGraphic
   extends ParametricCurveGraphic
   implements BoundsSubscriber {
 
-  constructor(yFuncStr: string, {
+  public constructor(yFuncStr: string, {
     from = 0, to = 1, varStr = 'x', variables = {}, ...others
   }: FunctionGraphicOptions = {}) {
     super(varStr, yFuncStr, {
@@ -22,7 +22,7 @@ export default class FunctionGraphic
     });
   }
 
-  public onBoundsUpdated(bounds: paper.Rectangle) {
+  public onBoundsUpdated(bounds: paper.Rectangle): void {
     this._from = bounds.left!;
     this._to = bounds.right!;
     this.build();

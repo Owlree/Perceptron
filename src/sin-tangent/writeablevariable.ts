@@ -8,10 +8,10 @@ import Variable from './variable';
  * sent to other objects that don't need to change the value.
  */
 export default class WritableVariable<T> extends Variable<T> {
-  get value(): T {
+  public get value(): T {
     return this._value!;
   }
-  set value(value: T) {
+  public set value(value: T) {
     this._value = value;
     for (let subscriber of this._subscribers) {
       subscriber(this);

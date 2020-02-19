@@ -17,7 +17,7 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
   private _mouseOver: boolean = false;
   private _functionGraphic: FunctionGraphic;
 
-  constructor(functionGraphic: FunctionGraphic, {x = 0, ...options}: ConstrainedPointFunctionGraphicOptions = {}) {
+  public constructor(functionGraphic: FunctionGraphic, {x = 0, ...options}: ConstrainedPointFunctionGraphicOptions = {}) {
     super(options);
 
     this._functionGraphic = functionGraphic;
@@ -28,27 +28,27 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
     this.x = x;
     this.y = functionGraphic.yAtX(x);
 
-    this._path.on('mouseenter', () => {
+    this._path.on('mouseenter', (): void => {
       this._mouseOver = true;
       this.updateStyle();
     });
 
-    this._path.on('mouseleave', () => {
+    this._path.on('mouseleave', (): void => {
       this._mouseOver = false;
       this.updateStyle();
     });
 
-    this._path.on('mousedown', () => {
+    this._path.on('mousedown', (): void => {
       this._mouseDown = true;
       this.updateStyle();
     });
 
-    paper.view.on('mouseup', () => {
+    paper.view.on('mouseup', (): void => {
       this._mouseDown = false;
       this.updateStyle();
     });
 
-    paper.view.on('mousemove', (event: paper.MouseEvent) => {
+    paper.view.on('mousemove', (event: paper.MouseEvent): void => {
       if (this._mouseDown === true) {
         this.x = event.point!.x!;
         this.y = this._functionGraphic.yAtX(this.x);
@@ -56,7 +56,7 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
     });
   }
 
-  private updateStyle() {
+  private updateStyle(): void {
     if (this._mouseDown) {
       this._path.shadowBlur = this.radius;
       document.body.style.cursor = 'grabbing';

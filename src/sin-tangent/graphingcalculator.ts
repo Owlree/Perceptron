@@ -22,17 +22,17 @@ export default class GraphingCalculator {
       new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
   private _graphics: Array<Graphic> = [];
 
-  constructor(canvasId: string) {
+  public constructor(canvasId: string) {
     paper.setup(canvasId);
     this._backgroundPath = new paper.Path.Rectangle(this._bounds);
     this.backgroundColor = Colors.backgroundColor;
-    paper.view.on('resize', () => {
+    paper.view.on('resize', (): void => {
       this.setup();
     });
     this.setup();
   }
 
-  private setup() {
+  private setup(): void {
 
     // Revert the previous transform
     paper.view.transform(paper.view.matrix!.inverted());
@@ -87,7 +87,7 @@ export default class GraphingCalculator {
     if (color instanceof Variable) {
       this._backgroundPath.fillColor = color.value;
       this._backgroundColorVariable = color;
-      this._backgroundColorVariableChangedCallback = (variable: Variable<paper.Color>) => {
+      this._backgroundColorVariableChangedCallback = (variable: Variable<paper.Color>): void => {
         this._backgroundPath.fillColor = variable.value;
       };
       this._backgroundColorVariable.register(this._backgroundColorVariableChangedCallback);
@@ -114,7 +114,7 @@ export default class GraphingCalculator {
     graphic.addTo(paper.project!);
   }
 
-  public remove(graphic: Graphic) {
+  public remove(graphic: Graphic): void {
     const index: number = this._graphics.indexOf(graphic);
     if (index > -1) {
       this._graphics[index].remove();

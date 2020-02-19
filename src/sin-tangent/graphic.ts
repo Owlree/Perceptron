@@ -10,7 +10,7 @@ export default abstract class Graphic {
   /**
    * Removes the underlying graphic from its parent.
    */
-  public remove() {
+  public remove(): void {
     this._path.remove();
   }
 
@@ -19,12 +19,12 @@ export default abstract class Graphic {
    * @param owner The paper.js project or item to add the underlying path to
    */
   public addTo(owner: paper.Project | paper.Layer | paper.Group |
-    paper.CompoundPath) {
+    paper.CompoundPath): void {
 
     this._path.addTo(owner);
   }
 
-  constructor() {
+  public constructor() {
     this._path = new paper.Path({insert: false});
   }
 }

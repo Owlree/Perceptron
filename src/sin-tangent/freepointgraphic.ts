@@ -13,7 +13,7 @@ export default class FreePointGraphic extends PointGraphic {
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
 
-  constructor({x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
+  public constructor({x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
     super(options);
 
     this._path.shadowColor = new paper.Color('salmon');
@@ -22,27 +22,27 @@ export default class FreePointGraphic extends PointGraphic {
     this.x = x;
     this.y = y;
 
-    this._path.on('mouseenter', () => {
+    this._path.on('mouseenter', (): void => {
       this._mouseOver = true;
       this.updateStyle();
     });
 
-    this._path.on('mouseleave', () => {
+    this._path.on('mouseleave', (): void => {
       this._mouseOver = false;
       this.updateStyle();
     });
 
-    this._path.on('mousedown', () => {
+    this._path.on('mousedown', (): void => {
       this._mouseDown = true;
       this.updateStyle();
     });
 
-    paper.view.on('mouseup', () => {
+    paper.view.on('mouseup', (): void => {
       this._mouseDown = false;
       this.updateStyle();
     });
 
-    paper.view.on('mousemove', (event: paper.MouseEvent) => {
+    paper.view.on('mousemove', (event: paper.MouseEvent): void => {
       if (this._mouseDown === true) {
         this.x = event.point!.x!;
         this.y = event.point!.y!;
@@ -50,7 +50,7 @@ export default class FreePointGraphic extends PointGraphic {
     });
   }
 
-  private updateStyle() {
+  private updateStyle(): void {
     if (this._mouseDown) {
       this._path.shadowBlur = this.radius;
       document.body.style.cursor = 'grabbing';

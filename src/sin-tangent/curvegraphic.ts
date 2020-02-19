@@ -15,7 +15,7 @@ export default abstract class CurveGraphic extends Graphic {
   protected _colorVariable?: Variable<paper.Color> = undefined;
   protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void) = undefined;
 
-  constructor({
+  public constructor({
     strokeColor = Colors.mainColor,
     strokeWidth = 0.01
   }: CurveGraphicOptions = {}) {
@@ -33,7 +33,7 @@ export default abstract class CurveGraphic extends Graphic {
     if (color instanceof Variable) {
       this._path.strokeColor = color.value;
       this._colorVariable = color;
-      this._colorVariableChangedCallback = (variable: Variable<paper.Color>) => {
+      this._colorVariableChangedCallback = (variable: Variable<paper.Color>): void => {
         this._path.strokeColor = variable.value;
       };
       this._colorVariable.register(this._colorVariableChangedCallback);
