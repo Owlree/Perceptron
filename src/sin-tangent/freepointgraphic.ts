@@ -1,6 +1,6 @@
 import * as paper from 'paper';
 
-import FreePointGraphicOptions from './freepointgraphicoptions';
+import FreePointGraphicOptions from './ifreepointgraphicoptions';
 import PointGraphic from './pointgraphic';
 
 

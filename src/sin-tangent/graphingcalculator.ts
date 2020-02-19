@@ -1,9 +1,9 @@
 import * as paper from 'paper';
 
-import BoundsSubscriber from './boundssubscriber';
+import BoundsSubscriber from './iboundssubscriber';
 import Colors from './colors';
 import Graphic from './graphic';
-import ScreenTransformSubscriber from './screentransformsubscriber';
+import ScreenTransformSubscriber from './iscreentransformsubscriber';
 import Variable from './variable';
 
 

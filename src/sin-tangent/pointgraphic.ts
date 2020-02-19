@@ -1,8 +1,8 @@
 import * as paper from 'paper';
 
 import Graphic from './graphic';
-import PointGraphicOptions from './pointgraphicoptions';
-import ScreenTransformSubscriber from './screentransformsubscriber';
+import PointGraphicOptions from './ipointgraphicoptions';
+import ScreenTransformSubscriber from './iscreentransformsubscriber';
 import Variable from './variable';
 import WritableVariable from './writeablevariable';
 import Colors from './colors';

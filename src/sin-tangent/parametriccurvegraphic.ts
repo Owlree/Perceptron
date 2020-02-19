@@ -2,10 +2,10 @@ import * as math from 'mathjs';
 import * as paper from 'paper';
 
 import CurveGraphic from './curvegraphic';
-import FunctionScope from './functionscope';
-import ParametricCurveGraphicOptions from './parametriccurvegraphicoptions';
+import FunctionScope from './ifunctionscope';
+import ParametricCurveGraphicOptions from './iparametriccurvegraphicoptions';
 import Variable from './variable';
-import VariablesDictionary from './variablesdictionary';
+import VariablesDictionary from './ivariablesdictionary';
 
 
 /**

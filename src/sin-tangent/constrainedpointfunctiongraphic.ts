@@ -1,6 +1,6 @@
 import * as paper from 'paper';
 
-import ConstrainedPointFunctionGraphicOptions from './constrainedpointfunctiongraphicoptions';
+import ConstrainedPointFunctionGraphicOptions from './iconstrainedpointfunctiongraphicoptions';
 import FunctionGraphic from './functiongraphic';
 import PointGrahic from './pointgraphic';
 

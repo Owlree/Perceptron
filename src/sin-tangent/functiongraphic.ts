@@ -1,5 +1,5 @@
-import BoundsSubscriber from './boundssubscriber';
-import FunctionGraphicOptions from './functiongraphicoptions';
+import BoundsSubscriber from './iboundssubscriber';
+import FunctionGraphicOptions from './ifunctiongraphicoptions';
 import ParametricCurveGraphic from './parametriccurvegraphic';
 
 

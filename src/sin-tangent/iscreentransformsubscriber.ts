@@ -6,6 +6,6 @@ import * as paper from 'paper';
  * notified when the transform that is applied to the screen to obtain the
  * local coordinate system changes in the parent {@link GraphingCalculator}.
  */
-export default interface ScreenTransformSubscriber {
+export default interface IScreenTransformSubscriber {
   onScreenTransformUpdated(matrix: paper.Matrix): void;
 }
