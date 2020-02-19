@@ -13,14 +13,24 @@ import Variable from './variable';
  * {@link FreePointGraphic}, or others.
  */
 export default class GraphingCalculator {
-  private _backgroundPath: paper.Path.Rectangle;
   private _backgroundColorVariable?: Variable<paper.Color> = undefined;
-  private _backgroundColorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void);
+  private _backgroundColorVariableChangedCallback?:
+    ((variable: Variable<paper.Color>) => void);
+  private _backgroundPath: paper.Path.Rectangle;
+  private _bounds: paper.Rectangle =
+    new paper.Rectangle(
+      new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
   private _graphics: Array<Graphic> = [];
-  private _bounds: paper.Rectangle = new paper.Rectangle(
-    new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
 
-  setup() {
+  constructor(canvasId: string) {
+    paper.setup(canvasId);
+    this._backgroundPath = new paper.Path.Rectangle(this._bounds);
+    this.backgroundColor = Colors.backgroundColor;
+    paper.view.on('resize', () => { this.setup() });
+    this.setup();
+  }
+
+  private setup() {
 
     // Revert the previous transform
     paper.view.transform(paper.view.matrix!.inverted());
@@ -38,21 +48,15 @@ export default class GraphingCalculator {
       -this._bounds.center!.x!, -this._bounds.center!.y!
     ));
 
+    // Notify all screen transform subscribers of the change
     for (let graphic of this._graphics) {
       const graphicAny: any = graphic as any;
       if ('onScreenTransformUpdated' in graphicAny) {
-        const updateable: ScreenTransformSubscriber  = graphicAny as ScreenTransformSubscriber;
+        const updateable: ScreenTransformSubscriber =
+          graphicAny as ScreenTransformSubscriber;
         updateable.onScreenTransformUpdated(paper.view.matrix!);
       }
     }
-  }
-
-  constructor(canvasId: string) {
-    paper.setup(canvasId);
-    this._backgroundPath = new paper.Path.Rectangle(this._bounds);
-    this.backgroundColor = Colors.backgroundColor;
-    paper.view.on('resize', () => { this.setup() });
-    this.setup();
   }
 
   public set bounds(bounds: paper.Rectangle) {
