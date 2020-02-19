@@ -4,6 +4,10 @@ import FreePointGraphicOptions from './freepointgraphicoptions';
 import PointGraphic from './pointgraphic';
 
 
+/**
+ * Class that represents a free draggable point. Provides mouse interaction out
+ * of the box.
+ */
 export default class FreePointGraphic extends PointGraphic {
 
   private _mouseDown: boolean = false;

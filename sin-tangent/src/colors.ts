@@ -3,6 +3,7 @@ import * as paper from 'paper';
 import Variable from './variable';
 import WritableVariable from "./writeablevariable";
 
+
 const _mainColor: WritableVariable<paper.Color> =
   new WritableVariable(new paper.Color('black'));
 const _backgroundColor: WritableVariable<paper.Color> =
@@ -42,6 +43,11 @@ function setColorScheme() {
 
 setColorScheme();
 
+/**
+ * Class containing getters for all theme colors, returned as variables. The
+ * value of the variables automatically change based on dark / light mode
+ * preferences of the user or time of day, in case there are no preferences.
+ */
 export default class Colors {
   static get backgroundColor(): Variable<paper.Color> {
     return _backgroundColor;

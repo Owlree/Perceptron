@@ -2,7 +2,7 @@ import * as paper from 'paper';
 
 
 /**
- * Base abstract class for all drawable mathematicall objects.
+ * Base abstract class that represents a drawable mathematical object.
  */
 export default abstract class Graphic {
   protected _path: paper.Path;

@@ -3,8 +3,8 @@ import VariablesDictionary from './variablesdictionary';
 
 
 /**
- * Interface describing the mathematical information needed to plot a
- * parametric curve.
+ * Interface that describes the options that the constructor of a
+ * {@link ParametricCurveGraphic} accepts as input.
  */
 export default interface ParametricCurveGraphicOptions
   extends CurveGraphicOptions {

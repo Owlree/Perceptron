@@ -8,6 +8,11 @@ import WritableVariable from './writeablevariable';
 import Colors from './colors';
 
 
+/**
+ * Base abstract class representing a mathematical point. Handles the the
+ * visual aspects of the graphic such as color and size. The position of the
+ * point is left to deriving classes.
+ */
 export default abstract class PointGraphic extends Graphic implements ScreenTransformSubscriber {
   protected _colorVariable?: Variable<paper.Color> = undefined;
   protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void) = undefined;

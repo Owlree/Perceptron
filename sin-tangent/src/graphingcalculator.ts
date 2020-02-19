@@ -7,6 +7,11 @@ import ScreenTransformSubscriber from './screentransformsubscriber';
 import Variable from './variable';
 
 
+/**
+ * A graphic calculator handles the presentation and interaction with various
+ * graphics such as {@link CurveGraphic}, {@link FunctionGraphic},
+ * {@link FreePointGraphic}, or others.
+ */
 export default class GraphingCalculator {
   private _backgroundPath: paper.Path.Rectangle;
   private _backgroundColorVariable?: Variable<paper.Color> = undefined;

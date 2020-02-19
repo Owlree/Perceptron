@@ -2,6 +2,7 @@ import BoundsSubscriber from './boundssubscriber';
 import FunctionGraphicOptions from './functiongraphicoptions';
 import ParametricCurveGraphic from './parametriccurvegraphic';
 
+
 /**
  * Object that represents the graph of an one variable function.
  */
