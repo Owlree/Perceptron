@@ -26,11 +26,11 @@ function setColorScheme(): void {
 
   window.matchMedia('(prefers-color-scheme: dark)').addListener(
     (event: MediaQueryListEvent): void => {
-      event.matches && activateDarkMode();
+      if (event.matches) activateDarkMode();
     });
   window.matchMedia('(prefers-color-scheme: light)').addListener(
     (event: MediaQueryListEvent): void => {
-      event.matches && activateLightMode();
+      if (event.matches) activateLightMode();
     });
 
   if(isDarkMode) activateDarkMode();

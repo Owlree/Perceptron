@@ -20,7 +20,7 @@ export default class GraphingCalculator {
   private _bounds: paper.Rectangle =
     new paper.Rectangle(
       new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
-  private _graphics: Array<Graphic> = [];
+  private readonly _graphics: Array<Graphic> = [];
 
   public constructor(canvasId: string) {
     paper.setup(canvasId);

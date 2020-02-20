@@ -17,10 +17,10 @@ export default class ParametricCurveGraphic extends CurveGraphic {
 
   protected _from: number = 0;
   protected _to: number = 1;
-  private _xfn: math.EvalFunction | undefined = undefined;
-  private _yfn: math.EvalFunction | undefined = undefined;
+  private readonly _xfn: math.EvalFunction | undefined = undefined;
+  private readonly _yfn: math.EvalFunction | undefined = undefined;
   private _varStr: string = 'x';
-  private _variables: VariablesDictionary = {};
+  private readonly _variables: VariablesDictionary = {};
 
   public constructor(xFuncStr: string, yFuncStr: string, {
     from = 0,
