@@ -1,22 +1,21 @@
 import * as paper from 'paper';
 
-import Variable from './variable';
 import WritableVariable from './writeablevariable';
 
 
-const _mainColor: WritableVariable<paper.Color> =
+export const mainColor: WritableVariable<paper.Color> =
   new WritableVariable(new paper.Color('black'));
-const _backgroundColor: WritableVariable<paper.Color> =
+export const backgroundColor: WritableVariable<paper.Color> =
   new WritableVariable(new paper.Color('black'));
 
 function activateDarkMode(): void {
-  _mainColor.value = new paper.Color('#FAFAFA');
-  _backgroundColor.value = new paper.Color('#121212');
+  mainColor.value = new paper.Color('#FAFAFA');
+  backgroundColor.value = new paper.Color('#121212');
 }
 
 function activateLightMode(): void {
-  _mainColor.value = new paper.Color('black');
-  _backgroundColor.value = new paper.Color('white');
+  mainColor.value = new paper.Color('black');
+  backgroundColor.value = new paper.Color('white');
 }
 
 function setColorScheme(): void {
@@ -46,17 +45,3 @@ function setColorScheme(): void {
 }
 
 setColorScheme();
-
-/**
- * Class containing getters for all theme colors, returned as variables. The
- * value of the variables automatically change based on dark / light mode
- * preferences of the user or time of day, in case there are no preferences.
- */
-export default class Colors {
-  public static get backgroundColor(): Variable<paper.Color> {
-    return _backgroundColor;
-  }
-  public static get mainColor(): Variable<paper.Color> {
-    return _mainColor;
-  }
-}

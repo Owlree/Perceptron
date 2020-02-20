@@ -59,7 +59,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
       scope[this._varStr] = i;
       return this._xfn.evaluate(scope);
     } else {
-      throw('Missing x coordinate function');
+      throw new Error('Missing x coordinate function');
     }
   }
 
@@ -85,7 +85,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
       scope[this._varStr] = i;
       return this._yfn.evaluate(scope);
     } else {
-      throw('Missing y coordinate function');
+      throw new Error('Missing y coordinate function');
     }
   }
 

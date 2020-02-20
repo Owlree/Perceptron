@@ -1,6 +1,6 @@
 import * as paper from 'paper';
 
-import Colors from './colors';
+import * as Colors from './colors';
 import CurveGraphicOptions from './icurvegraphicoptions';
 import Graphic from './graphic';
 import Variable from './variable';

@@ -43,7 +43,7 @@ export default class FreePointGraphic extends PointGraphic {
     });
 
     paper.view.on('mousemove', (event: paper.MouseEvent): void => {
-      if (this._mouseDown === true) {
+      if (this._mouseDown) {
         this.x = event.point!.x!;
         this.y = event.point!.y!;
       }

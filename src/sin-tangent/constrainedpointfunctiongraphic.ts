@@ -49,7 +49,7 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
     });
 
     paper.view.on('mousemove', (event: paper.MouseEvent): void => {
-      if (this._mouseDown === true) {
+      if (this._mouseDown) {
         this.x = event.point!.x!;
         this.y = this._functionGraphic.yAtX(this.x);
       }
