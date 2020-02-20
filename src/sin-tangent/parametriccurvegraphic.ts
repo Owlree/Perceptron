@@ -15,12 +15,12 @@ import VariablesDictionary from './ivariablesdictionary';
  */
 export default class ParametricCurveGraphic extends CurveGraphic {
 
+  protected _from: number = 0;
+  protected _to: number = 1;
   private _xfn: math.EvalFunction | undefined = undefined;
   private _yfn: math.EvalFunction | undefined = undefined;
   private _varStr: string = 'x';
   private _variables: VariablesDictionary = {};
-  protected _from: number = 0;
-  protected _to: number = 1;
 
   public constructor(xFuncStr: string, yFuncStr: string, {
     from = 0,
@@ -63,6 +63,22 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     }
   }
 
+  /**
+   * Computes all the points in the curve path based on {@code this._xfn} and
+   * {@code this._yfn}.
+   */
+  protected build(): void {
+    this._path.removeSegments();
+    for (let i = this._from; i <= this._to; i += 0.1) {
+      const point = new paper.Point(this.getX(i), this.getY(i));
+      const segment = new paper.Segment(point);
+      this._path.add(segment);
+    }
+    const point = new paper.Point(this.getX(this._to), this.getY(this._to));
+    const segment = new paper.Segment(point);
+    this._path.add(segment);
+  }
+
   protected getY(i: number): number {
     if (this._yfn !== undefined) {
       const scope: { [key: string]: number; } = this.getScope();
@@ -88,21 +104,5 @@ export default class ParametricCurveGraphic extends CurveGraphic {
       }
     }
     return scope;
-  }
-
-  /**
-   * Computes all the points in the curve path based on {@code this._xfn} and
-   * {@code this._yfn}.
-   */
-  protected build(): void {
-    this._path.removeSegments();
-    for (let i = this._from; i <= this._to; i += 0.1) {
-      const point = new paper.Point(this.getX(i), this.getY(i));
-      const segment = new paper.Segment(point);
-      this._path.add(segment);
-    }
-    const point = new paper.Point(this.getX(this._to), this.getY(this._to));
-    const segment = new paper.Segment(point);
-    this._path.add(segment);
   }
 }

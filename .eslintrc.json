@@ -132,6 +132,12 @@
                     "requireLast": true
                 }
             }
+        ],
+        "@typescript-eslint/member-naming": [
+            "error"
+        ],
+        "@typescript-eslint/member-ordering": [
+            "error"
         ]
     }
 }

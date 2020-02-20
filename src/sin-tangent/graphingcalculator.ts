@@ -32,35 +32,6 @@ export default class GraphingCalculator {
     this.setup();
   }
 
-  private setup(): void {
-
-    // Revert the previous transform
-    paper.view.transform(paper.view.matrix!.inverted());
-
-    // Apply the new transform
-    paper.view.transform(new paper.Matrix(
-      paper.view.viewSize!.width! / this._bounds.width!, 0,
-      0, -paper.view.viewSize!.height! / this._bounds.height!,
-      paper.view.viewSize!.width! / 2,
-      paper.view.viewSize!.height! / 2,
-    ));
-    paper.view.transform(new paper.Matrix(
-      1, 0,
-      0, 1,
-      -this._bounds.center!.x!, -this._bounds.center!.y!
-    ));
-
-    // Notify all screen transform subscribers of the change
-    for (let graphic of this._graphics) {
-      const graphicAny: any = graphic as any;
-      if ('onScreenTransformUpdated' in graphicAny) {
-        const updateable: ScreenTransformSubscriber =
-          graphicAny as ScreenTransformSubscriber;
-        updateable.onScreenTransformUpdated(paper.view.matrix!);
-      }
-    }
-  }
-
   public set bounds(bounds: paper.Rectangle) {
     this._bounds = bounds;
     this._backgroundPath.bounds = bounds;
@@ -119,6 +90,35 @@ export default class GraphingCalculator {
     if (index > -1) {
       this._graphics[index].remove();
       this._graphics.splice(index, 1);
+    }
+  }
+
+  private setup(): void {
+
+    // Revert the previous transform
+    paper.view.transform(paper.view.matrix!.inverted());
+
+    // Apply the new transform
+    paper.view.transform(new paper.Matrix(
+      paper.view.viewSize!.width! / this._bounds.width!, 0,
+      0, -paper.view.viewSize!.height! / this._bounds.height!,
+      paper.view.viewSize!.width! / 2,
+      paper.view.viewSize!.height! / 2,
+    ));
+    paper.view.transform(new paper.Matrix(
+      1, 0,
+      0, 1,
+      -this._bounds.center!.x!, -this._bounds.center!.y!
+    ));
+
+    // Notify all screen transform subscribers of the change
+    for (let graphic of this._graphics) {
+      const graphicAny: any = graphic as any;
+      if ('onScreenTransformUpdated' in graphicAny) {
+        const updateable: ScreenTransformSubscriber =
+          graphicAny as ScreenTransformSubscriber;
+        updateable.onScreenTransformUpdated(paper.view.matrix!);
+      }
     }
   }
 }

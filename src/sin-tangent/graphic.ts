@@ -7,6 +7,10 @@ import * as paper from 'paper';
 export default abstract class Graphic {
   protected _path: paper.Path;
 
+  public constructor() {
+    this._path = new paper.Path({insert: false});
+  }
+
   /**
    * Removes the underlying graphic from its parent.
    */
@@ -22,9 +26,5 @@ export default abstract class Graphic {
     paper.CompoundPath): void {
 
     this._path.addTo(owner);
-  }
-
-  public constructor() {
-    this._path = new paper.Path({insert: false});
   }
 }
