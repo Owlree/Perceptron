@@ -13,7 +13,8 @@ export default class FreePointGraphic extends PointGraphic {
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
 
-  public constructor({x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
+  public constructor(
+    {x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
     super(options);
 
     this._path.shadowColor = new paper.Color('salmon');

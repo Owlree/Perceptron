@@ -17,7 +17,8 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
   private _mouseOver: boolean = false;
   private readonly _functionGraphic: FunctionGraphic;
 
-  public constructor(functionGraphic: FunctionGraphic, {x = 0, ...options}: ConstrainedPointFunctionGraphicOptions = {}) {
+  public constructor(functionGraphic: FunctionGraphic, {x = 0, ...options}:
+    ConstrainedPointFunctionGraphicOptions = {}) {
     super(options);
 
     this._functionGraphic = functionGraphic;

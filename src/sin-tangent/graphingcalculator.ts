@@ -49,7 +49,8 @@ export default class GraphingCalculator {
   }
 
   public set backgroundColor(color: Variable<paper.Color> | paper.Color) {
-    if (this._backgroundColorVariable !== undefined && this._backgroundColorVariableChangedCallback !== undefined) {
+    if (this._backgroundColorVariable !== undefined &&
+      this._backgroundColorVariableChangedCallback !== undefined) {
       this._backgroundColorVariable.unregister(this._backgroundColorVariableChangedCallback);
       this._backgroundColorVariable = undefined;
       this._backgroundColorVariableChangedCallback = undefined;
@@ -58,9 +59,10 @@ export default class GraphingCalculator {
     if (color instanceof Variable) {
       this._backgroundPath.fillColor = color.value;
       this._backgroundColorVariable = color;
-      this._backgroundColorVariableChangedCallback = (variable: Variable<paper.Color>): void => {
-        this._backgroundPath.fillColor = variable.value;
-      };
+      this._backgroundColorVariableChangedCallback =
+        (variable: Variable<paper.Color>): void => {
+          this._backgroundPath.fillColor = variable.value;
+        };
       this._backgroundColorVariable.register(this._backgroundColorVariableChangedCallback);
     } else {
       this._backgroundPath.fillColor = color;

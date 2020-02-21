@@ -13,7 +13,8 @@ import Variable from './variable';
 export default abstract class CurveGraphic extends Graphic {
   protected _width: number = 0.01;
   protected _colorVariable?: Variable<paper.Color> = undefined;
-  protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void) = undefined;
+  protected _colorVariableChangedCallback?:
+    ((variable: Variable<paper.Color>) => void) = undefined;
 
   public constructor({
     strokeColor = Colors.mainColor,
@@ -25,7 +26,8 @@ export default abstract class CurveGraphic extends Graphic {
   }
 
   public set color(color: paper.Color | Variable<paper.Color>) {
-    if (this._colorVariable !== undefined && this._colorVariableChangedCallback !== undefined) {
+    if (this._colorVariable !== undefined &&
+      this._colorVariableChangedCallback !== undefined) {
       this._colorVariable.unregister(this._colorVariableChangedCallback);
       this._colorVariable = undefined;
       this._colorVariableChangedCallback = undefined;
@@ -33,9 +35,10 @@ export default abstract class CurveGraphic extends Graphic {
     if (color instanceof Variable) {
       this._path.strokeColor = color.value;
       this._colorVariable = color;
-      this._colorVariableChangedCallback = (variable: Variable<paper.Color>): void => {
-        this._path.strokeColor = variable.value;
-      };
+      this._colorVariableChangedCallback =
+        (variable: Variable<paper.Color>): void => {
+          this._path.strokeColor = variable.value;
+        };
       this._colorVariable.register(this._colorVariableChangedCallback);
     } else if (color instanceof paper.Color) {
       this._path.strokeColor = color;
