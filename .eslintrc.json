@@ -26,10 +26,6 @@
             "error",
             "unix"
         ],
-        "quotes": [
-            "error",
-            "single"
-        ],
         "semi": "off",
         "@typescript-eslint/semi": [
             "error"
@@ -171,7 +167,63 @@
         "@typescript-eslint/prefer-nullish-coalescing": "error",
         "@typescript-eslint/prefer-readonly": "error",
         "@typescript-eslint/prefer-string-starts-ends-with": "error",
-
-
+        "@typescript-eslint/require-array-sort-compare": [
+            "error"
+        ],
+        "@typescript-eslint/restrict-plus-operands": [
+            "error",
+            {
+                "checkCompoundAssignments": true
+            }
+        ],
+        "@typescript-eslint/restrict-template-expressions": [
+            "error",
+            {
+                "allowNumber": true,
+                "allowBoolean": false,
+                "allowNullable": false
+            }
+        ],
+        "space-before-function-paren": "off",
+        "@typescript-eslint/space-before-function-paren": [
+            "error",
+            {
+                "anonymous": "never",
+                "named": "never",
+                "asyncArrow": "never"
+            }
+        ],
+        "@typescript-eslint/strict-boolean-expressions": [
+            "error",
+            {
+                "allowNullable": false,
+                "allowSafe": false,
+                "ignoreRhs": false
+            }
+        ],
+        "@typescript-eslint/switch-exhaustiveness-check": [
+            "warn"
+        ],
+        "@typescript-eslint/type-annotation-spacing": [
+            "error"
+        ],
+        "@typescript-eslint/typedef": [
+            "error",
+            {
+                "arrayDestructuring": false,
+                "arrowParameter": false,
+                "memberVariableDeclaration": false,
+                "objectDestructuring": false,
+                "parameter": false,
+                "propertyDeclaration": false,
+                "variableDeclaration": false
+            }
+        ],
+        "@typescript-eslint/unbound-method": [
+            "error"
+        ],
+        "@typescript-eslint/unified-signatures": [
+            "error"
+        ]
     }
 }
