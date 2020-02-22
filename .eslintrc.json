@@ -224,6 +224,10 @@
         ],
         "@typescript-eslint/unified-signatures": [
             "error"
+        ],
+        "max-len": [
+            "warn",
+            80
         ]
     }
 }
