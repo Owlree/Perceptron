@@ -28,7 +28,7 @@
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.9"
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
     "@types/mathjs": "^6.0.4",
