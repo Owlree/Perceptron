@@ -1,4 +1,5 @@
 import Variable from './variable';
+import PointGraphicType from './pointgraphictype';
 
 
 /**
@@ -8,4 +9,5 @@ import Variable from './variable';
 export default interface IPointGraphicOptions {
   color?: paper.Color | Variable<paper.Color>;
   radius?: number;
+  type?: PointGraphicType;
 }
