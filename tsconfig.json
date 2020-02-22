@@ -7,6 +7,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "strict": true
+    "strict": true,
+    "experimentalDecorators": true,
+    "noImplicitThis": false
   }
 }

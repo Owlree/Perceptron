@@ -1,6 +1,7 @@
 import * as paper from 'paper';
 
 import * as Colors from './colors';
+import DecoratorWatchVariable from './decoratorwatchvariable';
 import Graphic from './graphic';
 import PointGraphicOptions from './ipointgraphicoptions';
 import ScreenTransformSubscriber from './iscreentransformsubscriber';
@@ -37,22 +38,9 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     this._yVariable = new WritableVariable<number>(0.2);
   }
 
+  @DecoratorWatchVariable
   public set color(color: paper.Color | Variable<paper.Color>) {
-    if (this._colorVariable !== undefined && this._colorVariableChangedCallback !== undefined) {
-      this._colorVariable.unregister(this._colorVariableChangedCallback);
-      this._colorVariable = undefined;
-      this._colorVariableChangedCallback = undefined;
-    }
-    if (color instanceof Variable) {
-      this._path.fillColor = color.value;
-      this._colorVariable = color;
-      this._colorVariableChangedCallback = (variable: Variable<paper.Color>): void => {
-        this._path.fillColor = variable.value;
-      };
-      this._colorVariable.register(this._colorVariableChangedCallback);
-    } else if (color instanceof paper.Color) {
-      this._path.fillColor = color;
-    }
+      this._path.fillColor = color as paper.Color;
   }
 
   public set radius(radius: number) {
