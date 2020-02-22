@@ -5,10 +5,14 @@ import * as paper from 'paper';
  * Base abstract class that represents a drawable mathematical object.
  */
 export default abstract class Graphic {
+
+  // TODO (Owlree) Get rid of the path and rely exclusively on the group
   protected _path: paper.Path;
+  protected _group: paper.Group;
 
   public constructor() {
     this._path = new paper.Path({insert: false});
+    this._group = new paper.Group({insert: false});
   }
 
   /**
@@ -16,6 +20,7 @@ export default abstract class Graphic {
    */
   public remove(): void {
     this._path.remove();
+    this._group.remove();
   }
 
   /**
@@ -26,5 +31,6 @@ export default abstract class Graphic {
     paper.CompoundPath): void {
 
     this._path.addTo(owner);
+    this._group.addTo(owner);
   }
 }
