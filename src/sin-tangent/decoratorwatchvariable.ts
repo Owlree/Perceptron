@@ -15,7 +15,7 @@ import Variable from './variable';
 export default function DecoratorWatchVariable<T>(_: any, __: string,
   descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void {
 
-  if (descriptor !== undefined) {
+  if (descriptor !== undefined && descriptor.set !== undefined) {
     // We are dealing with a setter method
     let variable: Variable<any> | undefined = undefined;
     let callback: ((variable: Variable<any>) => void) | undefined;
