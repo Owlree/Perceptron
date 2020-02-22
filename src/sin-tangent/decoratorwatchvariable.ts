@@ -4,8 +4,8 @@ import Variable from './variable';
 /**
  * Decorates a property that may be a {@link Variable} or a setter that may
  * take a {@link Variable} as argument. If a {@link Variable} is indeed
- * supplied, the setter is called with the value of the variable once when in
- * the beginning, and subsequently any time the variable changes.
+ * supplied, the setter is called with the value of the variable once when it
+ * is first decorated, and subsequently any time the variable changes.
  *
  * @param _
  * @param __
