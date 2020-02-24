@@ -42,17 +42,11 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
       case PointGraphicType.Triangle:
       {
         this._path.removeSegments();
-        // Here we create an equalateral triangle by hand because paper creates
-        // a triangle with the center that is off the origin
-        // TODO (Owlree) Double check if paper is actually faulty in this case
         const trianglePath = new paper.Path.RegularPolygon({
           insert: false,
           radius: radius,
           sides: 3
         });
-        this._path.transform(this._path.matrix!.inverted());
-        // const height: number = 3 / 2 * radius;
-        // const side: number = 2 * Math.sqrt(3) / 3 * height;
         this._path.addSegments(trianglePath.segments!);
         this._path.pivot = new paper.Point(0, 0);
         this._path.closePath();
