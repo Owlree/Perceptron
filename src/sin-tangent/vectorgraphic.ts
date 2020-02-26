@@ -104,7 +104,7 @@ export default class VectorGraphic extends Graphic {
       a = this._screenMatrix.transform(a);
       b = this._screenMatrix.transform(b);
       const angle = 180 * Math.atan2(a.y! - b.y!, b.x! - a.x!) / Math.PI;
-      this._toPoint.rotation = 90 + angle;
+      this._toPoint.rotation = -(270 + angle);
     }
   }
 }

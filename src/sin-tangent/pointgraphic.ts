@@ -87,19 +87,18 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     // coordinates, but it is not clear from the name that it does so
 
     this._rotation = rotation * Math.PI / 180;
+    this._rotation = rotation;
 
     // We can't rotate in screen space if we don't have a screen matrix
-    if (this._screenMatrix === undefined) return;
-
-    const oldPosition: paper.Point = this._path.position!;
-    this._path.transform(this._path.matrix!.inverted());
-    const rotationMatrix = new paper.Matrix(
-      Math.cos(this._rotation), -Math.sin(this._rotation),
-      -Math.sin(this._rotation), -Math.cos(this._rotation),
-      0, 0);
-    this._path.transform(rotationMatrix);
+    if (this._screenMatrix === undefined) {
+      console.warn('Could not screen rotate this object because it doesn\'t' +
+        'know of the screen transform');
+      return;
+    };
+    this._path.transform(this._screenMatrix);
+    const oldRotation = this._path.rotation!;
+    this._path.rotate(rotation - oldRotation);
     this._path.transform(this._screenMatrix.inverted());
-    this._path.position = oldPosition;
   }
 
   public get rotation(): number {
@@ -133,19 +132,11 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix): void {
-    this._screenMatrix = matrix;
-
     const oldPosition: paper.Point = this._path.position!;
     this._path.transform(this._path.matrix!.inverted());
-
-    // TODO (Owlree) Rotation matrix code duplication, see the rotation setter
-    const rotationMatrix = new paper.Matrix(
-      Math.cos(this._rotation), -Math.sin(this._rotation),
-      -Math.sin(this._rotation), -Math.cos(this._rotation),
-      0, 0);
-
-    this._path.transform(rotationMatrix);
-    this._path.transform(this._screenMatrix.inverted());
+    this._path.rotate(this._rotation);
+    this._path.transform(matrix.inverted());
+    this._screenMatrix = matrix;
     this._path.position = oldPosition;
   }
 }
