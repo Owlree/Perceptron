@@ -18,6 +18,7 @@ export default class VectorGraphic extends Graphic {
   private _y2: number = 0;
 
   public constructor(to: PointGraphic);
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
   public constructor(from: PointGraphic, to: PointGraphic)
   public constructor(point1: PointGraphic, point2?: PointGraphic) {
     super();

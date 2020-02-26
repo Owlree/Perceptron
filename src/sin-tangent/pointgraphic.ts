@@ -54,7 +54,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
       }
       default:
         // TODO (Owlree) Isn't there a better way to handle this case in TS?
-        throw new Error(`No path was created for type ${type}`);
+        throw new Error(`No path was created for type ${PointGraphicType[type]}`);
     }
     this._path.applyMatrix = false;
     this.color = color;
@@ -91,7 +91,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
       console.warn('Could not screen rotate this object because it doesn\'t' +
         'know of the screen transform');
       return;
-    };
+    }
     this._path.transform(this._screenMatrix);
     const oldRotation = this._path.rotation!;
     this._path.rotate(rotation - oldRotation);
