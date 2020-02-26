@@ -80,9 +80,6 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
 
   public set rotation(rotation: number) {
 
-    // TODO (Owlree) This code needs refactoring; it is highly duplicated with
-    // the code for the code in the screen transform update method
-
     // TODO (Owlree) This method rotates the point graphic using screen
     // coordinates, but it is not clear from the name that it does so
 
