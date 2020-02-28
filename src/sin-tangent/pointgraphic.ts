@@ -102,11 +102,13 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     return this._rotation;
   }
 
+  // TODO (Owlree) Use @DecoratorWatchVariable here
   public set x(x: number) {
     this._xVariable.value = x;
     this._path.position!.x = x;
   }
 
+  // TODO (Owlree) Use @DecoratorWatchVariable here
   public set y(y: number) {
     this._yVariable.value = y;
     this._path.position!.y = y;
