@@ -4,7 +4,7 @@ import ParametricCurveGraphic from './parametriccurvegraphic';
 
 
 /**
- * Object that represents the graph of an one variable function.
+ * Class that represents the graph of an one variable function.
  */
 export default class FunctionGraphic
   extends ParametricCurveGraphic

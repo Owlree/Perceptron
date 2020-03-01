@@ -8,6 +8,9 @@ import PointGraphic from './pointgraphic';
 import Vector2 from './vector2';
 
 
+/**
+ * Class that represents the graphic of a two-dimensional vector.
+ */
 export default class VectorGraphic extends Graphic {
   private _screenMatrix: paper.Matrix | undefined;
   private _segment: paper.Path;
