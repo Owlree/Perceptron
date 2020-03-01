@@ -5,13 +5,13 @@
  * {@link Variable} when giving it to other objects.
  */
 export default class Variable<T> {
-  protected _value?: T = undefined;
+  protected _value: T;
   protected _subscribers: Array<(self: Variable<T>) => void> = [];
-  public constructor(value: T | undefined = undefined) {
+  public constructor(value: T) {
     this._value = value;
   }
   public get value(): T {
-    return this._value!;
+    return this._value;
   }
   public register(callback: (self: Variable<T>) => void): void {
     this._subscribers.push(callback);
