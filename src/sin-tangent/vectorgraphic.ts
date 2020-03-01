@@ -9,7 +9,6 @@ import Vector2 from './vector2';
 
 
 export default class VectorGraphic extends Graphic {
-
   private _screenMatrix: paper.Matrix | undefined;
   private _segment: paper.Path;
   private _toPoint: PointGraphic;
@@ -30,37 +29,24 @@ export default class VectorGraphic extends Graphic {
 
     this._group.addChild(this._segment);
 
-    if (point2 !== undefined) {
-      // Create a vector from point1 to point2
-
+    if (point2 !== undefined) { // Create a vector from point1 to point2
       this._toPoint = point2; // Keep e reference to this point to rotate it
-
-      [this._x1, this._y1] = point1.position.array;
-      [this._x2, this._y2] = point2.position.array;
-
       this._v1 = point1.position;
       this._v2 = point2.position;
-
       point1.positionVariable.register((variable: Variable<Vector2>): void => {
         this._v1 = variable.value;
         this._build();
       });
-
       point2.positionVariable.register((variable: Variable<Vector2>): void => {
         this._v2 = variable.value;
         this._build();
       });
-
-    } else {
-      // Create a vector from (0, 0) to point1
-
+    } else { // Create a vector from (0, 0) to point1
       this._toPoint = point1; // Keep e reference to this point to rotate it
-
       point1.positionVariable.register((variable: Variable<Vector2>): void => {
         this._v2 = variable.value;
         this._build();
       });
-
       this._v1 = new Vector2(0, 0);
       this._v2 = point1.position;
     }
@@ -92,7 +78,7 @@ export default class VectorGraphic extends Graphic {
       let b = new paper.Point(this._v2.x, this._v2.y);
       a = this._screenMatrix.transform(a);
       b = this._screenMatrix.transform(b);
-      const angle = 180 * Math.atan2(a.y! - b.y!, b.x! - a.x!) / Math.PI;
+      const angle = Math.atan2(a.y! - b.y!, b.x! - a.x!) * 180 / Math.PI;
       this._toPoint.rotation = -(270 + angle);
     }
   }
