@@ -68,18 +68,17 @@ export default class VectorGraphic extends Graphic {
   }
 
   private _build(): void {
+    const a: paper.Point = new paper.Point(this._v1.x, this._v1.y);
+    const b: paper.Point = new paper.Point(this._v2.x, this._v2.y);
     this._segment.removeSegments();
-    this._segment.addSegments([
-      new paper.Segment(new paper.Point(this._v1.x, this._v1.y)),
-      new paper.Segment(new paper.Point(this._v2.x, this._v2.y))
-    ]);
+    this._segment.addSegments([new paper.Segment(a), new paper.Segment(b)]);
     if (this._screenMatrix !== undefined) {
-      let a = new paper.Point(this._v1.x, this._v1.y);
-      let b = new paper.Point(this._v2.x, this._v2.y);
-      a = this._screenMatrix.transform(a);
-      b = this._screenMatrix.transform(b);
-      const angle = Math.atan2(a.y! - b.y!, b.x! - a.x!) * 180 / Math.PI;
-      this._toPoint.rotation = -(270 + angle);
+      // Rotate the 'to' point to match the direction of the vector in screen
+      // coordinates
+      const sa: paper.Point = a.transform(this._screenMatrix);
+      const sb: paper.Point = b.transform(this._screenMatrix);
+      const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!)
+      this._toPoint.rotation = -(270 + angle * 180 / Math.PI);
     }
   }
 }
