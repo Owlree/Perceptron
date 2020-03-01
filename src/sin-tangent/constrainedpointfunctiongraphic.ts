@@ -24,6 +24,15 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
 
     this._functionGraphic = functionGraphic;
 
+    const functionChangedCallback = (): void => {
+      const x: number = this.position.x;
+      const y: number = this._functionGraphic.yAtX(x);
+      this.position = new Vector2(this.position.x, y);
+    };
+
+    // TODO (Owlree) Should this be unregistered at some point?
+    this._functionGraphic.register(functionChangedCallback);
+
     this._path.shadowColor = new paper.Color('salmon');
     this._path.shadowBlur = 0;
 

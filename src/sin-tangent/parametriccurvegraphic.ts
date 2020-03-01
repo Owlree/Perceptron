@@ -7,13 +7,16 @@ import ParametricCurveGraphicOptions from './iparametriccurvegraphicoptions';
 import Variable from './variable';
 import VariablesDictionary from './ivariablesdictionary';
 
+import MixinVariable from './mixinvariable';
+import applyMixins from './applymixins';
+
 
 /**
  * Class that represents a parametric curve graphic. Store data about the
  * mathematical functions that describe the curve. Visual information is store
  * in the parent class, {@link CurveGraphic}.
  */
-export default class ParametricCurveGraphic extends CurveGraphic {
+class ParametricCurveGraphic extends CurveGraphic {
 
   protected _from: number = 0;
   protected _to: number = 1;
@@ -44,6 +47,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     for (let key in this._variables) {
       const variable: Variable<number> | number = this._variables[key];
       if (variable instanceof Variable) {
+        // Rebuild the graphic when a variable changes value
         variable.register((): void => {
           this.build();
         });
@@ -77,6 +81,7 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     const point = new paper.Point(this.getX(this._to), this.getY(this._to));
     const segment = new paper.Segment(point);
     this._path.add(segment);
+    this.notify();
   }
 
   protected getY(i: number): number {
@@ -106,3 +111,8 @@ export default class ParametricCurveGraphic extends CurveGraphic {
     return scope;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface ParametricCurveGraphic extends MixinVariable<ParametricCurveGraphic> {}
+applyMixins(ParametricCurveGraphic, [MixinVariable]);
+export default ParametricCurveGraphic;

@@ -16,7 +16,6 @@ const functionGraphic: FunctionGraphic = new FunctionGraphic('sin(x)');
 // Create a point that is constrained to stay on the main function graphic
 const constrainedPoint = new ConstrainedPointFunctionGraphic(functionGraphic);
 
-
 const xVariable = new WritableVariable<number>(constrainedPoint.position.x);
 constrainedPoint.positionVariable.register((variable: Variable<Vector2>): void => {
   xVariable.value = variable.value.x;
@@ -30,10 +29,17 @@ const tangent: FunctionGraphic = new FunctionGraphic(
     }
   });
 
+const constrainedPoint1 = new ConstrainedPointFunctionGraphic(functionGraphic, { x: 0.25 });
+const constrainedPoint2 = new ConstrainedPointFunctionGraphic(tangent, { x: 0.25 });
+
+
 // Add both of them to the graphing calculator
 graphingCalculator.add(functionGraphic);
 graphingCalculator.add(tangent);
 graphingCalculator.add(constrainedPoint);
+graphingCalculator.add(constrainedPoint1);
+graphingCalculator.add(constrainedPoint2);
+graphingCalculator.add(new VectorGraphic(constrainedPoint1, constrainedPoint2));
 
 // Add a vector graphic from (0, 0) with a single controller
 let a = new FreePointGraphic({
