@@ -2,6 +2,7 @@ import * as paper from 'paper';
 
 import FreePointGraphicOptions from './ifreepointgraphicoptions';
 import PointGraphic from './pointgraphic';
+import Vector2 from './vector2';
 
 
 /**
@@ -20,8 +21,7 @@ export default class FreePointGraphic extends PointGraphic {
     this._path.shadowColor = new paper.Color('salmon');
     this._path.shadowBlur = 0;
 
-    this.x = x;
-    this.y = y;
+    this.position = new Vector2(x, y);
 
     this._path.on('mouseenter', (): void => {
       this._mouseOver = true;
@@ -45,8 +45,7 @@ export default class FreePointGraphic extends PointGraphic {
 
     paper.view.on('mousemove', (event: paper.MouseEvent): void => {
       if (this._mouseDown) {
-        this.x = event.point!.x!;
-        this.y = event.point!.y!;
+        this.position = new Vector2(event.point!.x!, event.point!.y!);
       }
     });
   }

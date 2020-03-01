@@ -5,6 +5,7 @@ import DecoratorWatchVariable from './decoratorwatchvariable';
 import Graphic from "./graphic";
 import Variable from "./variable";
 import PointGraphic from './pointgraphic';
+import Vector2 from './vector2';
 
 
 export default class VectorGraphic extends Graphic {
@@ -32,49 +33,35 @@ export default class VectorGraphic extends Graphic {
     this._group.addChild(this._segment);
 
     if (point2 !== undefined) {
+      // Create a vector from point1 to point2
 
-      this._toPoint = point2;
+      this._toPoint = point2; // Keep e reference to this point to rotate it
 
-      this._x1 = point1.x;
-      this._y2 = point2.y;
-      this._x2 = point2.x;
-      this._y1 = point1.y;
+      [this._x1, this._y1] = point1.position.array;
+      [this._x2, this._y2] = point2.position.array;
 
-      point1.xVariable.register((variable: Variable<number>): void => {
-        this._x1 = variable.value;
+      point1.positionVariable.register((variable: Variable<Vector2>): void => {
+        [this._x1, this._y1] = variable.value.array;
         this._build();
       });
 
-      point1.yVariable.register((variable: Variable<number>): void => {
-        this._y1 = variable.value;
+      point2.positionVariable.register((variable: Variable<Vector2>): void => {
+        [this._x2, this._y2] = variable.value.array;
         this._build();
       });
 
-      point2.xVariable.register((variable: Variable<number>): void => {
-        this._x2 = variable.value;
-        this._build();
-      });
-
-      point2.yVariable.register((variable: Variable<number>): void => {
-        this._y2 = variable.value;
-        this._build();
-      });
     } else {
-      this._toPoint = point1;
+      // Create a vector from (0, 0) to point1
 
-      point1.xVariable.register((variable: Variable<number>): void => {
-        this._x2 = variable.value;
-        this._build();
-      });
+      this._toPoint = point1; // Keep e reference to this point to rotate it
 
-      point1.yVariable.register((variable: Variable<number>): void => {
-        this._y2 = variable.value;
+      point1.positionVariable.register((variable: Variable<Vector2>): void => {
+        [this._x2, this._y2] = variable.value.array;
         this._build();
       });
 
       this._x1 = this._x2 = 0;
-      this._x2 = point1.x;
-      this._y2 = point1.y;
+      [this._x2, this._y2] = point1.position.array;
     }
 
     this._build();

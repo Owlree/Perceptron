@@ -3,7 +3,10 @@ import FreePointGraphic from './freepointgraphic';
 import FunctionGraphic from './functiongraphic';
 import GraphingCalculator from './graphingcalculator';
 import PointGraphicType from './pointgraphictype';
+import Variable from './variable';
+import Vector2 from './vector2';
 import VectorGraphic from './vectorgraphic';
+import WritableVariable from './writeablevariable';
 
 const graphingCalculator = new GraphingCalculator('canvas');
 
@@ -13,11 +16,17 @@ const functionGraphic: FunctionGraphic = new FunctionGraphic('sin(x)');
 // Create a point that is constrained to stay on the main function graphic
 const constrainedPoint = new ConstrainedPointFunctionGraphic(functionGraphic);
 
+
+const xVariable = new WritableVariable<number>(constrainedPoint.position.x);
+constrainedPoint.positionVariable.register((variable: Variable<Vector2>): void => {
+  xVariable.value = variable.value.x;
+});
+
 // Create a tangent line at a variable point
 const tangent: FunctionGraphic = new FunctionGraphic(
   'cos(p) * x + sin(p) - cos(p) * p', {
     variables: {
-      p: constrainedPoint.xVariable
+      p: xVariable
     }
   });
 
@@ -29,8 +38,14 @@ graphingCalculator.add(constrainedPoint);
 // Add a vector graphic from (0, 0) with a single controller
 let a = new FreePointGraphic({
   x: 0.25, y: -0.25,
+  type: PointGraphicType.Circle,
+  radius: 8
+});
+let b = new FreePointGraphic({
+  x: 0.50, y: -0.50,
   type: PointGraphicType.Triangle,
   radius: 12
 });
-graphingCalculator.add(new VectorGraphic(a));
+graphingCalculator.add(new VectorGraphic(a, b));
 graphingCalculator.add(a);
+graphingCalculator.add(b);

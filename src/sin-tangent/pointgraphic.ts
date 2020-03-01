@@ -8,6 +8,7 @@ import ScreenTransformSubscriber from './iscreentransformsubscriber';
 import Variable from './variable';
 import WritableVariable from './writeablevariable';
 import PointGraphicType from './pointgraphictype';
+import Vector2 from './vector2';
 
 
 /**
@@ -17,12 +18,10 @@ import PointGraphicType from './pointgraphictype';
  */
 export default abstract class PointGraphic extends Graphic implements ScreenTransformSubscriber {
   protected _colorVariable?: Variable<paper.Color> = undefined;
-  protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void) = undefined;
   protected _radius: number = 1;
   protected _rotation: number = 0;
-  protected _xVariable: WritableVariable<number>;
-  protected _yVariable: WritableVariable<number>;
   protected _screenMatrix: paper.Matrix | undefined;
+  protected _positionVariable: WritableVariable<Vector2>;
 
   public constructor({
     color = Colors.mainColor,
@@ -34,7 +33,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     switch (type) {
       case PointGraphicType.Circle:
         this._path = new paper.Path.Circle({
-          center: new paper.Point(0.7, 0.2),
+          center: new paper.Point(0.0, 0.0),
           radius: radius,
           insert: false
         });
@@ -59,8 +58,8 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     this._path.applyMatrix = false;
     this.color = color;
     this.radius = radius;
-    this._xVariable = new WritableVariable<number>(0.7);
-    this._yVariable = new WritableVariable<number>(0.2);
+    this._positionVariable = new WritableVariable<Vector2>(new Vector2(0, 0));
+    this._position = this._positionVariable;
   }
 
   @DecoratorWatchVariable
@@ -102,32 +101,22 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     return this._rotation;
   }
 
-  // TODO (Owlree) Use @DecoratorWatchVariable here
-  public set x(x: number) {
-    this._xVariable.value = x;
-    this._path.position!.x = x;
+  @DecoratorWatchVariable
+  protected set _position(position: Vector2 | Variable<Vector2>) {
+    const pv2: Vector2 = position as Vector2;
+    this._path.position = new paper.Point(pv2.x, pv2.y);
   }
 
-  // TODO (Owlree) Use @DecoratorWatchVariable here
-  public set y(y: number) {
-    this._yVariable.value = y;
-    this._path.position!.y = y;
+  public get position(): Vector2 {
+    return this._positionVariable.value;
   }
 
-  public get x(): number {
-    return this._xVariable.value;
+  public set position(position: Vector2) {
+    this._positionVariable.value = position;
   }
 
-  public get y(): number {
-    return this._yVariable.value;
-  }
-
-  public get xVariable(): Variable<number> {
-    return this._xVariable as Variable<number>;
-  }
-
-  public get yVariable(): Variable<number> {
-    return this._yVariable as Variable<number>;
+  public get positionVariable(): Variable<Vector2> {
+    return this._positionVariable as Variable<Vector2>;
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix): void {

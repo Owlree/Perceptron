@@ -3,6 +3,7 @@ import * as paper from 'paper';
 import ConstrainedPointFunctionGraphicOptions from './iconstrainedpointfunctiongraphicoptions';
 import FunctionGraphic from './functiongraphic';
 import PointGrahic from './pointgraphic';
+import Vector2 from './vector2';
 
 
 /**
@@ -26,8 +27,7 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
     this._path.shadowColor = new paper.Color('salmon');
     this._path.shadowBlur = 0;
 
-    this.x = x;
-    this.y = functionGraphic.yAtX(x);
+    this.position = new Vector2(x, functionGraphic.yAtX(x));
 
     this._path.on('mouseenter', (): void => {
       this._mouseOver = true;
@@ -51,8 +51,9 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
 
     paper.view.on('mousemove', (event: paper.MouseEvent): void => {
       if (this._mouseDown) {
-        this.x = event.point!.x!;
-        this.y = this._functionGraphic.yAtX(this.x);
+        const x: number = event.point!.x!;
+        const y: number = this._functionGraphic.yAtX(x);
+        this.position = new Vector2(x, y);
       }
     });
   }
