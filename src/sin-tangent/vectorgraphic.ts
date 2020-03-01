@@ -13,10 +13,8 @@ export default class VectorGraphic extends Graphic {
   private _screenMatrix: paper.Matrix | undefined;
   private _segment: paper.Path;
   private _toPoint: PointGraphic;
-  private _x1: number = 0;
-  private _x2: number = 0;
-  private _y1: number = 0;
-  private _y2: number = 0;
+  private _v1: Vector2;
+  private _v2: Vector2;
 
   public constructor(to: PointGraphic);
   // eslint-disable-next-line @typescript-eslint/unified-signatures
@@ -40,13 +38,16 @@ export default class VectorGraphic extends Graphic {
       [this._x1, this._y1] = point1.position.array;
       [this._x2, this._y2] = point2.position.array;
 
+      this._v1 = point1.position;
+      this._v2 = point2.position;
+
       point1.positionVariable.register((variable: Variable<Vector2>): void => {
-        [this._x1, this._y1] = variable.value.array;
+        this._v1 = variable.value;
         this._build();
       });
 
       point2.positionVariable.register((variable: Variable<Vector2>): void => {
-        [this._x2, this._y2] = variable.value.array;
+        this._v2 = variable.value;
         this._build();
       });
 
@@ -56,12 +57,12 @@ export default class VectorGraphic extends Graphic {
       this._toPoint = point1; // Keep e reference to this point to rotate it
 
       point1.positionVariable.register((variable: Variable<Vector2>): void => {
-        [this._x2, this._y2] = variable.value.array;
+        this._v2 = variable.value;
         this._build();
       });
 
-      this._x1 = this._x2 = 0;
-      [this._x2, this._y2] = point1.position.array;
+      this._v1 = new Vector2(0, 0);
+      this._v2 = point1.position;
     }
 
     this._build();
@@ -83,12 +84,12 @@ export default class VectorGraphic extends Graphic {
   private _build(): void {
     this._segment.removeSegments();
     this._segment.addSegments([
-      new paper.Segment(new paper.Point(this._x1, this._y1)),
-      new paper.Segment(new paper.Point(this._x2, this._y2))
+      new paper.Segment(new paper.Point(this._v1.x, this._v1.y)),
+      new paper.Segment(new paper.Point(this._v2.x, this._v2.y))
     ]);
     if (this._screenMatrix !== undefined) {
-      let a = new paper.Point(this._x1, this._y1);
-      let b = new paper.Point(this._x2, this._y2);
+      let a = new paper.Point(this._v1.x, this._v1.y);
+      let b = new paper.Point(this._v2.x, this._v2.y);
       a = this._screenMatrix.transform(a);
       b = this._screenMatrix.transform(b);
       const angle = 180 * Math.atan2(a.y! - b.y!, b.x! - a.x!) / Math.PI;
