@@ -80,7 +80,7 @@ export default class VectorGraphic extends Graphic {
       // coordinates
       const sa: paper.Point = a.transform(this._screenMatrix);
       const sb: paper.Point = b.transform(this._screenMatrix);
-      const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!)
+      const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!);
       this._toPoint.rotation = -(270 + angle * 180 / Math.PI);
     }
   }
