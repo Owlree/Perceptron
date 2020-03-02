@@ -1,11 +1,11 @@
-import * as Colors from './colors';
-import ConstrainedPointFunctionGraphic from './constrainedpointfunctiongraphic';
-import FunctionGraphic from './functiongraphic';
-import GraphingCalculator from './graphingcalculator';
-import Variable from './variable';
-import Vector2 from './vector2';
-import VectorGraphic from './vectorgraphic';
-import WritableVariable from './writeablevariable';
+import * as Colors from 'vima/lib/colors';
+import ConstrainedPointFunctionGraphic from 'vima/lib/constrainedpointfunctiongraphic';
+import FunctionGraphic from 'vima/lib/functiongraphic';
+import GraphingCalculator from 'vima/lib/graphingcalculator';
+import Variable from 'vima/lib/variable';
+import Vector2 from 'vima/lib/vector2';
+import VectorGraphic from 'vima/lib/vectorgraphic';
+import WritableVariable from 'vima/lib/writeablevariable';
 
 const graphingCalculator = new GraphingCalculator('canvas');
 

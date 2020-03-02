@@ -1,0 +1,1 @@
+{"version":3,"file":"icurvegraphicoptions.d.ts","sourceRoot":"","sources":["../src/icurvegraphicoptions.ts"],"names":[],"mappings":"AAAA,OAAO,QAAQ,MAAM,YAAY,CAAC;AAGlC;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,oBAAoB;IAC3C,WAAW,CAAC,EAAE,KAAK,CAAC,KAAK,GAAG,QAAQ,CAAC,KAAK,CAAC,KAAK,CAAC,CAAC;IAClD,WAAW,CAAC,EAAE,MAAM,CAAC;CACtB"}

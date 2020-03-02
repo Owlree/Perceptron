@@ -9,6 +9,9 @@
     "noImplicitReturns": true,
     "strict": true,
     "experimentalDecorators": true,
-    "noImplicitThis": false
-  }
+    "noImplicitThis": false,
+  },
+  "include": [
+    "src/sin-tangent/**/*.ts"
+  ]
 }

@@ -1,5 +1,3 @@
-import * as paper from 'paper';
-
 import * as Colors from './colors';
 import CurveGraphicOptions from './icurvegraphicoptions';
 import DecoratorWatchVariable from './decoratorwatchvariable';
