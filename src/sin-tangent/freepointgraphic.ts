@@ -1,5 +1,6 @@
 import * as paper from 'paper';
 
+import * as Colors from './colors';
 import FreePointGraphicOptions from './ifreepointgraphicoptions';
 import PointGraphic from './pointgraphic';
 import Vector2 from './vector2';
@@ -18,7 +19,7 @@ export default class FreePointGraphic extends PointGraphic {
     {x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
     super(options);
 
-    this._path.shadowColor = new paper.Color('salmon');
+    this._path.shadowColor = Colors.blueColor.value;
     this._path.shadowBlur = 0;
 
     this.position = new Vector2(x, y);

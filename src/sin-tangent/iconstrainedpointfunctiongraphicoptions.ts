@@ -1,4 +1,5 @@
 import IPointGraphicOptions from './ipointgraphicoptions';
+import Variable from './variable';
 
 
 /**
@@ -7,5 +8,5 @@ import IPointGraphicOptions from './ipointgraphicoptions';
  */
 export default interface IConstrainedPointFunctionGraphicOptions
   extends IPointGraphicOptions {
-  x?: number;
+  x?: number | Variable<number>;
 }

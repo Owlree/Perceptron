@@ -18,16 +18,20 @@ export default class VectorGraphic extends Graphic {
   private _v1: Vector2;
   private _v2: Vector2;
 
-  public constructor(to: PointGraphic);
-  // eslint-disable-next-line @typescript-eslint/unified-signatures
-  public constructor(from: PointGraphic, to: PointGraphic)
-  public constructor(point1: PointGraphic, point2?: PointGraphic) {
+  public constructor(point1: PointGraphic, point2?: PointGraphic, {
+    color = Colors.mainColor,
+    strokeWidth = 0.01
+  }: {
+    color?: paper.Color | Variable<paper.Color>;
+    strokeWidth?: number
+  } = {}) {
     super();
 
     this._segment = new paper.Path({
       insert: false,
-      strokeWidth: 0.01,
-      applyMatrix: false
+      strokeWidth: strokeWidth,
+      applyMatrix: false,
+      strokeColor: color,
     });
 
     this._group.addChild(this._segment);
@@ -56,8 +60,7 @@ export default class VectorGraphic extends Graphic {
 
     this._build();
 
-    this.color = Colors.mainColor;
-    this._path.strokeWidth = 0.01;
+    this.color = color;
   }
 
   @DecoratorWatchVariable

@@ -10,4 +10,5 @@ export default interface IPointGraphicOptions {
   color?: paper.Color | Variable<paper.Color>;
   radius?: number;
   type?: PointGraphicType;
+  interactive?: boolean;
 }

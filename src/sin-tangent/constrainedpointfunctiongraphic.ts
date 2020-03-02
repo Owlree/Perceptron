@@ -4,6 +4,8 @@ import ConstrainedPointFunctionGraphicOptions from './iconstrainedpointfunctiong
 import FunctionGraphic from './functiongraphic';
 import PointGrahic from './pointgraphic';
 import Vector2 from './vector2';
+import Variable from './variable';
+import DecoratorWatchVariable from './decoratorwatchvariable';
 
 
 /**
@@ -18,9 +20,12 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
   private _mouseOver: boolean = false;
   private readonly _functionGraphic: FunctionGraphic;
 
-  public constructor(functionGraphic: FunctionGraphic, {x = 0, ...options}:
-    ConstrainedPointFunctionGraphicOptions = {}) {
-    super(options);
+  public constructor(functionGraphic: FunctionGraphic, {
+    x = 0,
+    interactive = true,
+    ...options
+  }: ConstrainedPointFunctionGraphicOptions = {}) {
+    super({ interactive: interactive, ...options });
 
     this._functionGraphic = functionGraphic;
 
@@ -30,41 +35,49 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
       this.position = new Vector2(this.position.x, y);
     };
 
+    this.x = x;
+
     // TODO (Owlree) Should this be unregistered at some point?
     this._functionGraphic.register(functionChangedCallback);
 
     this._path.shadowColor = new paper.Color('salmon');
     this._path.shadowBlur = 0;
 
-    this.position = new Vector2(x, functionGraphic.yAtX(x));
+    if (interactive) {
+      this._path.on('mouseenter', (): void => {
+        this._mouseOver = true;
+        this.updateStyle();
+      });
 
-    this._path.on('mouseenter', (): void => {
-      this._mouseOver = true;
-      this.updateStyle();
-    });
+      this._path.on('mouseleave', (): void => {
+        this._mouseOver = false;
+        this.updateStyle();
+      });
 
-    this._path.on('mouseleave', (): void => {
-      this._mouseOver = false;
-      this.updateStyle();
-    });
+      this._path.on('mousedown', (): void => {
+        this._mouseDown = true;
+        this.updateStyle();
+      });
 
-    this._path.on('mousedown', (): void => {
-      this._mouseDown = true;
-      this.updateStyle();
-    });
+      paper.view.on('mouseup', (): void => {
+        this._mouseDown = false;
+        this.updateStyle();
+      });
 
-    paper.view.on('mouseup', (): void => {
-      this._mouseDown = false;
-      this.updateStyle();
-    });
+      paper.view.on('mousemove', (event: paper.MouseEvent): void => {
+        if (this._mouseDown) {
+          const x: number = event.point!.x!;
+          const y: number = this._functionGraphic.yAtX(x);
+          this.position = new Vector2(x, y);
+        }
+      });
+    }
+  }
 
-    paper.view.on('mousemove', (event: paper.MouseEvent): void => {
-      if (this._mouseDown) {
-        const x: number = event.point!.x!;
-        const y: number = this._functionGraphic.yAtX(x);
-        this.position = new Vector2(x, y);
-      }
-    });
+  @DecoratorWatchVariable
+  private set x(x: number | Variable<number>) {
+    const xn: number = x as number;
+    this.position = new Vector2(xn, this._functionGraphic.yAtX(xn));
   }
 
   private updateStyle(): void {

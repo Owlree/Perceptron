@@ -22,11 +22,13 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
   protected _rotation: number = 0;
   protected _screenMatrix: paper.Matrix | undefined;
   protected _positionVariable: WritableVariable<Vector2>;
+  protected _interactive: boolean = true;
 
   public constructor({
     color = Colors.mainColor,
     radius = 10,
-    type = PointGraphicType.Circle
+    type = PointGraphicType.Circle,
+    interactive = true
   }: PointGraphicOptions = {}) {
     super();
 
@@ -60,11 +62,31 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     this.radius = radius;
     this._positionVariable = new WritableVariable<Vector2>(new Vector2(0, 0));
     this._position = this._positionVariable;
+    this.interactive = interactive;
+  }
+
+  private set interactive(interactive: boolean) {
+    if (this._interactive && !interactive) {
+      this._path.strokeColor = this._path.fillColor as paper.Color;
+      this._path.fillColor = this._path.strokeColor.add(0.33);
+      this._path.strokeWidth = 2;
+    } else if (!this._interactive && interactive) {
+      this._path.fillColor = this._path.strokeColor;
+      this._path.strokeColor = null;
+      this._path.strokeWidth = 0;
+    }
+    this._interactive = interactive;
   }
 
   @DecoratorWatchVariable
   public set color(color: paper.Color | Variable<paper.Color>) {
+    if (this._interactive) {
       this._path.fillColor = color as paper.Color;
+      this._path.strokeColor = null;
+    } else {
+      this._path.strokeColor = color as paper.Color;
+      this._path.fillColor = this._path.strokeColor.add(0.33);
+    }
   }
 
   public set radius(radius: number) {

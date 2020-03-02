@@ -7,6 +7,10 @@ export const mainColor: WritableVariable<paper.Color> =
   new WritableVariable(new paper.Color('black'));
 export const backgroundColor: WritableVariable<paper.Color> =
   new WritableVariable(new paper.Color('black'));
+export const redColor: WritableVariable<paper.Color> = new WritableVariable(
+  new paper.Color('salmon'));
+export const blueColor: WritableVariable<paper.Color> = new WritableVariable(
+  new paper.Color('dodgerblue'));
 
 function activateDarkMode(): void {
   mainColor.value = new paper.Color('#FAFAFA');
