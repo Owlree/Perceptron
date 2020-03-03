@@ -1,0 +1,28 @@
+{
+  "name": "taylortan",
+  "version": "0.0.0",
+  "description": "A demosntration of approximating a function by using the linear terms of the Taylor expansion (i.e. the tangent)",
+  "main": "index.js",
+  "keywords": [
+    "matheamtics",
+    "visualisation"
+  ],
+  "author": "owlree128@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "vima": "^0.0.7"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "eslint": "^6.8.0",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^6.2.1",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "scripts": {
+    "build": "webpack",
+    "lint": "./node_modules/.bin/eslint src/**/*"
+  }
+}

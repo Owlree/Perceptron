@@ -3,12 +3,12 @@
 const path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const sinTangentConfig = {
+const taylortanConfig = {
   entry: {
-    main: './src/sin-tangent/index.ts'
+    main: './src/index.ts'
   },
   output: {
-    filename: 'sin-tangent/script.js',
+    filename: 'script.js',
     path: path.resolve(__dirname, 'dist')
   },
   mode: 'development',
@@ -22,10 +22,10 @@ const sinTangentConfig = {
     extensions: ['.ts', '.js']
   },
   plugins: [new HtmlWebpackPlugin({
-    title: 'Sin Tangent',
-    template: 'templates/canvas.html',
-    filename: 'sin-tangent/index.html'
+    title: 'Linear Taylor',
+    template: 'canvas-template.html',
+    filename: 'index.html'
   })]
 };
 
-module.exports = [ sinTangentConfig ];
+module.exports = [ taylortanConfig ];
