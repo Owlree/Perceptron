@@ -33,32 +33,36 @@ const tangentGraphic: vima.FunctionGraphic = new vima.FunctionGraphic(
     strokeWidth: 0.015
   });
 
+let dt: number = 1;
+
 // Create a variable that follows the tangent point's abscissa plus dt
 let xPlusDt: vima.WritableVariable<number> =
   new vima.WritableVariable<number>(0.5);
     tangentPoint.positionVariable.register(
       (variable: vima.Variable<vima.Vector2>): void => {
-        xPlusDt.value = variable.value.x + 1;
+        xPlusDt.value = variable.value.x + dt;
       });
 
 // Create a point constrained on the function graphic at x + dt
 const constrainedPointFunction = new vima.ConstrainedPointFunctionGraphic(
   functionGraphic, {
     x: xPlusDt,
-    interactive: false,
     radius: 5,
-    color: vima.Colors.redColor
+    color: vima.Colors.redColor,
+    // interactive: false
   });
 
 // Create a point constrained on the tangent graphic at x + dt
 const constrainedPointTangent = new vima.ConstrainedPointFunctionGraphic(
   tangentGraphic, {
     x: xPlusDt,
-    interactive: false,
     radius: 5,
-    color: vima.Colors.redColor
+    color: vima.Colors.redColor,
+    // interactive: false
   });
 
+// Create a vector that highlights the difference between the point on the
+// function and its approximation via the tangent
 const errorVector: vima.VectorGraphic = new vima.VectorGraphic(
   constrainedPointFunction, constrainedPointTangent, {
     color: vima.Colors.redColor,
@@ -80,3 +84,18 @@ graphingCalculator.add(errorVector);
 // Add the error vector controllers to the calculator
 graphingCalculator.add(constrainedPointFunction);
 graphingCalculator.add(constrainedPointTangent);
+
+errorVector.on('mousedrag', (event: any): void => {
+  xPlusDt.value = event.point.x;
+  dt = xPlusDt.value - tangentPoint.position.x;
+});
+
+constrainedPointFunction.on('mousedrag', (event: any): void => {
+  xPlusDt.value = event.point.x;
+  dt = xPlusDt.value - tangentPoint.position.x;
+});
+
+constrainedPointTangent.on('mousedrag', (event: any): void => {
+  xPlusDt.value = event.point.x;
+  dt = xPlusDt.value - tangentPoint.position.x;
+});
