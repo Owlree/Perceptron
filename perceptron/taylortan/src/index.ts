@@ -38,10 +38,10 @@ let dt: number = 1;
 // Create a variable that follows the tangent point's abscissa plus dt
 let xPlusDt: vima.WritableVariable<number> =
   new vima.WritableVariable<number>(0.5);
-    tangentPoint.positionVariable.register(
-      (variable: vima.Variable<vima.Vector2>): void => {
-        xPlusDt.value = variable.value.x + dt;
-      });
+tangentPoint.positionVariable.register(
+  (variable: vima.Variable<vima.Vector2>): void => {
+    xPlusDt.value = variable.value.x + dt;
+  });
 
 // Create a point constrained on the function graphic at x + dt
 const constrainedPointFunction = new vima.ConstrainedPointFunctionGraphic(
