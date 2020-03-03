@@ -14,5 +14,6 @@ export declare abstract class Graphic {
      * @param owner The paper.js project or item to add the underlying path to
      */
     addTo(owner: paper.Project | paper.Layer | paper.Group | paper.CompoundPath): void;
+    on(event: string, callback: Function): void;
 }
 //# sourceMappingURL=graphic.d.ts.map

@@ -24,6 +24,10 @@ var Graphic = /** @class */ (function () {
         this._path.addTo(owner);
         this._group.addTo(owner);
     };
+    Graphic.prototype.on = function (event, callback) {
+        this._group.on(event, callback);
+        this._path.on(event, callback);
+    };
     return Graphic;
 }());
 exports.Graphic = Graphic;

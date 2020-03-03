@@ -33,4 +33,10 @@ export abstract class Graphic {
     this._path.addTo(owner);
     this._group.addTo(owner);
   }
+
+  // TODO (Owlree) Paper events are exposed, create intermediary event class
+  public on(event: string, callback: Function) {
+    this._group.on(event, callback);
+    this._path.on(event, callback);
+  }
 }
