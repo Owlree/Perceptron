@@ -6,23 +6,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * The owner needs to create a {@link WriteableVariable}, casts it to a
  * {@link Variable} when giving it to other objects.
  */
-class Variable {
-    constructor(value) {
+var Variable = /** @class */ (function () {
+    function Variable(value) {
         this._subscribers = [];
         this._value = value;
     }
-    get value() {
-        return this._value;
-    }
-    register(callback) {
+    Object.defineProperty(Variable.prototype, "value", {
+        get: function () {
+            return this._value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Variable.prototype.register = function (callback) {
         this._subscribers.push(callback);
-    }
-    unregister(callback) {
-        const index = this._subscribers.indexOf(callback);
+    };
+    Variable.prototype.unregister = function (callback) {
+        var index = this._subscribers.indexOf(callback);
         if (index > -1) {
             this._subscribers.splice(index, 1);
         }
-    }
-}
-exports.default = Variable;
+    };
+    return Variable;
+}());
+exports.Variable = Variable;
 //# sourceMappingURL=variable.js.map

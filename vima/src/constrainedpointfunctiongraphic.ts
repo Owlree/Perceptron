@@ -1,11 +1,11 @@
 import * as paper from 'paper';
 
-import ConstrainedPointFunctionGraphicOptions from './iconstrainedpointfunctiongraphicoptions';
-import FunctionGraphic from './functiongraphic';
-import PointGrahic from './pointgraphic';
-import Vector2 from './vector2';
-import Variable from './variable';
-import DecoratorWatchVariable from './decoratorwatchvariable';
+import { IConstrainedPointFunctionGraphicOptions } from './iconstrainedpointfunctiongraphicoptions';
+import { FunctionGraphic } from './functiongraphic';
+import { PointGraphic } from './pointgraphic';
+import { Vector2 } from './vector2';
+import { Variable } from './variable';
+import { DecoratorWatchVariable } from './decoratorwatchvariable';
 
 
 /**
@@ -14,7 +14,7 @@ import DecoratorWatchVariable from './decoratorwatchvariable';
  * box. When the point is dragged, the abscissa of the mouse position is used
  * as input to the function to get the ordinate.
  */
-export default class ConstrainedPointFunctionGraphic extends PointGrahic {
+export class ConstrainedPointFunctionGraphic extends PointGraphic {
 
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
@@ -24,7 +24,7 @@ export default class ConstrainedPointFunctionGraphic extends PointGrahic {
     x = 0,
     interactive = true,
     ...options
-  }: ConstrainedPointFunctionGraphicOptions = {}) {
+  }: IConstrainedPointFunctionGraphicOptions = {}) {
     super({ interactive: interactive, ...options });
 
     this._functionGraphic = functionGraphic;

@@ -1,4 +1,4 @@
-export default class MixinVariable<T> {
+export class MixinVariable<T> {
   protected _subscribers: Array<(self: T) => void> = [];
 
   // TODO (Owlree) This code is duplicated with the generic variable code

@@ -1,1 +1,1 @@
-{"version":3,"file":"ifunctionscope.d.ts","sourceRoot":"","sources":["../src/ifunctionscope.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,CAAC,OAAO,WAAW,cAAc;IACrC,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAC;CACvB"}
+{"version":3,"file":"ifunctionscope.d.ts","sourceRoot":"","sources":["../src/ifunctionscope.ts"],"names":[],"mappings":"AAAA;;GAEG;AACH,MAAM,WAAW,cAAc;IAC7B,CAAC,GAAG,EAAE,MAAM,GAAG,MAAM,CAAC;CACvB"}

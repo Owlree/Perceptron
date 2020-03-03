@@ -1,10 +1,10 @@
 import * as paper from 'paper';
 
 import * as Colors from './colors';
-import BoundsSubscriber from './iboundssubscriber';
-import Graphic from './graphic';
-import ScreenTransformSubscriber from './iscreentransformsubscriber';
-import Variable from './variable';
+import { Graphic } from './graphic';
+import { IBoundsSubscriber } from './iboundssubscriber';
+import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
+import { Variable } from './variable';
 
 
 /**
@@ -12,7 +12,7 @@ import Variable from './variable';
  * graphics such as {@link CurveGraphic}, {@link FunctionGraphic},
  * {@link FreePointGraphic}, or others.
  */
-export default class GraphingCalculator {
+export class GraphingCalculator {
   private _backgroundColorVariable?: Variable<paper.Color> = undefined;
   private _backgroundColorVariableChangedCallback?:
     ((variable: Variable<paper.Color>) => void);
@@ -40,8 +40,8 @@ export default class GraphingCalculator {
     // Notify the bounds update on all objects that implement the subscriber
     // interface
     for (let graphic of this._graphics) {
-      const updateable: BoundsSubscriber | undefined =
-        graphic as unknown as BoundsSubscriber;
+      const updateable: IBoundsSubscriber | undefined =
+        graphic as unknown as IBoundsSubscriber;
       if (updateable !== undefined) {
         updateable.onBoundsUpdated(this._bounds);
       }
@@ -74,12 +74,12 @@ export default class GraphingCalculator {
     const graphicAny: any = graphic as any;
 
     if ('onBoundsUpdated' in graphicAny) {
-      const updateable: BoundsSubscriber  = graphicAny as BoundsSubscriber;
+      const updateable: IBoundsSubscriber  = graphicAny as IBoundsSubscriber;
       updateable.onBoundsUpdated(this._bounds);
     }
 
     if ('onScreenTransformUpdated' in graphicAny) {
-      const updateable: ScreenTransformSubscriber  = graphicAny as ScreenTransformSubscriber;
+      const updateable: IScreenTransformSubscriber  = graphicAny as IScreenTransformSubscriber;
       updateable.onScreenTransformUpdated(paper.view.matrix!);
     }
 
@@ -117,8 +117,8 @@ export default class GraphingCalculator {
     for (let graphic of this._graphics) {
       const graphicAny: any = graphic as any;
       if ('onScreenTransformUpdated' in graphicAny) {
-        const updateable: ScreenTransformSubscriber =
-          graphicAny as ScreenTransformSubscriber;
+        const updateable: IScreenTransformSubscriber =
+          graphicAny as IScreenTransformSubscriber;
         updateable.onScreenTransformUpdated(paper.view.matrix!);
       }
     }

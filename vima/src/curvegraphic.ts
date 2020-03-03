@@ -1,15 +1,16 @@
 import * as Colors from './colors';
-import CurveGraphicOptions from './icurvegraphicoptions';
-import DecoratorWatchVariable from './decoratorwatchvariable';
-import Graphic from './graphic';
-import Variable from './variable';
+
+import { ICurveGraphicOptions } from './icurvegraphicoptions';
+import { DecoratorWatchVariable } from './decoratorwatchvariable';
+import { Graphic } from './graphic';
+import { Variable } from './variable';
 
 
 /**
  * Abstract class for a curve graphic. Deals with all visual options. It can't
  * contain information about the actual object represented.
  */
-export default abstract class CurveGraphic extends Graphic {
+export abstract class CurveGraphic extends Graphic {
   public vars: Array<Variable<number>> = [];
   protected _width: number = 0.01;
   protected _colorVariable?: Variable<paper.Color> = undefined;
@@ -19,7 +20,7 @@ export default abstract class CurveGraphic extends Graphic {
   public constructor({
     strokeColor = Colors.mainColor,
     strokeWidth = 0.01
-  }: CurveGraphicOptions = {}) {
+  }: ICurveGraphicOptions = {}) {
     super();
     this._path.strokeWidth = strokeWidth;
     this.color = strokeColor;

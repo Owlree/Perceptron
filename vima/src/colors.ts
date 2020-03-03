@@ -1,6 +1,6 @@
 import * as paper from 'paper';
 
-import WritableVariable from './writeablevariable';
+import { WritableVariable } from './writablevariable';
 
 
 export const mainColor: WritableVariable<paper.Color> =

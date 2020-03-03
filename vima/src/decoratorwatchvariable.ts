@@ -1,4 +1,4 @@
-import Variable from './variable';
+import { Variable } from './variable';
 
 
 /**
@@ -12,7 +12,7 @@ import Variable from './variable';
  * @param descriptor
  * @returns May return the a descriptor with the decorated setter
  */
-export default function DecoratorWatchVariable<T>(_: any, __: string,
+export function DecoratorWatchVariable<T>(_: any, __: string,
   descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void {
 
   if (descriptor !== undefined && descriptor.set !== undefined) {

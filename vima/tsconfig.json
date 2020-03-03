@@ -3,7 +3,7 @@
     "declaration": true,
     "declarationMap": true,
     "experimentalDecorators": true,
-    "module": "commonjs",
+    "module": "CommonJS",
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": false,
@@ -12,9 +12,9 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es6"
+    "target": "ES5"
   },
   "include": [
-    "src/*"
+    "./src/*"
   ]
 }

@@ -1,14 +1,14 @@
 import * as math from 'mathjs';
 import * as paper from 'paper';
 
-import CurveGraphic from './curvegraphic';
-import FunctionScope from './ifunctionscope';
-import ParametricCurveGraphicOptions from './iparametriccurvegraphicoptions';
-import Variable from './variable';
-import VariablesDictionary from './ivariablesdictionary';
+import { CurveGraphic } from './curvegraphic';
+import { IFunctionScope } from './ifunctionscope';
+import { IParametricCurveGraphicOptions } from './iparametriccurvegraphicoptions';
+import { IVariablesDictionary } from './ivariablesdictionary';
+import { Variable } from './variable';
 
-import MixinVariable from './mixinvariable';
-import applyMixins from './applymixins';
+import { MixinVariable } from './mixinvariable';
+import { applyMixins } from './applymixins';
 
 
 /**
@@ -23,7 +23,7 @@ class ParametricCurveGraphic extends CurveGraphic {
   private readonly _xfn: math.EvalFunction | undefined = undefined;
   private readonly _yfn: math.EvalFunction | undefined = undefined;
   private _varStr: string = 'x';
-  private readonly _variables: VariablesDictionary = {};
+  private readonly _variables: IVariablesDictionary = {};
 
   public constructor(xFuncStr: string, yFuncStr: string, {
     from = 0,
@@ -31,7 +31,7 @@ class ParametricCurveGraphic extends CurveGraphic {
     variables = {},
     varStr = 'x',
     ...options
-  }: ParametricCurveGraphicOptions = {}) {
+  }: IParametricCurveGraphicOptions = {}) {
 
     super(options);
 
@@ -98,8 +98,8 @@ class ParametricCurveGraphic extends CurveGraphic {
    * @returns The scope containing the current values of the all the current
    * values
    */
-  private getScope(): FunctionScope {
-    let scope: FunctionScope = {};
+  private getScope(): IFunctionScope {
+    let scope: IFunctionScope = {};
     for (let key in this._variables) {
       const variable: Variable<number> | number = this._variables[key];
       if (variable instanceof Variable) {
@@ -115,4 +115,4 @@ class ParametricCurveGraphic extends CurveGraphic {
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface ParametricCurveGraphic extends MixinVariable<ParametricCurveGraphic> {}
 applyMixins(ParametricCurveGraphic, [MixinVariable]);
-export default ParametricCurveGraphic;
+export { ParametricCurveGraphic };

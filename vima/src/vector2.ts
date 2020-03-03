@@ -1,5 +1,5 @@
 
-export default class Vector2 {
+export class Vector2 {
   public readonly x: number;
   public readonly y: number;
 

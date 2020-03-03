@@ -1,14 +1,14 @@
 import * as paper from 'paper';
 
 import * as Colors from './colors';
-import DecoratorWatchVariable from './decoratorwatchvariable';
-import Graphic from './graphic';
-import PointGraphicOptions from './ipointgraphicoptions';
-import ScreenTransformSubscriber from './iscreentransformsubscriber';
-import Variable from './variable';
-import WritableVariable from './writeablevariable';
-import PointGraphicType from './pointgraphictype';
-import Vector2 from './vector2';
+import { DecoratorWatchVariable } from './decoratorwatchvariable';
+import { Graphic } from './graphic';
+import { IPointGraphicOptions } from './ipointgraphicoptions';
+import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
+import { Variable } from './variable';
+import { WritableVariable } from './writablevariable';
+import { PointGraphicType } from './pointgraphictype';
+import { Vector2 } from './vector2';
 
 
 /**
@@ -16,7 +16,7 @@ import Vector2 from './vector2';
  * visual aspects of the graphic such as color and size. The position of the
  * point is left to deriving classes.
  */
-export default abstract class PointGraphic extends Graphic implements ScreenTransformSubscriber {
+export abstract class PointGraphic extends Graphic implements IScreenTransformSubscriber {
   protected _colorVariable?: Variable<paper.Color> = undefined;
   protected _radius: number = 1;
   protected _rotation: number = 0;
@@ -29,7 +29,7 @@ export default abstract class PointGraphic extends Graphic implements ScreenTran
     radius = 10,
     type = PointGraphicType.Circle,
     interactive = true
-  }: PointGraphicOptions = {}) {
+  }: IPointGraphicOptions = {}) {
     super();
 
     switch (type) {

@@ -1,22 +1,22 @@
 import * as paper from 'paper';
 
 import * as Colors from './colors';
-import FreePointGraphicOptions from './ifreepointgraphicoptions';
-import PointGraphic from './pointgraphic';
-import Vector2 from './vector2';
+import { IFreePointGraphicOptions } from './ifreepointgraphicoptions';
+import { PointGraphic } from './pointgraphic';
+import { Vector2 } from './vector2';
 
 
 /**
  * Class that represents a free draggable point. Provides mouse interaction out
  * of the box.
  */
-export default class FreePointGraphic extends PointGraphic {
+export class FreePointGraphic extends PointGraphic {
 
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
 
   public constructor(
-    {x = 0, y = 0, ...options}: FreePointGraphicOptions = {}) {
+    {x = 0, y = 0, ...options}: IFreePointGraphicOptions = {}) {
     super(options);
 
     this._path.shadowColor = Colors.blueColor.value;

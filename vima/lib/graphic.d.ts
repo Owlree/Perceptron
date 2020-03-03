@@ -1,7 +1,7 @@
 /**
  * Base abstract class that represents a drawable mathematical object.
  */
-export default abstract class Graphic {
+export declare abstract class Graphic {
     protected _path: paper.Path;
     protected _group: paper.Group;
     constructor();

@@ -1,1 +1,1 @@
-{"version":3,"file":"iboundssubscriber.d.ts","sourceRoot":"","sources":["../src/iboundssubscriber.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,iBAAiB;IACxC,eAAe,CAAC,MAAM,EAAE,KAAK,CAAC,SAAS,GAAG,IAAI,CAAC;CAChD"}
+{"version":3,"file":"iboundssubscriber.d.ts","sourceRoot":"","sources":["../src/iboundssubscriber.ts"],"names":[],"mappings":"AAAA;;;GAGG;AACH,MAAM,WAAW,iBAAiB;IAChC,eAAe,CAAC,MAAM,EAAE,KAAK,CAAC,SAAS,GAAG,IAAI,CAAC;CAChD"}

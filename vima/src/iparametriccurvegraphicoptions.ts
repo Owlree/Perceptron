@@ -1,16 +1,16 @@
-import ICurveGraphicOptions from './icurvegraphicoptions';
-import VariablesDictionary from './ivariablesdictionary';
+import { ICurveGraphicOptions } from './icurvegraphicoptions';
+import { IVariablesDictionary }from './ivariablesdictionary';
 
 
 /**
  * Interface that describes the options that the constructor of a
  * {@link ParametricCurveGraphic} accepts as input.
  */
-export default interface IParametricCurveGraphicOptions
+export interface IParametricCurveGraphicOptions
   extends ICurveGraphicOptions {
 
   from?: number;
   to?: number;
-  variables?: VariablesDictionary;
+  variables?: IVariablesDictionary;
   varStr?: string;
 }

@@ -1,6 +1,17 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const variable_1 = require("./variable");
+var variable_1 = require("./variable");
 /**
  * Decorates a property that may be a {@link Variable} or a setter that may
  * take a {@link Variable} as argument. If a {@link Variable} is indeed
@@ -15,24 +26,25 @@ const variable_1 = require("./variable");
 function DecoratorWatchVariable(_, __, descriptor) {
     if (descriptor !== undefined && descriptor.set !== undefined) {
         // We are dealing with a setter method
-        let variable = undefined;
-        let callback;
-        return Object.assign(Object.assign({}, descriptor), { set: function (value) {
-                if (variable !== undefined && callback !== undefined) {
-                    variable.unregister(callback);
-                    variable = undefined;
-                    callback = undefined;
+        var variable_2 = undefined;
+        var callback_1;
+        return __assign(__assign({}, descriptor), { set: function (value) {
+                var _this = this;
+                if (variable_2 !== undefined && callback_1 !== undefined) {
+                    variable_2.unregister(callback_1);
+                    variable_2 = undefined;
+                    callback_1 = undefined;
                 }
-                if (value instanceof variable_1.default) {
-                    const variable = value;
-                    callback = (variable) => {
+                if (value instanceof variable_1.Variable) {
+                    var variable_3 = value;
+                    callback_1 = function (variable) {
                         if (descriptor.set !== undefined) {
-                            descriptor.set.call(this, variable.value);
+                            descriptor.set.call(_this, variable.value);
                         }
                     };
-                    variable.register(callback);
+                    variable_3.register(callback_1);
                     if (descriptor.set !== undefined) {
-                        descriptor.set.call(this, variable.value);
+                        descriptor.set.call(this, variable_3.value);
                     }
                 }
                 else {
@@ -47,5 +59,5 @@ function DecoratorWatchVariable(_, __, descriptor) {
         // TODO (Owlree) implements this case
     }
 }
-exports.default = DecoratorWatchVariable;
+exports.DecoratorWatchVariable = DecoratorWatchVariable;
 //# sourceMappingURL=decoratorwatchvariable.js.map

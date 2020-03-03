@@ -1,6 +1,6 @@
-import CurveGraphic from './curvegraphic';
-import ParametricCurveGraphicOptions from './iparametriccurvegraphicoptions';
-import MixinVariable from './mixinvariable';
+import { CurveGraphic } from './curvegraphic';
+import { IParametricCurveGraphicOptions } from './iparametriccurvegraphicoptions';
+import { MixinVariable } from './mixinvariable';
 /**
  * Class that represents a parametric curve graphic. Store data about the
  * mathematical functions that describe the curve. Visual information is store
@@ -13,7 +13,7 @@ declare class ParametricCurveGraphic extends CurveGraphic {
     private readonly _yfn;
     private _varStr;
     private readonly _variables;
-    constructor(xFuncStr: string, yFuncStr: string, { from, to, variables, varStr, ...options }?: ParametricCurveGraphicOptions);
+    constructor(xFuncStr: string, yFuncStr: string, { from, to, variables, varStr, ...options }?: IParametricCurveGraphicOptions);
     protected getX(i: number): number;
     /**
      * Computes all the points in the curve path based on {@code this._xfn} and
@@ -29,5 +29,5 @@ declare class ParametricCurveGraphic extends CurveGraphic {
 }
 interface ParametricCurveGraphic extends MixinVariable<ParametricCurveGraphic> {
 }
-export default ParametricCurveGraphic;
+export { ParametricCurveGraphic };
 //# sourceMappingURL=parametriccurvegraphic.d.ts.map

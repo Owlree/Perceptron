@@ -1,6 +1,6 @@
 /**
  * Interface describing a math.js function scope.
  */
-export default interface IFunctionScope {
+export interface IFunctionScope {
   [key: string]: number;
 }

@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "sourceMap": true,
-    "module": "commonjs",
-    "target": "es6",
+    "module": "CommonJS",
+    "target": "ES5",
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -10,6 +10,9 @@
     "strict": true,
     "experimentalDecorators": true,
     "noImplicitThis": false,
+    "typeRoots": [
+      "./node_modules/vima/lib"
+    ]
   },
   "include": [
     "src/sin-tangent/**/*.ts"

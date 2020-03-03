@@ -9,5 +9,5 @@
  * @param descriptor
  * @returns May return the a descriptor with the decorated setter
  */
-export default function DecoratorWatchVariable<T>(_: any, __: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void;
+export declare function DecoratorWatchVariable<T>(_: any, __: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void;
 //# sourceMappingURL=decoratorwatchvariable.d.ts.map

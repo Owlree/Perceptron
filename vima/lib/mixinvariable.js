@@ -1,29 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class MixinVariable {
-    constructor() {
+var MixinVariable = /** @class */ (function () {
+    function MixinVariable() {
         this._subscribers = [];
     }
     // TODO (Owlree) This code is duplicated with the generic variable code
-    register(callback) {
+    MixinVariable.prototype.register = function (callback) {
         if (this._subscribers === undefined) {
             this._subscribers = [];
         }
         this._subscribers.push(callback);
-    }
-    unregister(callback) {
-        const index = this._subscribers.indexOf(callback);
+    };
+    MixinVariable.prototype.unregister = function (callback) {
+        var index = this._subscribers.indexOf(callback);
         if (index > -1) {
             this._subscribers.splice(index, 1);
         }
-    }
-    notify() {
+    };
+    MixinVariable.prototype.notify = function () {
         if (this._subscribers === undefined)
             return;
-        for (let subscriber of this._subscribers) {
+        for (var _i = 0, _a = this._subscribers; _i < _a.length; _i++) {
+            var subscriber = _a[_i];
             subscriber(this);
         }
-    }
-}
-exports.default = MixinVariable;
+    };
+    return MixinVariable;
+}());
+exports.MixinVariable = MixinVariable;
 //# sourceMappingURL=mixinvariable.js.map

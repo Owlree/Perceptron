@@ -1,4 +1,4 @@
-export default class MixinVariable<T> {
+export declare class MixinVariable<T> {
     protected _subscribers: Array<(self: T) => void>;
     register(callback: (self: T) => void): void;
     unregister(callback: (self: T) => void): void;

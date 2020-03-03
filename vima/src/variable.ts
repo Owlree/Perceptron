@@ -4,7 +4,7 @@
  * The owner needs to create a {@link WriteableVariable}, casts it to a
  * {@link Variable} when giving it to other objects.
  */
-export default class Variable<T> {
+export class Variable<T> {
   protected _value: T;
   protected _subscribers: Array<(self: Variable<T>) => void> = [];
   public constructor(value: T) {

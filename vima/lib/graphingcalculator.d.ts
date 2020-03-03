@@ -1,11 +1,11 @@
-import Graphic from './graphic';
-import Variable from './variable';
+import { Graphic } from './graphic';
+import { Variable } from './variable';
 /**
  * A graphic calculator handles the presentation and interaction with various
  * graphics such as {@link CurveGraphic}, {@link FunctionGraphic},
  * {@link FreePointGraphic}, or others.
  */
-export default class GraphingCalculator {
+export declare class GraphingCalculator {
     private _backgroundColorVariable?;
     private _backgroundColorVariableChangedCallback?;
     private _backgroundPath;

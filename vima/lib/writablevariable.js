@@ -42,4 +42,4 @@ var WritableVariable = /** @class */ (function (_super) {
     return WritableVariable;
 }(variable_1.Variable));
 exports.WritableVariable = WritableVariable;
-//# sourceMappingURL=writeablevariable.js.map
+//# sourceMappingURL=writablevariable.js.map

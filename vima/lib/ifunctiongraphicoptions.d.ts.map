@@ -1,1 +1,1 @@
-{"version":3,"file":"ifunctiongraphicoptions.d.ts","sourceRoot":"","sources":["../src/ifunctiongraphicoptions.ts"],"names":[],"mappings":"AAAA,OAAO,8BAA8B,MAAM,kCAAkC,CAAC;AAG9E;;;GAGG;AACH,MAAM,CAAC,OAAO,WAAW,uBACvB,SAAQ,8BAA8B;CAAG"}
+{"version":3,"file":"ifunctiongraphicoptions.d.ts","sourceRoot":"","sources":["../src/ifunctiongraphicoptions.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,8BAA8B,EAAE,MAAM,kCAAkC,CAAC;AAGlF;;;GAGG;AACH,MAAM,WAAW,uBACf,SAAQ,8BAA8B;CAAG"}

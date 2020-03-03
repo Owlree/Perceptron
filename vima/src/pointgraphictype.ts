@@ -1,6 +1,4 @@
-enum PointGraphicType {
+export enum PointGraphicType {
   Circle,
   Triangle
 }
-
-export default PointGraphicType;

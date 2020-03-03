@@ -4,7 +4,7 @@ import * as paper from 'paper';
 /**
  * Base abstract class that represents a drawable mathematical object.
  */
-export default abstract class Graphic {
+export abstract class Graphic {
 
   // TODO (Owlree) Get rid of the path and rely exclusively on the group
   protected _path: paper.Path;

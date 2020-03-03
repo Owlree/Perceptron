@@ -1,4 +1,4 @@
-export default class Vector2 {
+export declare class Vector2 {
     readonly x: number;
     readonly y: number;
     constructor(x: number, y: number);

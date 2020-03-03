@@ -1,12 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Vector2 {
-    constructor(x, y) {
-        [this.x, this.y] = [x, y];
+var Vector2 = /** @class */ (function () {
+    function Vector2(x, y) {
+        var _a;
+        _a = [x, y], this.x = _a[0], this.y = _a[1];
     }
-    get array() {
-        return [this.x, this.y];
-    }
-}
-exports.default = Vector2;
+    Object.defineProperty(Vector2.prototype, "array", {
+        get: function () {
+            return [this.x, this.y];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Vector2;
+}());
+exports.Vector2 = Vector2;
 //# sourceMappingURL=vector2.js.map

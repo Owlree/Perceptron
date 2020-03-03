@@ -1,10 +1,10 @@
-import Graphic from "./graphic";
-import Variable from "./variable";
-import PointGraphic from './pointgraphic';
+import { Graphic } from "./graphic";
+import { Variable } from "./variable";
+import { PointGraphic } from './pointgraphic';
 /**
  * Class that represents the graphic of a two-dimensional vector.
  */
-export default class VectorGraphic extends Graphic {
+export declare class VectorGraphic extends Graphic {
     private _screenMatrix;
     private _segment;
     private _toPoint;

@@ -1,4 +1,4 @@
-import WritableVariable from './writeablevariable';
+import { WritableVariable } from './writablevariable';
 export declare const mainColor: WritableVariable<paper.Color>;
 export declare const backgroundColor: WritableVariable<paper.Color>;
 export declare const redColor: WritableVariable<paper.Color>;

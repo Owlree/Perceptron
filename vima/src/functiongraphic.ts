@@ -1,18 +1,18 @@
-import BoundsSubscriber from './iboundssubscriber';
-import FunctionGraphicOptions from './ifunctiongraphicoptions';
-import ParametricCurveGraphic from './parametriccurvegraphic';
+import { IBoundsSubscriber } from './iboundssubscriber';
+import { IFunctionGraphicOptions } from './ifunctiongraphicoptions';
+import { ParametricCurveGraphic } from './parametriccurvegraphic';
 
 
 /**
  * Class that represents the graph of an one variable function.
  */
-export default class FunctionGraphic
+export class FunctionGraphic
   extends ParametricCurveGraphic
-  implements BoundsSubscriber {
+  implements IBoundsSubscriber {
 
   public constructor(yFuncStr: string, {
     from = 0, to = 1, varStr = 'x', variables = {}, ...others
-  }: FunctionGraphicOptions = {}) {
+  }: IFunctionGraphicOptions = {}) {
     super(varStr, yFuncStr, {
       from: from,
       to: to,

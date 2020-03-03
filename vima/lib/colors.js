@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const paper = require("paper");
-const writeablevariable_1 = require("./writeablevariable");
-exports.mainColor = new writeablevariable_1.default(new paper.Color('black'));
-exports.backgroundColor = new writeablevariable_1.default(new paper.Color('black'));
-exports.redColor = new writeablevariable_1.default(new paper.Color('salmon'));
-exports.blueColor = new writeablevariable_1.default(new paper.Color('dodgerblue'));
+var paper = require("paper");
+var writablevariable_1 = require("./writablevariable");
+exports.mainColor = new writablevariable_1.WritableVariable(new paper.Color('black'));
+exports.backgroundColor = new writablevariable_1.WritableVariable(new paper.Color('black'));
+exports.redColor = new writablevariable_1.WritableVariable(new paper.Color('salmon'));
+exports.blueColor = new writablevariable_1.WritableVariable(new paper.Color('dodgerblue'));
 function activateDarkMode() {
     exports.mainColor.value = new paper.Color('#FAFAFA');
     exports.backgroundColor.value = new paper.Color('#121212');
@@ -15,15 +15,15 @@ function activateLightMode() {
     exports.backgroundColor.value = new paper.Color('white');
 }
 function setColorScheme() {
-    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
-    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches;
-    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified;
-    window.matchMedia('(prefers-color-scheme: dark)').addListener((event) => {
+    var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches;
+    var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches;
+    var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified;
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (event) {
         if (event.matches)
             activateDarkMode();
     });
-    window.matchMedia('(prefers-color-scheme: light)').addListener((event) => {
+    window.matchMedia('(prefers-color-scheme: light)').addListener(function (event) {
         if (event.matches)
             activateLightMode();
     });
@@ -32,8 +32,8 @@ function setColorScheme() {
     if (isLightMode)
         activateLightMode();
     if (isNotSpecified || hasNoSupport) {
-        const now = new Date();
-        const hour = now.getHours();
+        var now = new Date();
+        var hour = now.getHours();
         if (hour < 4 || hour >= 16) {
             activateDarkMode();
         }

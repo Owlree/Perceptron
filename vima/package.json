@@ -1,6 +1,6 @@
 {
   "name": "vima",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "Visualising mathematics in the browser",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,17 +11,23 @@
     "url": "https://github.com/Owlree/Perceptron",
     "directory": "vima"
   },
-  "keywords": ["mathematics", "math", "geometry", "visualisation"],
+  "keywords": [
+    "mathematics",
+    "math",
+    "geometry",
+    "visualisation"
+  ],
   "devDependencies": {
     "@types/mathjs": "^6.0.4",
-    "@types/paper": "^0.12.3",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "mathjs": "^6.6.1",
     "paper": "^0.12.4"
   },
-  "files": ["lib/**/*"],
-  "man": "lib/index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "main": "lib/index.js",
   "types": "lib/index.d.ts"
 }
