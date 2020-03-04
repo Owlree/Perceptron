@@ -18,12 +18,12 @@ import { Vector2 } from './vector2';
  */
 export abstract class PointGraphic extends Graphic implements IScreenTransformSubscriber {
   protected _colorVariable?: Variable<paper.Color> = undefined;
+  protected _interactive: boolean = true;
+  protected _path: paper.Path;
+  protected _positionVariable: WritableVariable<Vector2>;
   protected _radius: number = 1;
   protected _rotation: number = 0;
   protected _screenMatrix: paper.Matrix | undefined;
-  protected _positionVariable: WritableVariable<Vector2>;
-  protected _interactive: boolean = true;
-  protected _path: paper.Path;
 
   public constructor({
     color = Colors.mainColor,
