@@ -100,24 +100,56 @@ constrainedPointTangent.on('mousedrag', (event: any): void => {
   dt = xPlusDt.value - tangentPoint.position.x;
 });
 
-const text = new vima.TextGraphic('f(x)+Δxf\'(x)', constrainedPointTangent.positionVariable, new vima.Vector2(0, 0));
-graphingCalculator.add(text);
-
-tangentPointX.register((variable: vima.Variable<number>): void => {
-  const angle: number = Math.atan(Math.cos(variable.value));
-  text.rotation = angle * 180 / Math.PI;
-
-  if (constrainedPointTangent.position.y > constrainedPointFunction.position.y) {
-    text.offset = new vima.Vector2(-0.1 * Math.sin(angle), 0.1 * Math.cos(angle));
-  } else {
-    text.offset = new vima.Vector2(0.1 * Math.sin(angle), -0.1 * Math.cos(angle));
-  }
+const approixationLabel = new vima.TextGraphic({
+  content: 'f(x)+Δxf\'(x)',
+  fontFamily: 'Latin Modern Roman',
+  position: constrainedPointTangent.positionVariable,
+  fontWeight: 'bold'
+});
+const exactLabel = new vima.TextGraphic({
+  content: 'f(x+Δx)',
+  fontFamily: 'Latin Modern Roman',
+  position: constrainedPointFunction.positionVariable,
+  fontWeight: 'bold'
+});
+const fxLabel = new vima.TextGraphic({
+  content: 'f(x)',
+  fontFamily: 'Latin Modern Roman',
+  position: tangentPoint.positionVariable,
+  fontWeight: 'bold',
+  offset: new vima.Vector2(0, 0.1)
 });
 
-// let i = 0;
-// function loop() {
-//   text.rotation = i;
-//   i += 1;
-//   requestAnimationFrame(loop);
-// }
-// loop();
+
+graphingCalculator.add(approixationLabel);
+graphingCalculator.add(exactLabel);
+graphingCalculator.add(fxLabel);
+
+function positionExactLabel() {
+  const angle: number = Math.atan(Math.cos(constrainedPointFunction.positionVariable.value.x));
+  exactLabel.rotation = angle * 180 / Math.PI;
+  if (constrainedPointTangent.position.y > constrainedPointFunction.position.y) {
+    exactLabel.offset = new vima.Vector2(0.1 * Math.sin(angle), -0.1 * Math.cos(angle));
+  } else {
+    exactLabel.offset = new vima.Vector2(-0.1 * Math.sin(angle), 0.1 * Math.cos(angle));
+  }
+}
+
+function positionApproximationLabel() {
+  const angle: number = Math.atan(Math.cos(tangentPointX.value));
+  approixationLabel.rotation = angle * 180 / Math.PI;
+  if (constrainedPointTangent.position.y > constrainedPointFunction.position.y) {
+    approixationLabel.offset = new vima.Vector2(-0.1 * Math.sin(angle), 0.1 * Math.cos(angle));
+  } else {
+    approixationLabel.offset = new vima.Vector2(0.1 * Math.sin(angle), -0.1 * Math.cos(angle));
+  }
+}
+
+function positionLabels() {
+  positionApproximationLabel();
+  positionExactLabel();
+}
+
+tangentPointX.register(positionLabels);
+constrainedPointTangent.positionVariable.register(positionLabels);
+positionLabels();

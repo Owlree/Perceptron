@@ -3,8 +3,10 @@ import * as paper from 'paper';
 import { DecoratorWatchVariable } from './decoratorwatchvariable';
 import { Graphic } from './graphic';
 import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
+import { ITextGraphicOptions } from './itextgraphicoptions';
 import { Variable } from './variable';
 import { Vector2 } from './vector2';
+import { Colors } from '.';
 
 export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
 
@@ -13,37 +15,38 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
   protected _rotation: number = 0;
   protected _screenMatrix: paper.Matrix | undefined;
 
-  constructor(text: string, position: Variable<Vector2> | Vector2, offset: Vector2) {
+  constructor({
+    color = Colors.mainColor,
+    content = '',
+    fontFamily,
+    fontSize = 20,
+    fontWeight,
+    offset = new Vector2(0, 0),
+    position = new Vector2(0, 0)
+  }: ITextGraphicOptions = {}) {
     super();
     this._text = new paper.PointText({
       point: [0, 0],
-      content: text,
-      fillColor: 'black',
-      fontFamily: 'Courier New',
-      fontWeight: 'bold',
-      fontSize: 24
+      content: content,
+      fontFamily: fontFamily,
+      fontWeight: fontWeight,
+      fontSize: fontSize
     });
-    this.position = position;
+    this.color = color;
     this.offset = offset;
+    this.position = position;
   }
 
   public set rotation(rotation: number) {
-
-    // TODO (Owlree) This method rotates the point graphic using screen
-    // coordinates, but it is not clear from the name that it does so
-
     this._rotation = rotation;
-    // We can't rotate in screen space if we don't have a screen matrix
     if (this._screenMatrix === undefined) {
       console.warn('Could not screen rotate this object because it doesn\'t' +
         'know of the screen transform');
       return;
     }
     this._text.transform(this._screenMatrix);
-
     const a: paper.Point = new paper.Point(0, 0);
     const b: paper.Point = new paper.Point(1, Math.tan(this._rotation * Math.PI / 180));
-
     const sa: paper.Point = a.transform(this._screenMatrix);
     const sb: paper.Point = b.transform(this._screenMatrix);
     const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!);
@@ -62,12 +65,19 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
     this._text.position = new paper.Point(pv2.x + this._offset.x, pv2.y + this._offset.y);
   }
 
-  public set offset(offset: Vector2) {
+  @DecoratorWatchVariable
+  public set offset(offset: Variable<Vector2> | Vector2) {
+    const ov2: Vector2 = offset as Vector2;
     this._text.position =
       new paper.Point(
-        this._text.position.x - this._offset.x + offset.x,
-        this._text.position.y - this._offset.y + offset.y);
-    this._offset = offset;
+        this._text.position.x - this._offset.x + ov2.x,
+        this._text.position.y - this._offset.y + ov2.y);
+    this._offset = ov2;
+  }
+
+  @DecoratorWatchVariable
+  public set color(color: Variable<paper.Color> | paper.Color) {
+    this._text.fillColor = color as paper.Color;
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix): void {

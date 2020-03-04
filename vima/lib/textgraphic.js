@@ -23,22 +23,24 @@ var paper = require("paper");
 var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
 var graphic_1 = require("./graphic");
 var vector2_1 = require("./vector2");
+var _1 = require(".");
 var TextGraphic = /** @class */ (function (_super) {
     __extends(TextGraphic, _super);
-    function TextGraphic(text, position, offset) {
+    function TextGraphic(_a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? _1.Colors.mainColor : _c, _d = _b.content, content = _d === void 0 ? '' : _d, fontFamily = _b.fontFamily, _e = _b.fontSize, fontSize = _e === void 0 ? 20 : _e, fontWeight = _b.fontWeight, _f = _b.offset, offset = _f === void 0 ? new vector2_1.Vector2(0, 0) : _f, _g = _b.position, position = _g === void 0 ? new vector2_1.Vector2(0, 0) : _g;
         var _this = _super.call(this) || this;
         _this._offset = new vector2_1.Vector2(0, 0);
         _this._rotation = 0;
         _this._text = new paper.PointText({
             point: [0, 0],
-            content: text,
-            fillColor: 'black',
-            fontFamily: 'Courier New',
-            fontWeight: 'bold',
-            fontSize: 24
+            content: content,
+            fontFamily: fontFamily,
+            fontWeight: fontWeight,
+            fontSize: fontSize
         });
-        _this.position = position;
+        _this.color = color;
         _this.offset = offset;
+        _this.position = position;
         return _this;
     }
     Object.defineProperty(TextGraphic.prototype, "rotation", {
@@ -46,10 +48,7 @@ var TextGraphic = /** @class */ (function (_super) {
             return this._rotation;
         },
         set: function (rotation) {
-            // TODO (Owlree) This method rotates the point graphic using screen
-            // coordinates, but it is not clear from the name that it does so
             this._rotation = rotation;
-            // We can't rotate in screen space if we don't have a screen matrix
             if (this._screenMatrix === undefined) {
                 console.warn('Could not screen rotate this object because it doesn\'t' +
                     'know of the screen transform');
@@ -77,9 +76,17 @@ var TextGraphic = /** @class */ (function (_super) {
     });
     Object.defineProperty(TextGraphic.prototype, "offset", {
         set: function (offset) {
+            var ov2 = offset;
             this._text.position =
-                new paper.Point(this._text.position.x - this._offset.x + offset.x, this._text.position.y - this._offset.y + offset.y);
-            this._offset = offset;
+                new paper.Point(this._text.position.x - this._offset.x + ov2.x, this._text.position.y - this._offset.y + ov2.y);
+            this._offset = ov2;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TextGraphic.prototype, "color", {
+        set: function (color) {
+            this._text.fillColor = color;
         },
         enumerable: true,
         configurable: true
@@ -100,6 +107,12 @@ var TextGraphic = /** @class */ (function (_super) {
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], TextGraphic.prototype, "position", null);
+    __decorate([
+        decoratorwatchvariable_1.DecoratorWatchVariable
+    ], TextGraphic.prototype, "offset", null);
+    __decorate([
+        decoratorwatchvariable_1.DecoratorWatchVariable
+    ], TextGraphic.prototype, "color", null);
     return TextGraphic;
 }(graphic_1.Graphic));
 exports.TextGraphic = TextGraphic;
