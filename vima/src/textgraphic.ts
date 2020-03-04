@@ -48,11 +48,13 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
     }
     this._text.transform(this._screenMatrix);
     const a: paper.Point = new paper.Point(0, 0);
-    const b: paper.Point = new paper.Point(1, Math.tan(this._rotation * Math.PI / 180));
-    const sa: paper.Point = a.transform(this._screenMatrix);
-    const sb: paper.Point = b.transform(this._screenMatrix);
-    const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!);
-    this._text.rotation = -(angle * 180 / Math.PI);
+    const b: paper.Point = new paper.Point(
+      Math.cos(this._rotation * Math.PI / 180),
+      Math.sin(this._rotation * Math.PI / 180));
+    const sa: paper.Point = a.transform(this._screenMatrix.inverted());
+    const sb: paper.Point = b.transform(this._screenMatrix.inverted());
+    const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
+    this._text.rotation = angle * 180 / Math.PI;
 
     this._text.transform(this._screenMatrix.inverted());
   }
@@ -87,12 +89,14 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
     this._text.transform(this._text.matrix!.inverted());
 
     const a: paper.Point = new paper.Point(0, 0);
-    const b: paper.Point = new paper.Point(1, Math.tan(this._rotation * Math.PI / 180));
+    const b: paper.Point = new paper.Point(
+      Math.cos(this._rotation * Math.PI / 180),
+      Math.sin(this._rotation * Math.PI / 180));
 
-    const sa: paper.Point = a.transform(matrix);
-    const sb: paper.Point = b.transform(matrix);
-    const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!);
-    this._text.rotation = -(angle * 180 / Math.PI);
+    const sa: paper.Point = a.transform(matrix.inverted());
+    const sb: paper.Point = b.transform(matrix.inverted());
+    const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
+    this._text.rotation = angle * 180 / Math.PI;
 
     this._text.transform(matrix.inverted());
     this._screenMatrix = matrix;

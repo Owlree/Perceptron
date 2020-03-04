@@ -57,11 +57,11 @@ var TextGraphic = /** @class */ (function (_super) {
             }
             this._text.transform(this._screenMatrix);
             var a = new paper.Point(0, 0);
-            var b = new paper.Point(1, Math.tan(this._rotation * Math.PI / 180));
-            var sa = a.transform(this._screenMatrix);
-            var sb = b.transform(this._screenMatrix);
-            var angle = Math.atan2(sa.y - sb.y, sb.x - sa.x);
-            this._text.rotation = -(angle * 180 / Math.PI);
+            var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
+            var sa = a.transform(this._screenMatrix.inverted());
+            var sb = b.transform(this._screenMatrix.inverted());
+            var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
+            this._text.rotation = angle * 180 / Math.PI;
             this._text.transform(this._screenMatrix.inverted());
         },
         enumerable: true,
@@ -96,11 +96,11 @@ var TextGraphic = /** @class */ (function (_super) {
         var oldPosition = this._text.position;
         this._text.transform(this._text.matrix.inverted());
         var a = new paper.Point(0, 0);
-        var b = new paper.Point(1, Math.tan(this._rotation * Math.PI / 180));
-        var sa = a.transform(matrix);
-        var sb = b.transform(matrix);
-        var angle = Math.atan2(sa.y - sb.y, sb.x - sa.x);
-        this._text.rotation = -(angle * 180 / Math.PI);
+        var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
+        var sa = a.transform(matrix.inverted());
+        var sb = b.transform(matrix.inverted());
+        var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
+        this._text.rotation = angle * 180 / Math.PI;
         this._text.transform(matrix.inverted());
         this._screenMatrix = matrix;
         this._text.position = oldPosition;

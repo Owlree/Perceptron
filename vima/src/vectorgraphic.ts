@@ -83,12 +83,8 @@ export class VectorGraphic extends Graphic {
     this._segment.removeSegments();
     this._segment.addSegments([new paper.Segment(a), new paper.Segment(b)]);
     if (this._screenMatrix !== undefined) {
-      // Rotate the 'to' point to match the direction of the vector in screen
-      // coordinates
-      const sa: paper.Point = a.transform(this._screenMatrix);
-      const sb: paper.Point = b.transform(this._screenMatrix);
-      const angle: number = Math.atan2(sa.y! - sb.y!, sb.x! - sa.x!);
-      this._toPoint.rotation = -(270 + angle * 180 / Math.PI);
+      const angle: number = Math.atan2(b.y! - a.y!, b.x! - a.x!);
+      this._toPoint.rotation = angle * 180 / Math.PI - 90;
     }
   }
 }

@@ -11,12 +11,12 @@ import { Vector2 } from './vector2';
  */
 export declare abstract class PointGraphic extends Graphic implements IScreenTransformSubscriber {
     protected _colorVariable?: Variable<paper.Color>;
-    protected _radius: number;
-    protected _rotation: number;
-    protected _screenMatrix: paper.Matrix | undefined;
-    protected _positionVariable: WritableVariable<Vector2>;
     protected _interactive: boolean;
     protected _path: paper.Path;
+    protected _positionVariable: WritableVariable<Vector2>;
+    protected _radius: number;
+    protected _rotation: number;
+    protected _screenMatrix?: paper.Matrix;
     constructor({ color, radius, type, interactive }?: IPointGraphicOptions);
     private set interactive(value);
     set color(color: paper.Color | Variable<paper.Color>);

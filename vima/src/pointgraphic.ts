@@ -97,23 +97,23 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
   }
 
   public set rotation(rotation: number) {
-
-    // TODO (Owlree) This method rotates the point graphic using screen
-    // coordinates, but it is not clear from the name that it does so
-
-    this._rotation = rotation * Math.PI / 180;
     this._rotation = rotation;
-
-    // We can't rotate in screen space if we don't have a screen matrix
     if (this._screenMatrix === undefined) {
       console.warn('Could not screen rotate this object because it doesn\'t' +
         'know of the screen transform');
       return;
     }
-    this._path.transform(this._screenMatrix);
-    const oldRotation = this._path.rotation!;
-    this._path.rotate(rotation - oldRotation);
-    this._path.transform(this._screenMatrix.inverted());
+    this._item.transform(this._screenMatrix);
+    const a: paper.Point = new paper.Point(0, 0);
+    const b: paper.Point = new paper.Point(
+      Math.cos(this._rotation * Math.PI / 180),
+      Math.sin(this._rotation * Math.PI / 180));
+    const sa: paper.Point = a.transform(this._screenMatrix.inverted());
+    const sb: paper.Point = b.transform(this._screenMatrix.inverted());
+    const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
+    this._item.rotation = angle * 180 / Math.PI;
+
+    this._item.transform(this._screenMatrix.inverted());
   }
 
   public get rotation(): number {
@@ -139,11 +139,21 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix): void {
-    const oldPosition: paper.Point = this._path.position!;
-    this._path.transform(this._path.matrix!.inverted());
-    this._path.rotate(this._rotation);
-    this._path.transform(matrix.inverted());
+    const oldPosition: paper.Point = this._item.position!;
+    this._item.transform(this._item.matrix!.inverted());
+
+    const a: paper.Point = new paper.Point(0, 0);
+    const b: paper.Point = new paper.Point(
+      Math.cos(this._rotation * Math.PI / 180),
+      Math.sin(this._rotation * Math.PI / 180));
+
+    const sa: paper.Point = a.transform(matrix.inverted());
+    const sb: paper.Point = b.transform(matrix.inverted());
+    const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
+    this._item.rotation = angle * 180 / Math.PI;
+
+    this._item.transform(matrix.inverted());
     this._screenMatrix = matrix;
-    this._path.position = oldPosition;
+    this._item.position = oldPosition;
   }
 }

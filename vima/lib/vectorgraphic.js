@@ -83,12 +83,8 @@ var VectorGraphic = /** @class */ (function (_super) {
         this._segment.removeSegments();
         this._segment.addSegments([new paper.Segment(a), new paper.Segment(b)]);
         if (this._screenMatrix !== undefined) {
-            // Rotate the 'to' point to match the direction of the vector in screen
-            // coordinates
-            var sa = a.transform(this._screenMatrix);
-            var sb = b.transform(this._screenMatrix);
-            var angle = Math.atan2(sa.y - sb.y, sb.x - sa.x);
-            this._toPoint.rotation = -(270 + angle * 180 / Math.PI);
+            var angle = Math.atan2(b.y - a.y, b.x - a.x);
+            this._toPoint.rotation = angle * 180 / Math.PI - 90;
         }
     };
     __decorate([

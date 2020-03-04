@@ -37,9 +37,9 @@ var PointGraphic = /** @class */ (function (_super) {
         var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? Colors.mainColor : _c, _d = _b.radius, radius = _d === void 0 ? 10 : _d, _e = _b.type, type = _e === void 0 ? pointgraphictype_1.PointGraphicType.Circle : _e, _f = _b.interactive, interactive = _f === void 0 ? true : _f;
         var _this = _super.call(this) || this;
         _this._colorVariable = undefined;
+        _this._interactive = true;
         _this._radius = 1;
         _this._rotation = 0;
-        _this._interactive = true;
         switch (type) {
             case pointgraphictype_1.PointGraphicType.Circle:
                 _this._item = _this._path = new paper.Path.Circle({
@@ -118,20 +118,20 @@ var PointGraphic = /** @class */ (function (_super) {
             return this._rotation;
         },
         set: function (rotation) {
-            // TODO (Owlree) This method rotates the point graphic using screen
-            // coordinates, but it is not clear from the name that it does so
-            this._rotation = rotation * Math.PI / 180;
             this._rotation = rotation;
-            // We can't rotate in screen space if we don't have a screen matrix
             if (this._screenMatrix === undefined) {
                 console.warn('Could not screen rotate this object because it doesn\'t' +
                     'know of the screen transform');
                 return;
             }
-            this._path.transform(this._screenMatrix);
-            var oldRotation = this._path.rotation;
-            this._path.rotate(rotation - oldRotation);
-            this._path.transform(this._screenMatrix.inverted());
+            this._item.transform(this._screenMatrix);
+            var a = new paper.Point(0, 0);
+            var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
+            var sa = a.transform(this._screenMatrix.inverted());
+            var sb = b.transform(this._screenMatrix.inverted());
+            var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
+            this._item.rotation = angle * 180 / Math.PI;
+            this._item.transform(this._screenMatrix.inverted());
         },
         enumerable: true,
         configurable: true
@@ -162,12 +162,17 @@ var PointGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     PointGraphic.prototype.onScreenTransformUpdated = function (matrix) {
-        var oldPosition = this._path.position;
-        this._path.transform(this._path.matrix.inverted());
-        this._path.rotate(this._rotation);
-        this._path.transform(matrix.inverted());
+        var oldPosition = this._item.position;
+        this._item.transform(this._item.matrix.inverted());
+        var a = new paper.Point(0, 0);
+        var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
+        var sa = a.transform(matrix.inverted());
+        var sb = b.transform(matrix.inverted());
+        var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
+        this._item.rotation = angle * 180 / Math.PI;
+        this._item.transform(matrix.inverted());
         this._screenMatrix = matrix;
-        this._path.position = oldPosition;
+        this._item.position = oldPosition;
     };
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
