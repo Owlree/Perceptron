@@ -1,7 +1,7 @@
 import { Variable } from "./variable";
 import { Vector2 } from "./vector2";
 
-export interface ITextGraphicInterface {
+export interface ITextGraphicOptions {
   color?: Variable<paper.Color> | paper.Color;
   content?: string;
   fontFamily?: string;
