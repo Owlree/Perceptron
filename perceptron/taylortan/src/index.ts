@@ -99,3 +99,25 @@ constrainedPointTangent.on('mousedrag', (event: any): void => {
   xPlusDt.value = event.point.x;
   dt = xPlusDt.value - tangentPoint.position.x;
 });
+
+const text = new vima.TextGraphic('f(x)+Δxf\'(x)', constrainedPointTangent.positionVariable, new vima.Vector2(0, 0));
+graphingCalculator.add(text);
+
+tangentPointX.register((variable: vima.Variable<number>): void => {
+  const angle: number = Math.atan(Math.cos(variable.value));
+  text.rotation = angle * 180 / Math.PI;
+
+  if (constrainedPointTangent.position.y > constrainedPointFunction.position.y) {
+    text.offset = new vima.Vector2(-0.1 * Math.sin(angle), 0.1 * Math.cos(angle));
+  } else {
+    text.offset = new vima.Vector2(0.1 * Math.sin(angle), -0.1 * Math.cos(angle));
+  }
+});
+
+// let i = 0;
+// function loop() {
+//   text.rotation = i;
+//   i += 1;
+//   requestAnimationFrame(loop);
+// }
+// loop();
