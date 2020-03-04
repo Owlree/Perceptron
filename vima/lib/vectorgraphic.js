@@ -32,6 +32,7 @@ var VectorGraphic = /** @class */ (function (_super) {
     function VectorGraphic(point1, point2, _a) {
         var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? Colors.mainColor : _c, _d = _b.strokeWidth, strokeWidth = _d === void 0 ? 0.01 : _d;
         var _this = _super.call(this) || this;
+        _this._group = _this._item = new paper.Group({ insert: false });
         _this._segment = new paper.Path({
             insert: false,
             strokeWidth: strokeWidth,

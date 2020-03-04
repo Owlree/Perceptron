@@ -5,6 +5,7 @@ import { Variable } from './variable';
 import { Vector2 } from './vector2';
 export declare class TextGraphic extends Graphic implements IScreenTransformSubscriber {
     private _offset;
+    private _text;
     protected _rotation: number;
     protected _screenMatrix: paper.Matrix | undefined;
     constructor({ color, content, fontFamily, fontSize, fontWeight, offset, position }?: ITextGraphicOptions);

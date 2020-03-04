@@ -1,5 +1,6 @@
-import * as Colors from './colors';
+import * as paper from 'paper';
 
+import * as Colors from './colors';
 import { ICurveGraphicOptions } from './icurvegraphicoptions';
 import { DecoratorWatchVariable } from './decoratorwatchvariable';
 import { Graphic } from './graphic';
@@ -17,11 +18,14 @@ export abstract class CurveGraphic extends Graphic {
   protected _colorVariableChangedCallback?:
     ((variable: Variable<paper.Color>) => void) = undefined;
 
+  protected _path: paper.Path;
+
   public constructor({
     strokeColor = Colors.mainColor,
     strokeWidth = 0.01
   }: ICurveGraphicOptions = {}) {
     super();
+    this._item = this._path = new paper.Path({insert: false});
     this._path.strokeWidth = strokeWidth;
     this.color = strokeColor;
   }

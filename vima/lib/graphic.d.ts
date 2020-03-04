@@ -2,9 +2,7 @@
  * Base abstract class that represents a drawable mathematical object.
  */
 export declare abstract class Graphic {
-    protected _path: paper.Path;
-    protected _group: paper.Group;
-    protected _text: paper.PointText;
+    protected _item: paper.Item;
     constructor();
     /**
      * Removes the underlying graphic from its parent.

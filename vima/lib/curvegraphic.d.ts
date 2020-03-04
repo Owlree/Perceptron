@@ -10,6 +10,7 @@ export declare abstract class CurveGraphic extends Graphic {
     protected _width: number;
     protected _colorVariable?: Variable<paper.Color>;
     protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void);
+    protected _path: paper.Path;
     constructor({ strokeColor, strokeWidth }?: ICurveGraphicOptions);
     set color(color: paper.Color | Variable<paper.Color>);
     set width(width: number);

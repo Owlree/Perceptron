@@ -23,6 +23,7 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
   protected _screenMatrix: paper.Matrix | undefined;
   protected _positionVariable: WritableVariable<Vector2>;
   protected _interactive: boolean = true;
+  protected _path: paper.Path;
 
   public constructor({
     color = Colors.mainColor,
@@ -31,10 +32,9 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     interactive = true
   }: IPointGraphicOptions = {}) {
     super();
-
     switch (type) {
       case PointGraphicType.Circle:
-        this._path = new paper.Path.Circle({
+        this._item = this._path = new paper.Path.Circle({
           center: new paper.Point(0.0, 0.0),
           radius: radius,
           insert: false
@@ -42,15 +42,12 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
         break;
       case PointGraphicType.Triangle:
       {
-        this._path.removeSegments();
-        const trianglePath = new paper.Path.RegularPolygon({
+        this._item = this._path = new paper.Path.RegularPolygon({
           insert: false,
           radius: radius,
           sides: 3
         });
-        this._path.addSegments(trianglePath.segments!);
         this._path.pivot = new paper.Point(0, 0);
-        this._path.closePath();
         break;
       }
       default:

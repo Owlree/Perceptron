@@ -18,6 +18,8 @@ export class VectorGraphic extends Graphic {
   private _v1: Vector2;
   private _v2: Vector2;
 
+  private _group: paper.Group;
+
   public constructor(point1: PointGraphic, point2?: PointGraphic, {
     color = Colors.mainColor,
     strokeWidth = 0.01
@@ -26,6 +28,8 @@ export class VectorGraphic extends Graphic {
     strokeWidth?: number
   } = {}) {
     super();
+
+    this._group = this._item = new paper.Group({insert: false});
 
     this._segment = new paper.Path({
       insert: false,

@@ -11,6 +11,7 @@ import { Colors } from '.';
 export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
 
   private _offset: Vector2 = new Vector2(0, 0);
+  private _text: paper.PointText;
 
   protected _rotation: number = 0;
   protected _screenMatrix: paper.Matrix | undefined;
@@ -25,12 +26,13 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
     position = new Vector2(0, 0)
   }: ITextGraphicOptions = {}) {
     super();
-    this._text = new paper.PointText({
+    this._text = this._item = new paper.PointText({
       point: [0, 0],
       content: content,
       fontFamily: fontFamily,
       fontWeight: fontWeight,
-      fontSize: fontSize
+      fontSize: fontSize,
+      insert: false
     });
     this.color = color;
     this.offset = offset;

@@ -19,6 +19,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var paper = require("paper");
 var Colors = require("./colors");
 var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
 var graphic_1 = require("./graphic");
@@ -35,6 +36,7 @@ var CurveGraphic = /** @class */ (function (_super) {
         _this._width = 0.01;
         _this._colorVariable = undefined;
         _this._colorVariableChangedCallback = undefined;
+        _this._item = _this._path = new paper.Path({ insert: false });
         _this._path.strokeWidth = strokeWidth;
         _this.color = strokeColor;
         return _this;

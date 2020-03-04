@@ -16,6 +16,7 @@ export declare abstract class PointGraphic extends Graphic implements IScreenTra
     protected _screenMatrix: paper.Matrix | undefined;
     protected _positionVariable: WritableVariable<Vector2>;
     protected _interactive: boolean;
+    protected _path: paper.Path;
     constructor({ color, radius, type, interactive }?: IPointGraphicOptions);
     private set interactive(value);
     set color(color: paper.Color | Variable<paper.Color>);

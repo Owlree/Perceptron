@@ -42,7 +42,7 @@ var PointGraphic = /** @class */ (function (_super) {
         _this._interactive = true;
         switch (type) {
             case pointgraphictype_1.PointGraphicType.Circle:
-                _this._path = new paper.Path.Circle({
+                _this._item = _this._path = new paper.Path.Circle({
                     center: new paper.Point(0.0, 0.0),
                     radius: radius,
                     insert: false
@@ -50,15 +50,12 @@ var PointGraphic = /** @class */ (function (_super) {
                 break;
             case pointgraphictype_1.PointGraphicType.Triangle:
                 {
-                    _this._path.removeSegments();
-                    var trianglePath = new paper.Path.RegularPolygon({
+                    _this._item = _this._path = new paper.Path.RegularPolygon({
                         insert: false,
                         radius: radius,
                         sides: 3
                     });
-                    _this._path.addSegments(trianglePath.segments);
                     _this._path.pivot = new paper.Point(0, 0);
-                    _this._path.closePath();
                     break;
                 }
             default:

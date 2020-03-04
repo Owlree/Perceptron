@@ -10,6 +10,7 @@ export declare class VectorGraphic extends Graphic {
     private _toPoint;
     private _v1;
     private _v2;
+    private _group;
     constructor(point1: PointGraphic, point2?: PointGraphic, { color, strokeWidth }?: {
         color?: paper.Color | Variable<paper.Color>;
         strokeWidth?: number;

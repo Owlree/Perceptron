@@ -31,12 +31,13 @@ var TextGraphic = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this._offset = new vector2_1.Vector2(0, 0);
         _this._rotation = 0;
-        _this._text = new paper.PointText({
+        _this._text = _this._item = new paper.PointText({
             point: [0, 0],
             content: content,
             fontFamily: fontFamily,
             fontWeight: fontWeight,
-            fontSize: fontSize
+            fontSize: fontSize,
+            insert: false
         });
         _this.color = color;
         _this.offset = offset;
