@@ -4,6 +4,7 @@
 export declare abstract class Graphic {
     protected _path: paper.Path;
     protected _group: paper.Group;
+    protected _text: paper.PointText;
     constructor();
     /**
      * Removes the underlying graphic from its parent.

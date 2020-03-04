@@ -9,10 +9,12 @@ export abstract class Graphic {
   // TODO (Owlree) Get rid of the path and rely exclusively on the group
   protected _path: paper.Path;
   protected _group: paper.Group;
+  protected _text: paper.PointText;
 
   public constructor() {
     this._path = new paper.Path({insert: false});
     this._group = new paper.Group({insert: false});
+    this._text = new paper.PointText([0, 0]);
   }
 
   /**
@@ -21,6 +23,7 @@ export abstract class Graphic {
   public remove(): void {
     this._path.remove();
     this._group.remove();
+    this._text.remove();
   }
 
   /**
@@ -32,6 +35,7 @@ export abstract class Graphic {
 
     this._path.addTo(owner);
     this._group.addTo(owner);
+    this._text.addTo(owner);
   }
 
   // TODO (Owlree) Paper events are exposed, create intermediary event class

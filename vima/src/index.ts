@@ -21,6 +21,7 @@ export { MixinVariable } from './mixinvariable';
 export { ParametricCurveGraphic } from './parametriccurvegraphic';
 export { PointGraphic } from './pointgraphic';
 export { PointGraphicType } from './pointgraphictype';
+export { TextGraphic } from './textgraphic';
 export { Variable } from './variable';
 export { Vector2 } from './vector2';
 export { VectorGraphic } from './vectorgraphic';
