@@ -71,35 +71,23 @@ const errorVector: vima.VectorGraphic = new vima.VectorGraphic(
     strokeWidth: 0.03
   });
 
-// Add the function graphic to the calculator
+// Add all elements to the calculator
 graphingCalculator.add(functionGraphic);
-
-// Add the tangent graphic to the calculator
 graphingCalculator.add(tangentGraphic);
-
-// Add the tangent point to the graphic
 graphingCalculator.add(tangentPoint);
-
-// Add the error vector to the calculator
 graphingCalculator.add(errorVector);
-
-// Add the error vector controllers to the calculator
 graphingCalculator.add(constrainedPointFunction);
 graphingCalculator.add(constrainedPointTangent);
 
-// Add dragging behavior to the error vector
-errorVector.on('mousedrag', (event: any): void => {
+// Add dragging behavior to the error vector (this is a nice to have feature on
+// top of the draggable ends of the vector)
+function updateDt(event: any): void {
   xPlusDt.value = event.point.x;
   dt = xPlusDt.value - tangentPoint.position.x;
-});
-constrainedPointFunction.on('mousedrag', (event: any): void => {
-  xPlusDt.value = event.point.x;
-  dt = xPlusDt.value - tangentPoint.position.x;
-});
-constrainedPointTangent.on('mousedrag', (event: any): void => {
-  xPlusDt.value = event.point.x;
-  dt = xPlusDt.value - tangentPoint.position.x;
-});
+}
+errorVector.on('mousedrag', updateDt);
+constrainedPointFunction.on('mousedrag', updateDt);
+constrainedPointTangent.on('mousedrag', updateDt);
 
 // Create and add labels
 const approixationLabel = new vima.TextGraphic({
