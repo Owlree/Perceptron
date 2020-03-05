@@ -108,8 +108,8 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     const b: paper.Point = new paper.Point(
       Math.cos(this._rotation * Math.PI / 180),
       Math.sin(this._rotation * Math.PI / 180));
-    const sa: paper.Point = a.transform(this._screenMatrix.inverted());
-    const sb: paper.Point = b.transform(this._screenMatrix.inverted());
+    const sa: paper.Point = a.transform(this._screenMatrix);
+    const sb: paper.Point = b.transform(this._screenMatrix);
     const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
     this._item.rotation = angle * 180 / Math.PI;
 
@@ -147,8 +147,8 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
       Math.cos(this._rotation * Math.PI / 180),
       Math.sin(this._rotation * Math.PI / 180));
 
-    const sa: paper.Point = a.transform(matrix.inverted());
-    const sb: paper.Point = b.transform(matrix.inverted());
+    const sa: paper.Point = a.transform(matrix);
+    const sb: paper.Point = b.transform(matrix);
     const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
     this._item.rotation = angle * 180 / Math.PI;
 

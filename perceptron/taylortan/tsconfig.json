@@ -14,7 +14,7 @@
       "./node_modules/vima/lib"
     ]
   },
-  "include": [
-    "src/**/*.ts"
+  "files": [
+    "src/index.ts",
   ]
 }

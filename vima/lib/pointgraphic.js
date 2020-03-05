@@ -127,8 +127,8 @@ var PointGraphic = /** @class */ (function (_super) {
             this._item.transform(this._screenMatrix);
             var a = new paper.Point(0, 0);
             var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
-            var sa = a.transform(this._screenMatrix.inverted());
-            var sb = b.transform(this._screenMatrix.inverted());
+            var sa = a.transform(this._screenMatrix);
+            var sb = b.transform(this._screenMatrix);
             var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
             this._item.rotation = angle * 180 / Math.PI;
             this._item.transform(this._screenMatrix.inverted());
@@ -166,8 +166,8 @@ var PointGraphic = /** @class */ (function (_super) {
         this._item.transform(this._item.matrix.inverted());
         var a = new paper.Point(0, 0);
         var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
-        var sa = a.transform(matrix.inverted());
-        var sb = b.transform(matrix.inverted());
+        var sa = a.transform(matrix);
+        var sb = b.transform(matrix);
         var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
         this._item.rotation = angle * 180 / Math.PI;
         this._item.transform(matrix.inverted());

@@ -55,14 +55,14 @@ var TextGraphic = /** @class */ (function (_super) {
                     'know of the screen transform');
                 return;
             }
-            this._text.transform(this._screenMatrix);
+            this._item.transform(this._screenMatrix);
             var a = new paper.Point(0, 0);
             var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
-            var sa = a.transform(this._screenMatrix.inverted());
-            var sb = b.transform(this._screenMatrix.inverted());
+            var sa = a.transform(this._screenMatrix);
+            var sb = b.transform(this._screenMatrix);
             var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
-            this._text.rotation = angle * 180 / Math.PI;
-            this._text.transform(this._screenMatrix.inverted());
+            this._item.rotation = angle * 180 / Math.PI;
+            this._item.transform(this._screenMatrix.inverted());
         },
         enumerable: true,
         configurable: true
@@ -93,17 +93,17 @@ var TextGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     TextGraphic.prototype.onScreenTransformUpdated = function (matrix) {
-        var oldPosition = this._text.position;
-        this._text.transform(this._text.matrix.inverted());
+        var oldPosition = this._item.position;
+        this._item.transform(this._item.matrix.inverted());
         var a = new paper.Point(0, 0);
         var b = new paper.Point(Math.cos(this._rotation * Math.PI / 180), Math.sin(this._rotation * Math.PI / 180));
-        var sa = a.transform(matrix.inverted());
-        var sb = b.transform(matrix.inverted());
+        var sa = a.transform(matrix);
+        var sb = b.transform(matrix);
         var angle = Math.atan2(sb.y - sa.y, sb.x - sa.x);
-        this._text.rotation = angle * 180 / Math.PI;
-        this._text.transform(matrix.inverted());
+        this._item.rotation = angle * 180 / Math.PI;
+        this._item.transform(matrix.inverted());
         this._screenMatrix = matrix;
-        this._text.position = oldPosition;
+        this._item.position = oldPosition;
     };
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable

@@ -12,6 +12,9 @@ var Vector2 = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Vector2.prototype.multiply = function (a) {
+        return new Vector2(this.x * a, this.y * a);
+    };
     return Vector2;
 }());
 exports.Vector2 = Vector2;

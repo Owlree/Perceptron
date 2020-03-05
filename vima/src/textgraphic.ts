@@ -46,17 +46,17 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
         'know of the screen transform');
       return;
     }
-    this._text.transform(this._screenMatrix);
+    this._item.transform(this._screenMatrix);
     const a: paper.Point = new paper.Point(0, 0);
     const b: paper.Point = new paper.Point(
       Math.cos(this._rotation * Math.PI / 180),
       Math.sin(this._rotation * Math.PI / 180));
-    const sa: paper.Point = a.transform(this._screenMatrix.inverted());
-    const sb: paper.Point = b.transform(this._screenMatrix.inverted());
+    const sa: paper.Point = a.transform(this._screenMatrix);
+    const sb: paper.Point = b.transform(this._screenMatrix);
     const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
-    this._text.rotation = angle * 180 / Math.PI;
+    this._item.rotation = angle * 180 / Math.PI;
 
-    this._text.transform(this._screenMatrix.inverted());
+    this._item.transform(this._screenMatrix.inverted());
   }
 
   public get rotation(): number {
@@ -85,21 +85,21 @@ export class TextGraphic extends Graphic implements IScreenTransformSubscriber {
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix): void {
-    const oldPosition: paper.Point = this._text.position!;
-    this._text.transform(this._text.matrix!.inverted());
+    const oldPosition: paper.Point = this._item.position!;
+    this._item.transform(this._item.matrix!.inverted());
 
     const a: paper.Point = new paper.Point(0, 0);
     const b: paper.Point = new paper.Point(
       Math.cos(this._rotation * Math.PI / 180),
       Math.sin(this._rotation * Math.PI / 180));
 
-    const sa: paper.Point = a.transform(matrix.inverted());
-    const sb: paper.Point = b.transform(matrix.inverted());
+    const sa: paper.Point = a.transform(matrix);
+    const sb: paper.Point = b.transform(matrix);
     const angle: number = Math.atan2(sb.y! - sa.y!, sb.x! - sa.x!);
-    this._text.rotation = angle * 180 / Math.PI;
+    this._item.rotation = angle * 180 / Math.PI;
 
-    this._text.transform(matrix.inverted());
+    this._item.transform(matrix.inverted());
     this._screenMatrix = matrix;
-    this._text.position = oldPosition;
+    this._item.position = oldPosition;
   }
 }

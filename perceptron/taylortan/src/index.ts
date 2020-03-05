@@ -117,31 +117,40 @@ const fxLabel = new vima.TextGraphic({
   fontFamily: 'Latin Modern Roman',
   position: tangentPoint.positionVariable,
   fontWeight: 'bold',
-  offset: new vima.Vector2(0, 0.1)
+  offset: new vima.Vector2(0, 0.12)
 });
-
 
 graphingCalculator.add(approixationLabel);
 graphingCalculator.add(exactLabel);
 graphingCalculator.add(fxLabel);
 
+function getTangentAngleAt(x: number): number {
+  return Math.atan(Math.cos(x));
+}
+
+function getUnitCircleVectorAtAngle(angle: number): vima.Vector2 {
+  return new vima.Vector2(Math.cos(angle), Math.sin(angle));
+}
+
 function positionExactLabel() {
-  const angle: number = Math.atan(Math.cos(constrainedPointFunction.positionVariable.value.x));
+  const angle: number = getTangentAngleAt(constrainedPointFunction.positionVariable.value.x);
   exactLabel.rotation = angle * 180 / Math.PI;
+  console.log('a' + (angle * 180 / Math.PI));
   if (constrainedPointTangent.position.y > constrainedPointFunction.position.y) {
-    exactLabel.offset = new vima.Vector2(0.1 * Math.sin(angle), -0.1 * Math.cos(angle));
+    exactLabel.offset = getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.12);
   } else {
-    exactLabel.offset = new vima.Vector2(-0.1 * Math.sin(angle), 0.1 * Math.cos(angle));
+    exactLabel.offset = getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.12);
   }
 }
 
 function positionApproximationLabel() {
   const angle: number = Math.atan(Math.cos(tangentPointX.value));
   approixationLabel.rotation = angle * 180 / Math.PI;
+  console.log('p' + (angle * 180 / Math.PI));
   if (constrainedPointTangent.position.y > constrainedPointFunction.position.y) {
-    approixationLabel.offset = new vima.Vector2(-0.1 * Math.sin(angle), 0.1 * Math.cos(angle));
+    approixationLabel.offset = getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.12);
   } else {
-    approixationLabel.offset = new vima.Vector2(0.1 * Math.sin(angle), -0.1 * Math.cos(angle));
+    approixationLabel.offset = getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.12);
   }
 }
 
