@@ -40,9 +40,6 @@ export class ConstrainedPointFunctionGraphic extends PointGraphic {
     // TODO (Owlree) Should this be unregistered at some point?
     this._functionGraphic.register(functionChangedCallback);
 
-    this._path.shadowColor = new paper.Color('salmon');
-    this._path.shadowBlur = 0;
-
     if (interactive) {
       this._path.on('mouseenter', (): void => {
         this._mouseOver = true;
@@ -82,13 +79,10 @@ export class ConstrainedPointFunctionGraphic extends PointGraphic {
 
   private updateStyle(): void {
     if (this._mouseDown) {
-      this._path.shadowBlur = this.radius;
       document.body.style.cursor = 'grabbing';
     } else if (this._mouseOver) {
-      this._path.shadowBlur = this.radius;
       document.body.style.cursor = 'grab';
     } else {
-      this._path.shadowBlur = 0;
       document.body.style.cursor = '';
     }
   }

@@ -68,8 +68,6 @@ var ConstrainedPointFunctionGraphic = /** @class */ (function (_super) {
         _this.x = x;
         // TODO (Owlree) Should this be unregistered at some point?
         _this._functionGraphic.register(functionChangedCallback);
-        _this._path.shadowColor = new paper.Color('salmon');
-        _this._path.shadowBlur = 0;
         if (interactive) {
             _this._path.on('mouseenter', function () {
                 _this._mouseOver = true;
@@ -107,15 +105,12 @@ var ConstrainedPointFunctionGraphic = /** @class */ (function (_super) {
     });
     ConstrainedPointFunctionGraphic.prototype.updateStyle = function () {
         if (this._mouseDown) {
-            this._path.shadowBlur = this.radius;
             document.body.style.cursor = 'grabbing';
         }
         else if (this._mouseOver) {
-            this._path.shadowBlur = this.radius;
             document.body.style.cursor = 'grab';
         }
         else {
-            this._path.shadowBlur = 0;
             document.body.style.cursor = '';
         }
     };
