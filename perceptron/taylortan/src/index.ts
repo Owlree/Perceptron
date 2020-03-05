@@ -85,21 +85,21 @@ graphingCalculator.add(errorVector);
 graphingCalculator.add(constrainedPointFunction);
 graphingCalculator.add(constrainedPointTangent);
 
+// Add dragging behavior to the error vector
 errorVector.on('mousedrag', (event: any): void => {
   xPlusDt.value = event.point.x;
   dt = xPlusDt.value - tangentPoint.position.x;
 });
-
 constrainedPointFunction.on('mousedrag', (event: any): void => {
   xPlusDt.value = event.point.x;
   dt = xPlusDt.value - tangentPoint.position.x;
 });
-
 constrainedPointTangent.on('mousedrag', (event: any): void => {
   xPlusDt.value = event.point.x;
   dt = xPlusDt.value - tangentPoint.position.x;
 });
 
+// Create and add labels
 const approixationLabel = new vima.TextGraphic({
   content: 'f(x)+Δxf\'(x)',
   fontFamily: 'Latin Modern Roman',
@@ -119,20 +119,18 @@ const fxLabel = new vima.TextGraphic({
   fontWeight: 'bold',
   offset: new vima.Vector2(0, 0.12)
 });
-
 graphingCalculator.add(approixationLabel);
 graphingCalculator.add(exactLabel);
 graphingCalculator.add(fxLabel);
 
+// Rotate labels when their positions change
 function getTangentAngleAt(x: number): number {
   return Math.atan(Math.cos(x));
 }
-
 function getUnitCircleVectorAtAngle(angle: number): vima.Vector2 {
   return new vima.Vector2(Math.cos(angle), Math.sin(angle));
 }
-
-function positionExactLabel() {
+function rotateExactLabel() {
   const angle: number = getTangentAngleAt(constrainedPointFunction.positionVariable.value.x);
   exactLabel.rotation = angle * 180 / Math.PI;
   console.log('a' + (angle * 180 / Math.PI));
@@ -142,8 +140,7 @@ function positionExactLabel() {
     exactLabel.offset = getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.12);
   }
 }
-
-function positionApproximationLabel() {
+function rotateApproximationLabel() {
   const angle: number = Math.atan(Math.cos(tangentPointX.value));
   approixationLabel.rotation = angle * 180 / Math.PI;
   console.log('p' + (angle * 180 / Math.PI));
@@ -153,12 +150,10 @@ function positionApproximationLabel() {
     approixationLabel.offset = getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.12);
   }
 }
-
-function positionLabels() {
-  positionApproximationLabel();
-  positionExactLabel();
+function rotateLabels() {
+  rotateApproximationLabel();
+  rotateExactLabel();
 }
-
-tangentPointX.register(positionLabels);
-constrainedPointTangent.positionVariable.register(positionLabels);
-positionLabels();
+tangentPointX.register(rotateLabels);
+constrainedPointTangent.positionVariable.register(rotateLabels);
+rotateLabels();
