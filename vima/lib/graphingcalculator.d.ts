@@ -17,5 +17,6 @@ export declare class GraphingCalculator {
     add(graphic: Graphic): void;
     remove(graphic: Graphic): void;
     private setup;
+    on(event: string, callback: Function): void;
 }
 //# sourceMappingURL=graphingcalculator.d.ts.map

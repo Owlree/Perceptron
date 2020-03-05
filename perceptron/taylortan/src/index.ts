@@ -79,8 +79,7 @@ graphingCalculator.add(errorVector);
 graphingCalculator.add(constrainedPointFunction);
 graphingCalculator.add(constrainedPointTangent);
 
-// Add dragging behavior to the error vector (this is a nice to have feature on
-// top of the draggable ends of the vector)
+// Make sure the error vector is always vertical
 function updateDt(event: any): void {
   xPlusDt.value = event.point.x;
   dt = xPlusDt.value - tangentPoint.position.x;
@@ -88,6 +87,35 @@ function updateDt(event: any): void {
 errorVector.on('mousedrag', updateDt);
 constrainedPointFunction.on('mousedrag', updateDt);
 constrainedPointTangent.on('mousedrag', updateDt);
+
+let mouseOver = false;
+let mouseDown = false;
+
+function updateCursorStyle(): void {
+  if (mouseDown) {
+    document.body.style.cursor = 'grabbing';
+  } else if (mouseOver) {
+    document.body.style.cursor = 'grab';
+  } else {
+    document.body.style.cursor = '';
+  }
+}
+errorVector.on('mouseenter', (): void => {
+  mouseOver = true;
+  updateCursorStyle();
+});
+errorVector.on('mouseleave', (): void => {
+  mouseOver = false;
+  updateCursorStyle();
+});
+errorVector.on('mousedown', (): void => {
+  mouseDown = true;
+  updateCursorStyle();
+});
+graphingCalculator.on('mouseup', (): void => {
+  mouseDown = false;
+  updateCursorStyle();
+});
 
 // Create and add labels
 const approixationLabel = new vima.TextGraphic({

@@ -123,4 +123,9 @@ export class GraphingCalculator {
       }
     }
   }
+
+  // TODO (Owlree) Paper events are exposed, create intermediary event class
+  public on(event: string, callback: Function): void {
+    paper.view.on(event, callback);
+  }
 }

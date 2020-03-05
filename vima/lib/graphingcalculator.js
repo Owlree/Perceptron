@@ -101,6 +101,10 @@ var GraphingCalculator = /** @class */ (function () {
             }
         }
     };
+    // TODO (Owlree) Paper events are exposed, create intermediary event class
+    GraphingCalculator.prototype.on = function (event, callback) {
+        paper.view.on(event, callback);
+    };
     return GraphingCalculator;
 }());
 exports.GraphingCalculator = GraphingCalculator;
