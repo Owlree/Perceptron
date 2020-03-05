@@ -103,21 +103,21 @@ constrainedPointTangent.on('mousedrag', (event: any): void => {
 
 // Create and add labels
 const approixationLabel = new vima.TextGraphic({
-  content: 'f(x)+Δxf\'(x)',
+  content: 'f(t)+Δtf\'(t)',
   fontFamily: 'Latin Modern Roman',
   position: constrainedPointTangent.positionVariable,
   fontWeight: 'bold',
   fontSize: 18
 });
 const exactLabel = new vima.TextGraphic({
-  content: 'f(x+Δx)',
+  content: 'f(t+Δt)',
   fontFamily: 'Latin Modern Roman',
   position: constrainedPointFunction.positionVariable,
   fontWeight: 'bold',
   fontSize: 18
 });
 const fxLabel = new vima.TextGraphic({
-  content: 'f(x)',
+  content: 'f(t)',
   fontFamily: 'Latin Modern Roman',
   position: tangentPoint.positionVariable,
   fontWeight: 'bold',
