@@ -24,6 +24,6 @@
   },
   "scripts": {
     "build": "webpack",
-    "lint": "./node_modules/.bin/eslint src/**/*"
+    "lint": "eslint src/**/*"
   }
 }
