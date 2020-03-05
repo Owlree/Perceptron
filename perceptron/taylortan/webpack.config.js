@@ -14,7 +14,7 @@ const taylortanConfig = {
   mode: 'development',
   module: {
     rules: [{
-      test: /\.tsx?$/,
+      test: /\.ts$/,
       loader: 'ts-loader',
     }]
   },
@@ -28,4 +28,4 @@ const taylortanConfig = {
   })]
 };
 
-module.exports = [ taylortanConfig ];
+module.exports = [taylortanConfig];
