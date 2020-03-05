@@ -37,9 +37,9 @@ function setColorScheme(): void {
       if (event.matches) activateLightMode();
     });
 
-  if(isDarkMode) activateDarkMode();
-  if(isLightMode) activateLightMode();
-  if(isNotSpecified || hasNoSupport) {
+  if (isDarkMode) activateDarkMode();
+  if (isLightMode) activateLightMode();
+  if (isNotSpecified || hasNoSupport) {
     const now: Date = new Date();
     const hour: number = now.getHours();
     if (hour < 4 || hour >= 16) {
