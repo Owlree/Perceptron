@@ -12,7 +12,13 @@ export declare class ConstrainedPointFunctionGraphic extends PointGraphic {
     private _mouseOver;
     private readonly _functionGraphic;
     constructor(functionGraphic: FunctionGraphic, { x, interactive, ...options }?: IConstrainedPointFunctionGraphicOptions);
+    /**
+     * @param x The new abscissa of the point
+     */
     private set x(value);
-    private updateStyle;
+    /**
+     * Updates the cursor style based on what actions are performed on the object
+     */
+    private updateCursorStyle;
 }
 //# sourceMappingURL=constrainedpointfunctiongraphic.d.ts.map

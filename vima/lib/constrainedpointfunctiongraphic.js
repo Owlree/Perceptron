@@ -60,30 +60,32 @@ var ConstrainedPointFunctionGraphic = /** @class */ (function (_super) {
         _this._mouseDown = false;
         _this._mouseOver = false;
         _this._functionGraphic = functionGraphic;
+        _this.x = x;
+        // This callback is to be called anytime the given function changes, so we
+        // can update the ordinate of the point accordingly
         var functionChangedCallback = function () {
             var x = _this.position.x;
             var y = _this._functionGraphic.yAtX(x);
             _this.position = new vector2_1.Vector2(_this.position.x, y);
         };
-        _this.x = x;
         // TODO (Owlree) Should this be unregistered at some point?
         _this._functionGraphic.register(functionChangedCallback);
         if (interactive) {
-            _this._path.on('mouseenter', function () {
+            _this._item.on('mouseenter', function () {
                 _this._mouseOver = true;
-                _this.updateStyle();
+                _this.updateCursorStyle();
             });
-            _this._path.on('mouseleave', function () {
+            _this._item.on('mouseleave', function () {
                 _this._mouseOver = false;
-                _this.updateStyle();
+                _this.updateCursorStyle();
             });
-            _this._path.on('mousedown', function () {
+            _this._item.on('mousedown', function () {
                 _this._mouseDown = true;
-                _this.updateStyle();
+                _this.updateCursorStyle();
             });
             paper.view.on('mouseup', function () {
                 _this._mouseDown = false;
-                _this.updateStyle();
+                _this.updateCursorStyle();
             });
             paper.view.on('mousemove', function (event) {
                 if (_this._mouseDown) {
@@ -96,6 +98,9 @@ var ConstrainedPointFunctionGraphic = /** @class */ (function (_super) {
         return _this;
     }
     Object.defineProperty(ConstrainedPointFunctionGraphic.prototype, "x", {
+        /**
+         * @param x The new abscissa of the point
+         */
         set: function (x) {
             var xn = x;
             this.position = new vector2_1.Vector2(xn, this._functionGraphic.yAtX(xn));
@@ -103,15 +108,18 @@ var ConstrainedPointFunctionGraphic = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    ConstrainedPointFunctionGraphic.prototype.updateStyle = function () {
+    /**
+     * Updates the cursor style based on what actions are performed on the object
+     */
+    ConstrainedPointFunctionGraphic.prototype.updateCursorStyle = function () {
         if (this._mouseDown) {
-            document.body.style.cursor = 'grabbing';
+            paper.view.element.style.cursor = 'grabbing';
         }
         else if (this._mouseOver) {
-            document.body.style.cursor = 'grab';
+            paper.view.element.style.cursor = 'grab';
         }
         else {
-            document.body.style.cursor = '';
+            paper.view.element.style.cursor = '';
         }
     };
     __decorate([

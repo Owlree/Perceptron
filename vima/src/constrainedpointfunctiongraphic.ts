@@ -15,7 +15,6 @@ import { DecoratorWatchVariable } from './decoratorwatchvariable';
  * as input to the function to get the ordinate.
  */
 export class ConstrainedPointFunctionGraphic extends PointGraphic {
-
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
   private readonly _functionGraphic: FunctionGraphic;
@@ -28,37 +27,38 @@ export class ConstrainedPointFunctionGraphic extends PointGraphic {
     super({ interactive: interactive, ...options });
 
     this._functionGraphic = functionGraphic;
+    this.x = x;
 
+    // This callback is to be called anytime the given function changes, so we
+    // can update the ordinate of the point accordingly
     const functionChangedCallback = (): void => {
       const x: number = this.position.x;
       const y: number = this._functionGraphic.yAtX(x);
       this.position = new Vector2(this.position.x, y);
     };
 
-    this.x = x;
-
     // TODO (Owlree) Should this be unregistered at some point?
     this._functionGraphic.register(functionChangedCallback);
 
     if (interactive) {
-      this._path.on('mouseenter', (): void => {
+      this._item.on('mouseenter', (): void => {
         this._mouseOver = true;
-        this.updateStyle();
+        this.updateCursorStyle();
       });
 
-      this._path.on('mouseleave', (): void => {
+      this._item.on('mouseleave', (): void => {
         this._mouseOver = false;
-        this.updateStyle();
+        this.updateCursorStyle();
       });
 
-      this._path.on('mousedown', (): void => {
+      this._item.on('mousedown', (): void => {
         this._mouseDown = true;
-        this.updateStyle();
+        this.updateCursorStyle();
       });
 
       paper.view.on('mouseup', (): void => {
         this._mouseDown = false;
-        this.updateStyle();
+        this.updateCursorStyle();
       });
 
       paper.view.on('mousemove', (event: paper.MouseEvent): void => {
@@ -71,19 +71,25 @@ export class ConstrainedPointFunctionGraphic extends PointGraphic {
     }
   }
 
+  /**
+   * @param x The new abscissa of the point
+   */
   @DecoratorWatchVariable
   private set x(x: number | Variable<number>) {
     const xn: number = x as number;
     this.position = new Vector2(xn, this._functionGraphic.yAtX(xn));
   }
 
-  private updateStyle(): void {
+  /**
+   * Updates the cursor style based on what actions are performed on the object
+   */
+  private updateCursorStyle(): void {
     if (this._mouseDown) {
-      document.body.style.cursor = 'grabbing';
+      paper.view.element.style.cursor = 'grabbing';
     } else if (this._mouseOver) {
-      document.body.style.cursor = 'grab';
+      paper.view.element.style.cursor = 'grab';
     } else {
-      document.body.style.cursor = '';
+      paper.view.element.style.cursor = '';
     }
   }
 }
