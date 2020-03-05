@@ -135,13 +135,12 @@ function getTangentAngleAt(x: number): number {
 function getUnitCircleVectorAtAngle(angle: number): vima.Vector2 {
   return new vima.Vector2(Math.cos(angle), Math.sin(angle));
 }
-function rotateExactLabel() {
+function rotateExactLabel(): void {
   const angle: number = getTangentAngleAt(
     constrainedPointFunction.positionVariable.value.x);
   exactLabel.rotation = angle * 180 / Math.PI;
-  console.log('a' + (angle * 180 / Math.PI));
-  if (constrainedPointTangent.position.y > constrainedPointFunction.position.y)
-  {
+  if (constrainedPointTangent.position.y >
+    constrainedPointFunction.position.y) {
     exactLabel.offset =
       getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
   } else {
@@ -149,12 +148,11 @@ function rotateExactLabel() {
       getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
   }
 }
-function rotateApproximationLabel() {
+function rotateApproximationLabel(): void {
   const angle: number = Math.atan(Math.cos(tangentPointX.value));
   approixationLabel.rotation = angle * 180 / Math.PI;
-  console.log('p' + (angle * 180 / Math.PI));
-  if (constrainedPointTangent.position.y > constrainedPointFunction.position.y)
-  {
+  if (constrainedPointTangent.position.y >
+    constrainedPointFunction.position.y) {
     approixationLabel.offset =
       getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
   } else {
@@ -162,7 +160,7 @@ function rotateApproximationLabel() {
       getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
   }
 }
-function rotateLabels() {
+function rotateLabels(): void {
   rotateApproximationLabel();
   rotateExactLabel();
 }
