@@ -15,6 +15,8 @@ const tangentPoint = new vima.ConstrainedPointFunctionGraphic(
     radius: 5
   });
 
+tangentPoint.position = new vima.Vector2(-Math.PI / 3, 0);
+
 // Create a variable that extracts the tangent point's abscissa
 const tangentPointX: vima.WritableVariable<number> =
   new vima.WritableVariable<number>(tangentPoint.position.x);
@@ -104,20 +106,23 @@ const approixationLabel = new vima.TextGraphic({
   content: 'f(x)+Δxf\'(x)',
   fontFamily: 'Latin Modern Roman',
   position: constrainedPointTangent.positionVariable,
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  fontSize: 18
 });
 const exactLabel = new vima.TextGraphic({
   content: 'f(x+Δx)',
   fontFamily: 'Latin Modern Roman',
   position: constrainedPointFunction.positionVariable,
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  fontSize: 18
 });
 const fxLabel = new vima.TextGraphic({
   content: 'f(x)',
   fontFamily: 'Latin Modern Roman',
   position: tangentPoint.positionVariable,
   fontWeight: 'bold',
-  offset: new vima.Vector2(0, 0.12)
+  offset: new vima.Vector2(0, 0.15),
+  fontSize: 18
 });
 graphingCalculator.add(approixationLabel);
 graphingCalculator.add(exactLabel);
@@ -138,10 +143,10 @@ function rotateExactLabel() {
   if (constrainedPointTangent.position.y > constrainedPointFunction.position.y)
   {
     exactLabel.offset =
-      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.12);
+      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
   } else {
     exactLabel.offset =
-      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.12);
+      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
   }
 }
 function rotateApproximationLabel() {
@@ -151,10 +156,10 @@ function rotateApproximationLabel() {
   if (constrainedPointTangent.position.y > constrainedPointFunction.position.y)
   {
     approixationLabel.offset =
-      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.12);
+      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
   } else {
     approixationLabel.offset =
-      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.12);
+      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
   }
 }
 function rotateLabels() {
