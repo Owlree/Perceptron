@@ -87,4 +87,11 @@ export class VectorGraphic extends Graphic {
       this._toPoint.rotation = angle * 180 / Math.PI - 90;
     }
   }
+
+  public get vector2(): Vector2 {
+    return new Vector2(
+      this._v2.x - this._v1.x,
+      this._v2.y - this._v1.y,
+    );
+  }
 }

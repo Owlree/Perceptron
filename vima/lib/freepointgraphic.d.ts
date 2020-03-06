@@ -7,7 +7,7 @@ import { PointGraphic } from './pointgraphic';
 export declare class FreePointGraphic extends PointGraphic {
     private _mouseDown;
     private _mouseOver;
-    constructor({ x, y, ...options }?: IFreePointGraphicOptions);
+    constructor({ x, y, interactive, ...options }?: IFreePointGraphicOptions);
     private updateStyle;
 }
 //# sourceMappingURL=freepointgraphic.d.ts.map

@@ -87,6 +87,13 @@ var VectorGraphic = /** @class */ (function (_super) {
             this._toPoint.rotation = angle * 180 / Math.PI - 90;
         }
     };
+    Object.defineProperty(VectorGraphic.prototype, "vector2", {
+        get: function () {
+            return new vector2_1.Vector2(this._v2.x - this._v1.x, this._v2.y - this._v1.y);
+        },
+        enumerable: true,
+        configurable: true
+    });
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], VectorGraphic.prototype, "color", null);

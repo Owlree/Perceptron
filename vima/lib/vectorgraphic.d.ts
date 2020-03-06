@@ -1,6 +1,7 @@
 import { Graphic } from "./graphic";
 import { Variable } from "./variable";
 import { PointGraphic } from './pointgraphic';
+import { Vector2 } from './vector2';
 /**
  * Class that represents the graphic of a two-dimensional vector.
  */
@@ -18,5 +19,6 @@ export declare class VectorGraphic extends Graphic {
     set color(color: paper.Color | Variable<paper.Color>);
     onScreenTransformUpdated(matrix: paper.Matrix): void;
     private _build;
+    get vector2(): Vector2;
 }
 //# sourceMappingURL=vectorgraphic.d.ts.map

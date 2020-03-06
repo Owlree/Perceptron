@@ -3,6 +3,7 @@ export { Colors };
 export { ConstrainedPointFunctionGraphic } from './constrainedpointfunctiongraphic';
 export { CurveGraphic } from './curvegraphic';
 export { DecoratorWatchVariable } from './decoratorwatchvariable';
+export { Event } from './event';
 export { FreePointGraphic } from './freepointgraphic';
 export { FunctionGraphic } from './functiongraphic';
 export { Graphic } from './graphic';

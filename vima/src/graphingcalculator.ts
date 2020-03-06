@@ -1,10 +1,12 @@
 import * as paper from 'paper';
 
 import * as Colors from './colors';
+import { Event } from './event';
 import { Graphic } from './graphic';
 import { IBoundsSubscriber } from './iboundssubscriber';
 import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
 import { Variable } from './variable';
+import { Vector2 } from './vector2';
 
 
 /**
@@ -21,6 +23,8 @@ export class GraphingCalculator {
     new paper.Rectangle(
       new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
   private readonly _graphics: Array<Graphic> = [];
+  private _mousePosition: Vector2 = new Vector2(0, 0);
+  private _screenMatrix: paper.Matrix = new paper.Matrix(1, 0, 0, 1, 0, 0);
 
   public constructor(canvasId: string) {
     paper.setup(canvasId);
@@ -113,6 +117,8 @@ export class GraphingCalculator {
       -this._bounds.center!.x!, -this._bounds.center!.y!
     ));
 
+    this._screenMatrix = paper.view.matrix;
+
     // Notify all screen transform subscribers of the change
     for (let graphic of this._graphics) {
       const graphicAny: any = graphic as any;
@@ -122,10 +128,27 @@ export class GraphingCalculator {
         updateable.onScreenTransformUpdated(paper.view.matrix!);
       }
     }
+
+    // Subscribe to the mouse position
+    paper.view.element.addEventListener('mousemove', (event: MouseEvent) => {
+      const point: paper.Point = new paper.Point(event.clientX, event.clientY);
+      const localPoint: paper.Point = point.transform(this._screenMatrix.inverted());
+      this._mousePosition = new Vector2(localPoint.x, localPoint.y);
+    });
   }
 
   // TODO (Owlree) Paper events are exposed, create intermediary event class
-  public on(event: string, callback: Function): void {
-    paper.view.on(event, callback);
+  public on(event: string, callback: (event: Event) => void): void {
+    if (event === 'frame') {
+      paper.view.on(event, (event: any) => {
+        callback({time: event.time})
+      });
+    } else {
+      paper.view.on(event, callback);
+    }
+  }
+
+  public get mousePosition(): Vector2 {
+    return this._mousePosition;
   }
 }
