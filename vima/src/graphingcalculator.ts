@@ -8,6 +8,7 @@ import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
 import { Rectangle } from './rectangle';
 import { Variable } from './variable';
 import { Vector2 } from './vector2';
+import { DecoratorWatchVariable } from './decoratorwatchvariable';
 
 
 /**
@@ -16,34 +17,28 @@ import { Vector2 } from './vector2';
  * {@link FreePointGraphic}, or others.
  */
 export class GraphingCalculator {
-  private _backgroundColorVariable?: Variable<paper.Color> = undefined;
-  private _backgroundColorVariableChangedCallback?:
-    ((variable: Variable<paper.Color>) => void);
-  private _backgroundPath: paper.Path.Rectangle;
-  private _bounds: Rectangle;
-  private readonly _graphics: Array<Graphic> = [];
+  private _bounds: Rectangle = new Rectangle(new Vector2(0, 0), new Vector2(0, 0));
   private _mousePosition: Vector2 = new Vector2(0, 0);
   private _screenMatrix: paper.Matrix = new paper.Matrix(1, 0, 0, 1, 0, 0);
+  private readonly _backgroundPath: paper.Path.Rectangle;
+  private readonly _graphics: Array<Graphic> = [];
 
   public constructor(canvasId: string, bounds: Rectangle) {
     paper.setup(canvasId);
-    this._bounds = bounds;
-    this._backgroundPath = new paper.Path.Rectangle(this._bounds);
+
+    this._backgroundPath = new paper.Path.Rectangle(new paper.Point(0, 0), new paper.Point(1, 1));
+    this.bounds = bounds;
     this.backgroundColor = Colors.backgroundColor;
+
     paper.view.on('resize', (): void => {
       this.setup();
     });
-    this.setup();
   }
 
   public set bounds(bounds: Rectangle) {
-
-    console.log(bounds);
-
     this._bounds = bounds;
     this._backgroundPath.bounds = new paper.Rectangle(
-      this._bounds.left, this._bounds.top,
-      this.bounds.width, this._bounds.height
+      bounds.left, bounds.bottom, bounds.width, bounds.height
     );
 
     // Transforms the paper view according to the new bounds
@@ -60,25 +55,9 @@ export class GraphingCalculator {
     }
   }
 
+  @DecoratorWatchVariable
   public set backgroundColor(color: Variable<paper.Color> | paper.Color) {
-    if (this._backgroundColorVariable !== undefined &&
-      this._backgroundColorVariableChangedCallback !== undefined) {
-      this._backgroundColorVariable.unregister(this._backgroundColorVariableChangedCallback);
-      this._backgroundColorVariable = undefined;
-      this._backgroundColorVariableChangedCallback = undefined;
-    }
-
-    if (color instanceof Variable) {
-      this._backgroundPath.fillColor = color.value;
-      this._backgroundColorVariable = color;
-      this._backgroundColorVariableChangedCallback =
-        (variable: Variable<paper.Color>): void => {
-          this._backgroundPath.fillColor = variable.value;
-        };
-      this._backgroundColorVariable.register(this._backgroundColorVariableChangedCallback);
-    } else {
-      this._backgroundPath.fillColor = color;
-    }
+    this._backgroundPath.fillColor = color as paper.Color;
   }
 
   public add(graphic: Graphic): void {
@@ -139,6 +118,20 @@ export class GraphingCalculator {
     // Subscribe to the mouse position
     paper.view.element.addEventListener('mousemove', (event: MouseEvent) => {
       const point: paper.Point = new paper.Point(event.clientX, event.clientY);
+      const localPoint: paper.Point = point.transform(this._screenMatrix.inverted());
+      this._mousePosition = new Vector2(localPoint.x, localPoint.y);
+    });
+
+    paper.view.element.addEventListener('touchstart', (event: TouchEvent) => {
+      const point: paper.Point = new paper.Point(
+        event.touches[0].pageX, event.touches[0].pageY);
+      const localPoint: paper.Point = point.transform(this._screenMatrix.inverted());
+      this._mousePosition = new Vector2(localPoint.x, localPoint.y);
+    });
+
+    paper.view.element.addEventListener('touchmove', (event: TouchEvent) => {
+      const point: paper.Point = new paper.Point(
+        event.touches[0].pageX, event.touches[0].pageY);
       const localPoint: paper.Point = point.transform(this._screenMatrix.inverted());
       this._mousePosition = new Vector2(localPoint.x, localPoint.y);
     });

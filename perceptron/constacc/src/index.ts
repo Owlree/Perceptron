@@ -26,8 +26,10 @@ graphingCalculator.on('frame', ({time}: vima.Event) => {
     point.position = new vima.Vector2(x, y);
   }
   balls = balls.filter(({point}) => {
-    const out: boolean = bounds.left > point.bounds.right ||
-      bounds.bottom > point.bounds.bottom || bounds.right < point.bounds.left;
+    const out: boolean =
+      bounds.left   > point.bounds.right ||
+      bounds.bottom > point.bounds.top   ||
+      bounds.right  < point.bounds.left;
     if (out) {
       point.remove();
     }
@@ -39,30 +41,32 @@ let fromPoint: vima.FreePointGraphic | undefined = undefined;
 let toPoint: vima.FreePointGraphic | undefined = undefined;
 let vector: vima.VectorGraphic | undefined = undefined;
 
-document.body.addEventListener('mousedown', () => {
+const mouseDown = () => {
   fromPoint = new vima.FreePointGraphic({
     x: graphingCalculator.mousePosition.x,
-    y: graphingCalculator.mousePosition.y
+    y: graphingCalculator.mousePosition.y,
+    interactive: false
   });
   toPoint = new vima.FreePointGraphic({
     type: vima.PointGraphicType.Triangle,
     x: graphingCalculator.mousePosition.x,
-    y: graphingCalculator.mousePosition.y
+    y: graphingCalculator.mousePosition.y,
+    interactive: false
   });
   vector = new vima.VectorGraphic(fromPoint, toPoint);
   graphingCalculator.add(vector);
   graphingCalculator.add(toPoint);
-});
+};
 
-document.body.addEventListener('mousemove', () => {
+const mouseMove = () => {
   if (toPoint !== undefined) {
     toPoint.position = graphingCalculator.mousePosition;
   }
-});
+};
 
-document.body.addEventListener('mouseup', () => {
+const mouseUp = () => {
   let newBall = {
-    point: new vima.FreePointGraphic(),
+    point: new vima.FreePointGraphic({interactive: false}),
     s0: fromPoint!.position,
     v0: vector!.vector2,
     t0: currentTime
@@ -75,4 +79,13 @@ document.body.addEventListener('mouseup', () => {
   fromPoint = undefined;
   toPoint = undefined;
   vector = undefined;
-});
+};
+
+document.body.addEventListener('mousedown', mouseDown);
+document.body.addEventListener('mousemove', mouseMove);
+document.body.addEventListener('mouseup', mouseUp);
+
+// Add support for touch interaction
+document.body.addEventListener('touchstart', mouseDown);
+document.body.addEventListener('touchmove', mouseMove);
+document.body.addEventListener('touchend', mouseUp);

@@ -9,13 +9,11 @@ import { Vector2 } from './vector2';
  * {@link FreePointGraphic}, or others.
  */
 export declare class GraphingCalculator {
-    private _backgroundColorVariable?;
-    private _backgroundColorVariableChangedCallback?;
-    private _backgroundPath;
     private _bounds;
-    private readonly _graphics;
     private _mousePosition;
     private _screenMatrix;
+    private readonly _backgroundPath;
+    private readonly _graphics;
     constructor(canvasId: string, bounds: Rectangle);
     set bounds(bounds: Rectangle);
     set backgroundColor(color: Variable<paper.Color> | paper.Color);

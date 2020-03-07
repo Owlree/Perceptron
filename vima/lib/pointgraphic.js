@@ -177,7 +177,7 @@ var PointGraphic = /** @class */ (function (_super) {
     };
     Object.defineProperty(PointGraphic.prototype, "bounds", {
         get: function () {
-            return new rectangle_1.Rectangle(new vector2_1.Vector2(this._item.bounds.topLeft.x, this._item.bounds.topLeft.y), new vector2_1.Vector2(this._item.bounds.bottomRight.x, this._item.bounds.bottomRight.y));
+            return new rectangle_1.Rectangle(new vector2_1.Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y), new vector2_1.Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y));
         },
         enumerable: true,
         configurable: true

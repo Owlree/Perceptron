@@ -1,9 +1,16 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var paper = require("paper");
 var Colors = require("./colors");
-var variable_1 = require("./variable");
+var rectangle_1 = require("./rectangle");
 var vector2_1 = require("./vector2");
+var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
 /**
  * A graphic calculator handles the presentation and interaction with various
  * graphics such as {@link CurveGraphic}, {@link FunctionGraphic},
@@ -12,24 +19,22 @@ var vector2_1 = require("./vector2");
 var GraphingCalculator = /** @class */ (function () {
     function GraphingCalculator(canvasId, bounds) {
         var _this = this;
-        this._backgroundColorVariable = undefined;
-        this._graphics = [];
+        this._bounds = new rectangle_1.Rectangle(new vector2_1.Vector2(0, 0), new vector2_1.Vector2(0, 0));
         this._mousePosition = new vector2_1.Vector2(0, 0);
         this._screenMatrix = new paper.Matrix(1, 0, 0, 1, 0, 0);
+        this._graphics = [];
         paper.setup(canvasId);
-        this._bounds = bounds;
-        this._backgroundPath = new paper.Path.Rectangle(this._bounds);
+        this._backgroundPath = new paper.Path.Rectangle(new paper.Point(0, 0), new paper.Point(1, 1));
+        this.bounds = bounds;
         this.backgroundColor = Colors.backgroundColor;
         paper.view.on('resize', function () {
             _this.setup();
         });
-        this.setup();
     }
     Object.defineProperty(GraphingCalculator.prototype, "bounds", {
         set: function (bounds) {
-            console.log(bounds);
             this._bounds = bounds;
-            this._backgroundPath.bounds = new paper.Rectangle(this._bounds.left, this._bounds.top, this.bounds.width, this._bounds.height);
+            this._backgroundPath.bounds = new paper.Rectangle(bounds.left, bounds.bottom, bounds.width, bounds.height);
             // Transforms the paper view according to the new bounds
             this.setup();
             // Notify the bounds update on all objects that implement the subscriber
@@ -47,25 +52,7 @@ var GraphingCalculator = /** @class */ (function () {
     });
     Object.defineProperty(GraphingCalculator.prototype, "backgroundColor", {
         set: function (color) {
-            var _this = this;
-            if (this._backgroundColorVariable !== undefined &&
-                this._backgroundColorVariableChangedCallback !== undefined) {
-                this._backgroundColorVariable.unregister(this._backgroundColorVariableChangedCallback);
-                this._backgroundColorVariable = undefined;
-                this._backgroundColorVariableChangedCallback = undefined;
-            }
-            if (color instanceof variable_1.Variable) {
-                this._backgroundPath.fillColor = color.value;
-                this._backgroundColorVariable = color;
-                this._backgroundColorVariableChangedCallback =
-                    function (variable) {
-                        _this._backgroundPath.fillColor = variable.value;
-                    };
-                this._backgroundColorVariable.register(this._backgroundColorVariableChangedCallback);
-            }
-            else {
-                this._backgroundPath.fillColor = color;
-            }
+            this._backgroundPath.fillColor = color;
         },
         enumerable: true,
         configurable: true
@@ -113,6 +100,16 @@ var GraphingCalculator = /** @class */ (function () {
             var localPoint = point.transform(_this._screenMatrix.inverted());
             _this._mousePosition = new vector2_1.Vector2(localPoint.x, localPoint.y);
         });
+        paper.view.element.addEventListener('touchstart', function (event) {
+            var point = new paper.Point(event.touches[0].pageX, event.touches[0].pageY);
+            var localPoint = point.transform(_this._screenMatrix.inverted());
+            _this._mousePosition = new vector2_1.Vector2(localPoint.x, localPoint.y);
+        });
+        paper.view.element.addEventListener('touchmove', function (event) {
+            var point = new paper.Point(event.touches[0].pageX, event.touches[0].pageY);
+            var localPoint = point.transform(_this._screenMatrix.inverted());
+            _this._mousePosition = new vector2_1.Vector2(localPoint.x, localPoint.y);
+        });
     };
     // TODO (Owlree) Paper events are exposed, create intermediary event class
     GraphingCalculator.prototype.on = function (event, callback) {
@@ -135,6 +132,9 @@ var GraphingCalculator = /** @class */ (function () {
     GraphingCalculator.prototype.contains = function (position) {
         return paper.view.bounds.contains(new paper.Point(position.x, position.y));
     };
+    __decorate([
+        decoratorwatchvariable_1.DecoratorWatchVariable
+    ], GraphingCalculator.prototype, "backgroundColor", null);
     return GraphingCalculator;
 }());
 exports.GraphingCalculator = GraphingCalculator;
