@@ -41,7 +41,8 @@ let fromPoint: vima.FreePointGraphic | undefined = undefined;
 let toPoint: vima.FreePointGraphic | undefined = undefined;
 let vector: vima.VectorGraphic | undefined = undefined;
 
-const mouseDown = () => {
+const mouseDown = (event: MouseEvent | TouchEvent) => {
+  event.preventDefault();
   fromPoint = new vima.FreePointGraphic({
     x: graphingCalculator.mousePosition.x,
     y: graphingCalculator.mousePosition.y,
@@ -58,13 +59,15 @@ const mouseDown = () => {
   graphingCalculator.add(toPoint);
 };
 
-const mouseMove = () => {
+const mouseMove = (event: MouseEvent | TouchEvent) => {
+  event.preventDefault();
   if (toPoint !== undefined) {
     toPoint.position = graphingCalculator.mousePosition;
   }
 };
 
-const mouseUp = () => {
+const mouseUp = (event: MouseEvent | TouchEvent) => {
+  event.preventDefault();
   let newBall = {
     point: new vima.FreePointGraphic({interactive: false}),
     s0: fromPoint!.position,
