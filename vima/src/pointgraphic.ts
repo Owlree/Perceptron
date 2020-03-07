@@ -9,6 +9,7 @@ import { Variable } from './variable';
 import { WritableVariable } from './writablevariable';
 import { PointGraphicType } from './pointgraphictype';
 import { Vector2 } from './vector2';
+import { Rectangle } from './rectangle';
 
 
 /**
@@ -155,5 +156,12 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     this._item.transform(matrix.inverted());
     this._screenMatrix = matrix;
     this._item.position = oldPosition;
+  }
+
+  public get bounds(): Rectangle {
+    return new Rectangle(
+      new Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y),
+      new Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y),
+    );
   }
 }

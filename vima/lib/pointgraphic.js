@@ -26,6 +26,7 @@ var graphic_1 = require("./graphic");
 var writablevariable_1 = require("./writablevariable");
 var pointgraphictype_1 = require("./pointgraphictype");
 var vector2_1 = require("./vector2");
+var rectangle_1 = require("./rectangle");
 /**
  * Base abstract class representing a mathematical point. Handles the the
  * visual aspects of the graphic such as color and size. The position of the
@@ -174,6 +175,13 @@ var PointGraphic = /** @class */ (function (_super) {
         this._screenMatrix = matrix;
         this._item.position = oldPosition;
     };
+    Object.defineProperty(PointGraphic.prototype, "bounds", {
+        get: function () {
+            return new rectangle_1.Rectangle(new vector2_1.Vector2(this._item.bounds.topLeft.x, this._item.bounds.topLeft.y), new vector2_1.Vector2(this._item.bounds.bottomRight.x, this._item.bounds.bottomRight.y));
+        },
+        enumerable: true,
+        configurable: true
+    });
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], PointGraphic.prototype, "color", null);

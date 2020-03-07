@@ -4,6 +4,7 @@ import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
 import { Variable } from './variable';
 import { WritableVariable } from './writablevariable';
 import { Vector2 } from './vector2';
+import { Rectangle } from './rectangle';
 /**
  * Base abstract class representing a mathematical point. Handles the the
  * visual aspects of the graphic such as color and size. The position of the
@@ -29,5 +30,6 @@ export declare abstract class PointGraphic extends Graphic implements IScreenTra
     set position(position: Vector2);
     get positionVariable(): Variable<Vector2>;
     onScreenTransformUpdated(matrix: paper.Matrix): void;
+    get bounds(): Rectangle;
 }
 //# sourceMappingURL=pointgraphic.d.ts.map

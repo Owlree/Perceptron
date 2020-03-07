@@ -1,6 +1,7 @@
 import { IBoundsSubscriber } from './iboundssubscriber';
 import { IFunctionGraphicOptions } from './ifunctiongraphicoptions';
 import { ParametricCurveGraphic } from './parametriccurvegraphic';
+import { Rectangle } from './rectangle';
 
 
 /**
@@ -22,7 +23,7 @@ export class FunctionGraphic
     });
   }
 
-  public onBoundsUpdated(bounds: paper.Rectangle): void {
+  public onBoundsUpdated(bounds: Rectangle): void {
     this._from = bounds.left!;
     this._to = bounds.right!;
     this.build();

@@ -1,7 +1,10 @@
 import * as vima from 'vima';
 
+const bounds: vima.Rectangle = new vima.Rectangle(
+  new vima.Vector2(-Math.PI, 1.2), new vima.Vector2(Math.PI, -1.2));
+
 // Create an instance of the graphing calculator
-const graphingCalculator = new vima.GraphingCalculator('canvas');
+const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
 
 // Create the main function
 const functionGraphic: vima.FunctionGraphic =
@@ -50,8 +53,7 @@ const constrainedPointFunction = new vima.ConstrainedPointFunctionGraphic(
   functionGraphic, {
     x: xPlusDt,
     radius: 5,
-    color: vima.Colors.redColor,
-    // interactive: false
+    color: vima.Colors.redColor
   });
 
 // Create a point constrained on the tangent graphic at x + dt
@@ -59,8 +61,7 @@ const constrainedPointTangent = new vima.ConstrainedPointFunctionGraphic(
   tangentGraphic, {
     x: xPlusDt,
     radius: 5,
-    color: vima.Colors.redColor,
-    // interactive: false
+    color: vima.Colors.redColor
   });
 
 // Create a vector that highlights the difference between the point on the

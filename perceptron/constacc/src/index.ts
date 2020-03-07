@@ -1,7 +1,10 @@
 import * as vima from 'vima';
 
+const bounds: vima.Rectangle = new vima.Rectangle(
+  new vima.Vector2(-Math.PI, 1.2), new vima.Vector2(Math.PI, -1.2));
+
 // Create an instance of the graphing calculator
-const graphingCalculator = new vima.GraphingCalculator('canvas');
+const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
 
 const a0: vima.Vector2 = new vima.Vector2(0, -1);
 
@@ -22,6 +25,14 @@ graphingCalculator.on('frame', ({time}: vima.Event) => {
     const y: number = s0.y + v0.y * t + a0.y * t * t / 2;
     point.position = new vima.Vector2(x, y);
   }
+  balls = balls.filter(({point}) => {
+    const out: boolean = bounds.left > point.bounds.right ||
+      bounds.bottom > point.bounds.bottom || bounds.right < point.bounds.left;
+    if (out) {
+      point.remove();
+    }
+    return !out;
+  });
 });
 
 let fromPoint: vima.FreePointGraphic | undefined = undefined;
@@ -30,12 +41,10 @@ let vector: vima.VectorGraphic | undefined = undefined;
 
 document.body.addEventListener('mousedown', () => {
   fromPoint = new vima.FreePointGraphic({
-    // interactive: false,
     x: graphingCalculator.mousePosition.x,
     y: graphingCalculator.mousePosition.y
   });
   toPoint = new vima.FreePointGraphic({
-    // interactive: false,
     type: vima.PointGraphicType.Triangle,
     x: graphingCalculator.mousePosition.x,
     y: graphingCalculator.mousePosition.y

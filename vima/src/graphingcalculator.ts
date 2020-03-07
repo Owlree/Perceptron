@@ -5,6 +5,7 @@ import { Event } from './event';
 import { Graphic } from './graphic';
 import { IBoundsSubscriber } from './iboundssubscriber';
 import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
+import { Rectangle } from './rectangle';
 import { Variable } from './variable';
 import { Vector2 } from './vector2';
 
@@ -19,15 +20,14 @@ export class GraphingCalculator {
   private _backgroundColorVariableChangedCallback?:
     ((variable: Variable<paper.Color>) => void);
   private _backgroundPath: paper.Path.Rectangle;
-  private _bounds: paper.Rectangle =
-    new paper.Rectangle(
-      new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
+  private _bounds: Rectangle;
   private readonly _graphics: Array<Graphic> = [];
   private _mousePosition: Vector2 = new Vector2(0, 0);
   private _screenMatrix: paper.Matrix = new paper.Matrix(1, 0, 0, 1, 0, 0);
 
-  public constructor(canvasId: string) {
+  public constructor(canvasId: string, bounds: Rectangle) {
     paper.setup(canvasId);
+    this._bounds = bounds;
     this._backgroundPath = new paper.Path.Rectangle(this._bounds);
     this.backgroundColor = Colors.backgroundColor;
     paper.view.on('resize', (): void => {
@@ -36,9 +36,17 @@ export class GraphingCalculator {
     this.setup();
   }
 
-  public set bounds(bounds: paper.Rectangle) {
+  public set bounds(bounds: Rectangle) {
+
+    console.log(bounds);
+
     this._bounds = bounds;
-    this._backgroundPath.bounds = bounds;
+    this._backgroundPath.bounds = new paper.Rectangle(
+      this._bounds.left, this._bounds.top,
+      this.bounds.width, this._bounds.height
+    );
+
+    // Transforms the paper view according to the new bounds
     this.setup();
 
     // Notify the bounds update on all objects that implement the subscriber
@@ -102,19 +110,18 @@ export class GraphingCalculator {
   private setup(): void {
 
     // Revert the previous transform
-    paper.view.transform(paper.view.matrix!.inverted());
+    paper.view.transform(this._screenMatrix.inverted());
 
     // Apply the new transform
     paper.view.transform(new paper.Matrix(
-      paper.view.viewSize!.width! / this._bounds.width!, 0,
-      0, -paper.view.viewSize!.height! / this._bounds.height!,
-      paper.view.viewSize!.width! / 2,
-      paper.view.viewSize!.height! / 2,
+      paper.view.viewSize.width / this._bounds.width, 0,
+      0, -paper.view.viewSize.height! / this._bounds.height,
+      paper.view.viewSize.width / 2, paper.view.viewSize.height / 2,
     ));
     paper.view.transform(new paper.Matrix(
       1, 0,
       0, 1,
-      -this._bounds.center!.x!, -this._bounds.center!.y!
+      -this._bounds.center.x, -this._bounds.center.y
     ));
 
     this._screenMatrix = paper.view.matrix;
@@ -150,5 +157,9 @@ export class GraphingCalculator {
 
   public get mousePosition(): Vector2 {
     return this._mousePosition;
+  }
+
+  public contains(position: Vector2) {
+    return paper.view.bounds.contains(new paper.Point(position.x, position.y));
   }
 }

@@ -10,14 +10,14 @@ var vector2_1 = require("./vector2");
  * {@link FreePointGraphic}, or others.
  */
 var GraphingCalculator = /** @class */ (function () {
-    function GraphingCalculator(canvasId) {
+    function GraphingCalculator(canvasId, bounds) {
         var _this = this;
         this._backgroundColorVariable = undefined;
-        this._bounds = new paper.Rectangle(new paper.Point(-Math.PI, -1.5), new paper.Point(Math.PI, 1.5));
         this._graphics = [];
         this._mousePosition = new vector2_1.Vector2(0, 0);
         this._screenMatrix = new paper.Matrix(1, 0, 0, 1, 0, 0);
         paper.setup(canvasId);
+        this._bounds = bounds;
         this._backgroundPath = new paper.Path.Rectangle(this._bounds);
         this.backgroundColor = Colors.backgroundColor;
         paper.view.on('resize', function () {
@@ -27,8 +27,10 @@ var GraphingCalculator = /** @class */ (function () {
     }
     Object.defineProperty(GraphingCalculator.prototype, "bounds", {
         set: function (bounds) {
+            console.log(bounds);
             this._bounds = bounds;
-            this._backgroundPath.bounds = bounds;
+            this._backgroundPath.bounds = new paper.Rectangle(this._bounds.left, this._bounds.top, this.bounds.width, this._bounds.height);
+            // Transforms the paper view according to the new bounds
             this.setup();
             // Notify the bounds update on all objects that implement the subscriber
             // interface
@@ -91,7 +93,7 @@ var GraphingCalculator = /** @class */ (function () {
     GraphingCalculator.prototype.setup = function () {
         var _this = this;
         // Revert the previous transform
-        paper.view.transform(paper.view.matrix.inverted());
+        paper.view.transform(this._screenMatrix.inverted());
         // Apply the new transform
         paper.view.transform(new paper.Matrix(paper.view.viewSize.width / this._bounds.width, 0, 0, -paper.view.viewSize.height / this._bounds.height, paper.view.viewSize.width / 2, paper.view.viewSize.height / 2));
         paper.view.transform(new paper.Matrix(1, 0, 0, 1, -this._bounds.center.x, -this._bounds.center.y));
@@ -130,6 +132,9 @@ var GraphingCalculator = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    GraphingCalculator.prototype.contains = function (position) {
+        return paper.view.bounds.contains(new paper.Point(position.x, position.y));
+    };
     return GraphingCalculator;
 }());
 exports.GraphingCalculator = GraphingCalculator;
