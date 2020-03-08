@@ -1,14 +1,17 @@
 import * as paper from 'paper';
 
 import * as Colors from './colors';
+import { applyMixins } from './applymixins';
+import { DecoratorWatchVariable } from './decoratorwatchvariable';
 import { Event } from './event';
 import { Graphic } from './graphic';
 import { IBoundsSubscriber } from './iboundssubscriber';
 import { IScreenTransformSubscriber } from './iscreentransformsubscriber';
+import { IVariableListener } from './ivariablelistener';
+import { MixinVariableListener } from './mixinvariablelistener';
 import { Rectangle } from './rectangle';
 import { Variable } from './variable';
 import { Vector2 } from './vector2';
-import { DecoratorWatchVariable } from './decoratorwatchvariable';
 
 
 /**
@@ -16,7 +19,7 @@ import { DecoratorWatchVariable } from './decoratorwatchvariable';
  * graphics such as {@link CurveGraphic}, {@link FunctionGraphic},
  * {@link FreePointGraphic}, or others.
  */
-export class GraphingCalculator {
+class GraphingCalculator implements IVariableListener {
   private _bounds: Rectangle = new Rectangle(new Vector2(0, 0), new Vector2(0, 0));
   private _mousePosition: Vector2 = new Vector2(0, 0);
   private _screenMatrix: paper.Matrix = new paper.Matrix(1, 0, 0, 1, 0, 0);
@@ -167,3 +170,8 @@ export class GraphingCalculator {
     return paper.view.bounds.contains(new paper.Point(position.x, position.y));
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface GraphingCalculator extends MixinVariableListener {}
+applyMixins(GraphingCalculator, [MixinVariableListener]);
+export { GraphingCalculator };

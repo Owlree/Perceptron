@@ -94,9 +94,4 @@ export class VectorGraphic extends Graphic {
       this._v2.y - this._v1.y,
     );
   }
-
-  public remove() {
-    super.remove();
-    this.color = new paper.Color('red');
-  }
 }

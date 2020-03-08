@@ -8,9 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var paper = require("paper");
 var Colors = require("./colors");
+var applymixins_1 = require("./applymixins");
+var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
+var mixinvariablelistener_1 = require("./mixinvariablelistener");
 var rectangle_1 = require("./rectangle");
 var vector2_1 = require("./vector2");
-var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
 /**
  * A graphic calculator handles the presentation and interaction with various
  * graphics such as {@link CurveGraphic}, {@link FunctionGraphic},
@@ -51,12 +53,19 @@ var GraphingCalculator = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(GraphingCalculator.prototype, "backgroundColor", {
+        /**
+         * @param color The color or variable color to set as background
+         */
         set: function (color) {
             this._backgroundPath.fillColor = color;
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     * Adds a graphic to the graphing calculator
+     * @param graphic The graphic to add
+     */
     GraphingCalculator.prototype.add = function (graphic) {
         var graphicAny = graphic;
         if ('onBoundsUpdated' in graphicAny) {
@@ -70,6 +79,10 @@ var GraphingCalculator = /** @class */ (function () {
         this._graphics.push(graphic);
         graphic.addTo(paper.project);
     };
+    /**
+     * Removes a graphic from the graphing calculator
+     * @param graphic The graphic to remove
+     */
     GraphingCalculator.prototype.remove = function (graphic) {
         var index = this._graphics.indexOf(graphic);
         if (index > -1) {
@@ -138,4 +151,5 @@ var GraphingCalculator = /** @class */ (function () {
     return GraphingCalculator;
 }());
 exports.GraphingCalculator = GraphingCalculator;
+applymixins_1.applyMixins(GraphingCalculator, [mixinvariablelistener_1.MixinVariableListener]);
 //# sourceMappingURL=graphingcalculator.js.map

@@ -181,11 +181,6 @@ var PointGraphic = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    PointGraphic.prototype.remove = function () {
-        _super.prototype.remove.call(this);
-        this._position = new vector2_1.Vector2(0, 0);
-        this.color = new paper.Color('red');
-    };
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], PointGraphic.prototype, "color", null);

@@ -27,22 +27,22 @@ function DecoratorWatchVariable(_, name, descriptor) {
     if (descriptor !== undefined && descriptor.set !== undefined) {
         return __assign(__assign({}, descriptor), { set: function (value) {
                 var _this = this;
-                var varname = "__var" + name;
-                var cbname = "__cb" + name;
-                if (this[varname] !== undefined && this[cbname] !== undefined) {
-                    this[varname].unregister(this[cbname]);
-                    this[varname] = this[cbname] = undefined;
+                var _a = this.getVariableCallbackRef(name), variable = _a.variable, callback = _a.callback;
+                if (variable !== undefined && callback !== undefined) {
+                    variable.unregister(callback);
+                    this.removeVariableCallbackRef(name);
                 }
                 if (value instanceof variable_1.Variable) {
-                    this[varname] = value;
-                    this[cbname] = function (variable) {
+                    var variable_2 = value;
+                    var callback_1 = function (variable) {
                         if (descriptor.set !== undefined) {
                             descriptor.set.call(_this, variable.value);
                         }
                     };
-                    this[varname].register(this[cbname]);
+                    variable_2.register(callback_1);
+                    this.saveVariableCallbackRef(name, callback_1, variable_2);
                     if (descriptor.set !== undefined) { // TODO (Owlree) This condition should not be necessary
-                        descriptor.set.call(this, this[varname].value);
+                        descriptor.set.call(this, variable_2.value);
                     }
                 }
                 else {

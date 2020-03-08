@@ -77,6 +77,9 @@ const mouseUp = (event: MouseEvent | TouchEvent) => {
   };
   balls.push(newBall);
   graphingCalculator.add(newBall.point);
+  fromPoint?.unregisterAllVariableCallbacks();
+  toPoint?.unregisterAllVariableCallbacks();
+  vector?.unregisterAllVariableCallbacks();
   graphingCalculator.remove(fromPoint!);
   graphingCalculator.remove(toPoint!);
   graphingCalculator.remove(vector!);

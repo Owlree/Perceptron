@@ -30,6 +30,5 @@ export declare abstract class PointGraphic extends Graphic implements IScreenTra
     get positionVariable(): Variable<Vector2>;
     onScreenTransformUpdated(matrix: paper.Matrix): void;
     get bounds(): Rectangle;
-    remove(): void;
 }
 //# sourceMappingURL=pointgraphic.d.ts.map

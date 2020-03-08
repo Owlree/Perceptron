@@ -1,7 +1,9 @@
+import { MixinVariableListener } from './mixinvariablelistener';
+import { IVariableListener } from './ivariablelistener';
 /**
  * Base abstract class that represents a drawable mathematical object.
  */
-export declare abstract class Graphic {
+declare abstract class Graphic implements IVariableListener {
     protected _item: paper.Item;
     constructor();
     /**
@@ -15,4 +17,7 @@ export declare abstract class Graphic {
     addTo(owner: paper.Project | paper.Layer | paper.Group | paper.CompoundPath): void;
     on(event: string, callback: Function): void;
 }
+interface Graphic extends MixinVariableListener {
+}
+export { Graphic };
 //# sourceMappingURL=graphic.d.ts.map

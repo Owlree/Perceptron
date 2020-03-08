@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var paper = require("paper");
+var applymixins_1 = require("./applymixins");
+var mixinvariablelistener_1 = require("./mixinvariablelistener");
 /**
  * Base abstract class that represents a drawable mathematical object.
  */
@@ -28,4 +30,5 @@ var Graphic = /** @class */ (function () {
     return Graphic;
 }());
 exports.Graphic = Graphic;
+applymixins_1.applyMixins(Graphic, [mixinvariablelistener_1.MixinVariableListener]);
 //# sourceMappingURL=graphic.js.map

@@ -1,4 +1,5 @@
 import { Variable } from './variable';
+import { IVariableListener } from './ivariablelistener';
 
 
 /**
@@ -18,22 +19,22 @@ export function DecoratorWatchVariable<T>(_: any, name: string,
     return {
       ...descriptor,
       set: function(value: T): void {
-        const varname = `__var${name}`;
-        const cbname = `__cb${name}`;
-        if (this[varname] !== undefined && this[cbname] !== undefined) {
-          this[varname].unregister(this[cbname]);
-          this[varname] = this[cbname] = undefined;
+        const {variable, callback} = (this as IVariableListener).getVariableCallbackRef(name);
+        if (variable !== undefined && callback !== undefined) {
+          variable.unregister(callback);
+          (this as IVariableListener).removeVariableCallbackRef(name);
         }
         if (value instanceof Variable) {
-          this[varname] = value;
-          this[cbname] = (variable: Variable<any>): void => {
+          const variable = value as Variable<any>;
+          const callback = (variable: Variable<any>): void => {
             if (descriptor.set !== undefined) {
               descriptor.set.call(this, variable.value as T);
             }
           };
-          this[varname].register(this[cbname]);
+          variable.register(callback);
+          (this as IVariableListener).saveVariableCallbackRef(name, callback, variable);
           if (descriptor.set !== undefined) { // TODO (Owlree) This condition should not be necessary
-            descriptor.set.call(this, this[varname].value as T);
+            descriptor.set.call(this, variable.value as T);
           }
         } else {
           if (descriptor.set !== undefined) {

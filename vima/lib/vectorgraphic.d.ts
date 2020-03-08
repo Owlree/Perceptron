@@ -20,6 +20,5 @@ export declare class VectorGraphic extends Graphic {
     onScreenTransformUpdated(matrix: paper.Matrix): void;
     private _build;
     get vector2(): Vector2;
-    remove(): void;
 }
 //# sourceMappingURL=vectorgraphic.d.ts.map

@@ -1,10 +1,13 @@
 import * as paper from 'paper';
 
+import { applyMixins } from './applymixins';
+import { MixinVariableListener } from './mixinvariablelistener';
+import { IVariableListener } from './ivariablelistener';
 
 /**
  * Base abstract class that represents a drawable mathematical object.
  */
-export abstract class Graphic {
+abstract class Graphic implements IVariableListener {
   protected _item: paper.Item;
 
   public constructor() {
@@ -33,3 +36,8 @@ export abstract class Graphic {
     this._item.on(event, callback);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface Graphic extends MixinVariableListener {}
+applyMixins(Graphic, [MixinVariableListener]);
+export { Graphic };
