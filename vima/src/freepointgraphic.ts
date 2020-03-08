@@ -11,7 +11,6 @@ import { Vector2 } from './vector2';
  * of the box.
  */
 export class FreePointGraphic extends PointGraphic {
-
   private _mouseDown: boolean = false;
   private _mouseOver: boolean = false;
 
@@ -24,7 +23,6 @@ export class FreePointGraphic extends PointGraphic {
 
     this._path.shadowColor = Colors.blueColor.value;
     this._path.shadowBlur = 0;
-
     this.position = new Vector2(x, y);
 
     if (interactive) {
@@ -32,23 +30,19 @@ export class FreePointGraphic extends PointGraphic {
         this._mouseOver = true;
         this.updateStyle();
       });
-
       this._path.on('mouseleave', (): void => {
         this._mouseOver = false;
         this.updateStyle();
       });
-
       this._path.on('mousedown', (): void => {
         this._mouseDown = true;
         this.updateStyle();
       });
-
       paper.view.on('mouseup', (): boolean => {
         this._mouseDown = false;
         this.updateStyle();
         return true;
       });
-
       paper.view.on('mousemove', (event: paper.MouseEvent): void => {
         if (this._mouseDown) {
           this.position = new Vector2(event.point!.x!, event.point!.y!);

@@ -42,6 +42,9 @@ var CurveGraphic = /** @class */ (function (_super) {
         return _this;
     }
     Object.defineProperty(CurveGraphic.prototype, "color", {
+        /**
+         * @param color The stroke color for the curve
+         */
         set: function (color) {
             this._path.strokeColor = color;
         },
@@ -49,6 +52,9 @@ var CurveGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(CurveGraphic.prototype, "width", {
+        /**
+         * @param width The width of the curve's stroke
+         */
         set: function (width) {
             this._width = width;
             if (this._path !== undefined) {

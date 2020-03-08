@@ -9,9 +9,9 @@ import { IVariableListener } from './ivariablelistener';
  * is first decorated, and subsequently any time the variable changes.
  *
  * @param _
- * @param __
- * @param descriptor
- * @returns May return the a descriptor with the decorated setter
+ * @param name The name of the property
+ * @param descriptor The descriptor of the property
+ * @returns A descriptor with a setter decorated accordingly
  */
 export function DecoratorWatchVariable<T>(_: any, name: string,
   descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void {
@@ -19,10 +19,11 @@ export function DecoratorWatchVariable<T>(_: any, name: string,
     return {
       ...descriptor,
       set: function(value: T): void {
-        const {variable, callback} = (this as IVariableListener).getVariableCallbackRef(name);
+        const thisvl: IVariableListener = this as IVariableListener;
+        const {variable, callback} = thisvl.getVariableCallbackRef(name);
         if (variable !== undefined && callback !== undefined) {
           variable.unregister(callback);
-          (this as IVariableListener).removeVariableCallbackRef(name);
+          thisvl.removeVariableCallbackRef(name);
         }
         if (value instanceof Variable) {
           const variable = value as Variable<any>;
@@ -32,8 +33,9 @@ export function DecoratorWatchVariable<T>(_: any, name: string,
             }
           };
           variable.register(callback);
-          (this as IVariableListener).saveVariableCallbackRef(name, callback, variable);
-          if (descriptor.set !== undefined) { // TODO (Owlree) This condition should not be necessary
+          thisvl.saveVariableCallbackRef(name, callback, variable);
+          // TODO (Owlree) This condition should not be necessary
+          if (descriptor.set !== undefined) {
             descriptor.set.call(this, variable.value as T);
           }
         } else {

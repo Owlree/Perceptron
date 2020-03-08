@@ -5,9 +5,9 @@
  * is first decorated, and subsequently any time the variable changes.
  *
  * @param _
- * @param __
- * @param descriptor
- * @returns May return the a descriptor with the decorated setter
+ * @param name The name of the property
+ * @param descriptor The descriptor of the property
+ * @returns A descriptor with a setter decorated accordingly
  */
 export declare function DecoratorWatchVariable<T>(_: any, name: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void;
 //# sourceMappingURL=decoratorwatchvariable.d.ts.map

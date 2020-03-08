@@ -17,7 +17,6 @@ export abstract class CurveGraphic extends Graphic {
   protected _colorVariable?: Variable<paper.Color> = undefined;
   protected _colorVariableChangedCallback?:
     ((variable: Variable<paper.Color>) => void) = undefined;
-
   protected _path: paper.Path;
 
   public constructor({
@@ -30,11 +29,17 @@ export abstract class CurveGraphic extends Graphic {
     this.color = strokeColor;
   }
 
+  /**
+   * @param color The stroke color for the curve
+   */
   @DecoratorWatchVariable
   public set color(color: paper.Color | Variable<paper.Color>) {
     this._path.strokeColor = color as paper.Color;
   }
 
+  /**
+   * @param width The width of the curve's stroke
+   */
   public set width(width: number) {
     this._width = width;
     if (this._path !== undefined) {

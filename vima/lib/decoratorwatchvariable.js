@@ -19,18 +19,19 @@ var variable_1 = require("./variable");
  * is first decorated, and subsequently any time the variable changes.
  *
  * @param _
- * @param __
- * @param descriptor
- * @returns May return the a descriptor with the decorated setter
+ * @param name The name of the property
+ * @param descriptor The descriptor of the property
+ * @returns A descriptor with a setter decorated accordingly
  */
 function DecoratorWatchVariable(_, name, descriptor) {
     if (descriptor !== undefined && descriptor.set !== undefined) {
         return __assign(__assign({}, descriptor), { set: function (value) {
                 var _this = this;
-                var _a = this.getVariableCallbackRef(name), variable = _a.variable, callback = _a.callback;
+                var thisvl = this;
+                var _a = thisvl.getVariableCallbackRef(name), variable = _a.variable, callback = _a.callback;
                 if (variable !== undefined && callback !== undefined) {
                     variable.unregister(callback);
-                    this.removeVariableCallbackRef(name);
+                    thisvl.removeVariableCallbackRef(name);
                 }
                 if (value instanceof variable_1.Variable) {
                     var variable_2 = value;
@@ -40,8 +41,9 @@ function DecoratorWatchVariable(_, name, descriptor) {
                         }
                     };
                     variable_2.register(callback_1);
-                    this.saveVariableCallbackRef(name, callback_1, variable_2);
-                    if (descriptor.set !== undefined) { // TODO (Owlree) This condition should not be necessary
+                    thisvl.saveVariableCallbackRef(name, callback_1, variable_2);
+                    // TODO (Owlree) This condition should not be necessary
+                    if (descriptor.set !== undefined) {
                         descriptor.set.call(this, variable_2.value);
                     }
                 }

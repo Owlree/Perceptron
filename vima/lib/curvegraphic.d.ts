@@ -12,7 +12,13 @@ export declare abstract class CurveGraphic extends Graphic {
     protected _colorVariableChangedCallback?: ((variable: Variable<paper.Color>) => void);
     protected _path: paper.Path;
     constructor({ strokeColor, strokeWidth }?: ICurveGraphicOptions);
+    /**
+     * @param color The stroke color for the curve
+     */
     set color(color: paper.Color | Variable<paper.Color>);
+    /**
+     * @param width The width of the curve's stroke
+     */
     set width(width: number);
 }
 //# sourceMappingURL=curvegraphic.d.ts.map
