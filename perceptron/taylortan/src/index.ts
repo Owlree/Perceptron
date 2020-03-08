@@ -15,7 +15,8 @@ const functionGraphic: vima.FunctionGraphic =
 // Create a point that is constrained to stay on the main function graphic
 const tangentPoint = new vima.ConstrainedPointFunctionGraphic(
   functionGraphic, {
-    radius: 5
+    radius: 5,
+    color: vima.Colors.blueColor
   });
 
 tangentPoint.position = new vima.Vector2(-Math.PI / 3, 0);
