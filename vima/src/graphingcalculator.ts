@@ -55,11 +55,18 @@ export class GraphingCalculator {
     }
   }
 
+  /**
+   * @param color The color or variable color to set as background
+   */
   @DecoratorWatchVariable
   public set backgroundColor(color: Variable<paper.Color> | paper.Color) {
     this._backgroundPath.fillColor = color as paper.Color;
   }
 
+  /**
+   * Adds a graphic to the graphing calculator
+   * @param graphic The graphic to add
+   */
   public add(graphic: Graphic): void {
 
     const graphicAny: any = graphic as any;
@@ -78,6 +85,10 @@ export class GraphingCalculator {
     graphic.addTo(paper.project!);
   }
 
+  /**
+   * Removes a graphic from the graphing calculator
+   * @param graphic The graphic to remove
+   */
   public remove(graphic: Graphic): void {
     const index: number = this._graphics.indexOf(graphic);
     if (index > -1) {
