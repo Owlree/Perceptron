@@ -12,31 +12,28 @@ import { Variable } from './variable';
  * @param descriptor
  * @returns May return the a descriptor with the decorated setter
  */
-export function DecoratorWatchVariable<T>(_: any, __: string,
+export function DecoratorWatchVariable<T>(_: any, name: string,
   descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> | void {
-
   if (descriptor !== undefined && descriptor.set !== undefined) {
-    // We are dealing with a setter method
-    let variable: Variable<any> | undefined = undefined;
-    let callback: ((variable: Variable<any>) => void) | undefined;
     return {
       ...descriptor,
       set: function(value: T): void {
-        if (variable !== undefined && callback !== undefined) {
-          variable.unregister(callback);
-          variable = undefined;
-          callback = undefined;
+        const varname = `__var${name}`;
+        const cbname = `__cb${name}`;
+        if (this[varname] !== undefined && this[cbname] !== undefined) {
+          this[varname].unregister(this[cbname]);
+          this[varname] = this[cbname] = undefined;
         }
         if (value instanceof Variable) {
-          const variable = value as Variable<any>;
-          callback = (variable: Variable<any>): void => {
+          this[varname] = value;
+          this[cbname] = (variable: Variable<any>): void => {
             if (descriptor.set !== undefined) {
               descriptor.set.call(this, variable.value as T);
             }
           };
-          variable.register(callback);
-          if (descriptor.set !== undefined) {
-            descriptor.set.call(this, variable.value as T);
+          this[varname].register(this[cbname]);
+          if (descriptor.set !== undefined) { // TODO (Owlree) This condition should not be necessary
+            descriptor.set.call(this, this[varname].value as T);
           }
         } else {
           if (descriptor.set !== undefined) {

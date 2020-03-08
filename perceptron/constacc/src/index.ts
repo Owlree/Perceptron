@@ -31,7 +31,7 @@ graphingCalculator.on('frame', ({time}: vima.Event) => {
       bounds.bottom > point.bounds.top   ||
       bounds.right  < point.bounds.left;
     if (out) {
-      point.remove();
+      graphingCalculator.remove(point);
     }
     return !out;
   });
@@ -57,6 +57,7 @@ const mouseDown = (event: MouseEvent | TouchEvent) => {
   vector = new vima.VectorGraphic(fromPoint, toPoint);
   graphingCalculator.add(vector);
   graphingCalculator.add(toPoint);
+  graphingCalculator.add(fromPoint);
 };
 
 const mouseMove = (event: MouseEvent | TouchEvent) => {
@@ -76,9 +77,9 @@ const mouseUp = (event: MouseEvent | TouchEvent) => {
   };
   balls.push(newBall);
   graphingCalculator.add(newBall.point);
-  fromPoint?.remove();
-  toPoint?.remove();
-  vector?.remove();
+  graphingCalculator.remove(fromPoint!);
+  graphingCalculator.remove(toPoint!);
+  graphingCalculator.remove(vector!);
   fromPoint = undefined;
   toPoint = undefined;
   vector = undefined;

@@ -23,28 +23,26 @@ var variable_1 = require("./variable");
  * @param descriptor
  * @returns May return the a descriptor with the decorated setter
  */
-function DecoratorWatchVariable(_, __, descriptor) {
+function DecoratorWatchVariable(_, name, descriptor) {
     if (descriptor !== undefined && descriptor.set !== undefined) {
-        // We are dealing with a setter method
-        var variable_2 = undefined;
-        var callback_1;
         return __assign(__assign({}, descriptor), { set: function (value) {
                 var _this = this;
-                if (variable_2 !== undefined && callback_1 !== undefined) {
-                    variable_2.unregister(callback_1);
-                    variable_2 = undefined;
-                    callback_1 = undefined;
+                var varname = "__var" + name;
+                var cbname = "__cb" + name;
+                if (this[varname] !== undefined && this[cbname] !== undefined) {
+                    this[varname].unregister(this[cbname]);
+                    this[varname] = this[cbname] = undefined;
                 }
                 if (value instanceof variable_1.Variable) {
-                    var variable_3 = value;
-                    callback_1 = function (variable) {
+                    this[varname] = value;
+                    this[cbname] = function (variable) {
                         if (descriptor.set !== undefined) {
                             descriptor.set.call(_this, variable.value);
                         }
                     };
-                    variable_3.register(callback_1);
-                    if (descriptor.set !== undefined) {
-                        descriptor.set.call(this, variable_3.value);
+                    this[varname].register(this[cbname]);
+                    if (descriptor.set !== undefined) { // TODO (Owlree) This condition should not be necessary
+                        descriptor.set.call(this, this[varname].value);
                     }
                 }
                 else {

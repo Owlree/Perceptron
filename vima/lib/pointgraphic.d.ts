@@ -11,7 +11,6 @@ import { Rectangle } from './rectangle';
  * point is left to deriving classes.
  */
 export declare abstract class PointGraphic extends Graphic implements IScreenTransformSubscriber {
-    protected _colorVariable?: Variable<paper.Color>;
     protected _interactive: boolean;
     protected _path: paper.Path;
     protected _positionVariable: WritableVariable<Vector2>;
@@ -31,5 +30,6 @@ export declare abstract class PointGraphic extends Graphic implements IScreenTra
     get positionVariable(): Variable<Vector2>;
     onScreenTransformUpdated(matrix: paper.Matrix): void;
     get bounds(): Rectangle;
+    remove(): void;
 }
 //# sourceMappingURL=pointgraphic.d.ts.map

@@ -18,7 +18,6 @@ import { Rectangle } from './rectangle';
  * point is left to deriving classes.
  */
 export abstract class PointGraphic extends Graphic implements IScreenTransformSubscriber {
-  protected _colorVariable?: Variable<paper.Color> = undefined;
   protected _interactive: boolean = true;
   protected _path: paper.Path;
   protected _positionVariable: WritableVariable<Vector2>;
@@ -163,5 +162,11 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
       new Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y),
       new Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y),
     );
+  }
+
+  public remove(): void {
+    super.remove();
+    this._position = new Vector2(0, 0);
+    this.color = new paper.Color('red');
   }
 }

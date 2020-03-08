@@ -37,7 +37,6 @@ var PointGraphic = /** @class */ (function (_super) {
     function PointGraphic(_a) {
         var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? Colors.mainColor : _c, _d = _b.radius, radius = _d === void 0 ? 10 : _d, _e = _b.type, type = _e === void 0 ? pointgraphictype_1.PointGraphicType.Circle : _e, _f = _b.interactive, interactive = _f === void 0 ? true : _f;
         var _this = _super.call(this) || this;
-        _this._colorVariable = undefined;
         _this._interactive = true;
         _this._radius = 1;
         _this._rotation = 0;
@@ -182,6 +181,11 @@ var PointGraphic = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    PointGraphic.prototype.remove = function () {
+        _super.prototype.remove.call(this);
+        this._position = new vector2_1.Vector2(0, 0);
+        this.color = new paper.Color('red');
+    };
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], PointGraphic.prototype, "color", null);

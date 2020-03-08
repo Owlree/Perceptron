@@ -94,6 +94,10 @@ var VectorGraphic = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    VectorGraphic.prototype.remove = function () {
+        _super.prototype.remove.call(this);
+        this.color = new paper.Color('red');
+    };
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], VectorGraphic.prototype, "color", null);
