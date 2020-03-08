@@ -72,16 +72,6 @@ var PointGraphic = /** @class */ (function (_super) {
     }
     Object.defineProperty(PointGraphic.prototype, "interactive", {
         set: function (interactive) {
-            if (this._interactive && !interactive) {
-                this._path.strokeColor = this._path.fillColor;
-                this._path.fillColor = this._path.strokeColor.add(0.33);
-                this._path.strokeWidth = 2;
-            }
-            else if (!this._interactive && interactive) {
-                this._path.fillColor = this._path.strokeColor;
-                this._path.strokeColor = null;
-                this._path.strokeWidth = 0;
-            }
             this._interactive = interactive;
         },
         enumerable: true,

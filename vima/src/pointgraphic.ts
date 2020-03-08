@@ -63,15 +63,6 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
   }
 
   private set interactive(interactive: boolean) {
-    if (this._interactive && !interactive) {
-      this._path.strokeColor = this._path.fillColor as paper.Color;
-      this._path.fillColor = this._path.strokeColor.add(0.33);
-      this._path.strokeWidth = 2;
-    } else if (!this._interactive && interactive) {
-      this._path.fillColor = this._path.strokeColor;
-      this._path.strokeColor = null;
-      this._path.strokeWidth = 0;
-    }
     this._interactive = interactive;
   }
 
