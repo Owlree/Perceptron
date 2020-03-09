@@ -1,3 +1,7 @@
+/**
+ * A mixin that allows a class to accept subscribers and notify them when
+ * something changes.
+ */
 export class MixinVariable<T> {
   protected _subscribers: Array<(self: T) => void> = [];
 

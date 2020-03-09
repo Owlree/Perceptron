@@ -10,12 +10,27 @@ export class Variable<T> {
   public constructor(value: T) {
     this._value = value;
   }
+
+  /**
+   * @returns The value of the variable
+   */
   public get value(): T {
     return this._value;
   }
+
+  /**
+   * Register a callback that will be called whenever the value of the variable
+   * changes.
+   * @param callback The callback to register
+   */
   public register(callback: (self: Variable<T>) => void): void {
     this._subscribers.push(callback);
   }
+
+  /**
+   * Unregisters a callback.
+   * @param callback The callback to unregister
+   */
   public unregister(callback: (self: Variable<T>) => void): void {
     const index: number = this._subscribers.indexOf(callback);
     if (index > -1) {

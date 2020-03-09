@@ -1,3 +1,7 @@
+/**
+ * Export all public modules.
+ */
+
 import * as Colors from './colors';
 export { Colors };
 export { ConstrainedPointFunctionGraphic } from './constrainedpointfunctiongraphic';

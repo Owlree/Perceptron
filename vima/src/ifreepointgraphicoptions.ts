@@ -2,7 +2,7 @@ import { IPointGraphicOptions } from './ipointgraphicoptions';
 
 
 /**
- * Interface that describes the options that the constructor of a
+ * Interface that describes the options the constructor of a
  * {@link FreePointGraphic} accepts as input.
  */
 export interface IFreePointGraphicOptions

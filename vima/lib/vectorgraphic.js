@@ -29,6 +29,7 @@ var vector2_1 = require("./vector2");
  */
 var VectorGraphic = /** @class */ (function (_super) {
     __extends(VectorGraphic, _super);
+    // TODO (Owlree) Add more overloads
     function VectorGraphic(point1, point2, _a) {
         var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? Colors.mainColor : _c, _d = _b.strokeWidth, strokeWidth = _d === void 0 ? 0.01 : _d;
         var _this = _super.call(this) || this;
@@ -63,10 +64,14 @@ var VectorGraphic = /** @class */ (function (_super) {
             _this._v2 = point1.position;
         }
         _this._build();
+        // Save the color variable
         _this.color = color;
         return _this;
     }
     Object.defineProperty(VectorGraphic.prototype, "color", {
+        /**
+         * @param color The new color of the vector
+         */
         set: function (color) {
             this._segment.strokeColor = color;
         },
@@ -88,6 +93,9 @@ var VectorGraphic = /** @class */ (function (_super) {
         }
     };
     Object.defineProperty(VectorGraphic.prototype, "vector2", {
+        /**
+         * @returns The vector value represented by the graphic
+         */
         get: function () {
             return new vector2_1.Vector2(this._v2.x - this._v1.x, this._v2.y - this._v1.y);
         },

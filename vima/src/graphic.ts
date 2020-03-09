@@ -37,6 +37,8 @@ abstract class Graphic implements IVariableListener {
   }
 }
 
+// Decorate the class with methods that allow the use of variable watcher
+// decorator.
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface Graphic extends MixinVariableListener {}
 applyMixins(Graphic, [MixinVariableListener]);

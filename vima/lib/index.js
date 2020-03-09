@@ -1,4 +1,7 @@
 "use strict";
+/**
+ * Export all public modules.
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 var Colors = require("./colors");
 exports.Colors = Colors;

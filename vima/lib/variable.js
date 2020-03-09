@@ -12,15 +12,27 @@ var Variable = /** @class */ (function () {
         this._value = value;
     }
     Object.defineProperty(Variable.prototype, "value", {
+        /**
+         * @returns The value of the variable
+         */
         get: function () {
             return this._value;
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     * Register a callback that will be called whenever the value of the variable
+     * changes.
+     * @param callback The callback to register
+     */
     Variable.prototype.register = function (callback) {
         this._subscribers.push(callback);
     };
+    /**
+     * Unregisters a callback.
+     * @param callback The callback to unregister
+     */
     Variable.prototype.unregister = function (callback) {
         var index = this._subscribers.indexOf(callback);
         if (index > -1) {

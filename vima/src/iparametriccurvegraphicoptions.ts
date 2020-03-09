@@ -3,12 +3,11 @@ import { IVariablesDictionary }from './ivariablesdictionary';
 
 
 /**
- * Interface that describes the options that the constructor of a
+ * Interface that describes the options the constructor of a
  * {@link ParametricCurveGraphic} accepts as input.
  */
 export interface IParametricCurveGraphicOptions
   extends ICurveGraphicOptions {
-
   from?: number;
   to?: number;
   variables?: IVariablesDictionary;

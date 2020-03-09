@@ -16,9 +16,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var variable_1 = require("./variable");
 /**
  * Class that represents a value that may change and allows other objects to
- * subscribe to those changes. This is created by variable owners that need to
- * change the value. Usually, a cast to the parent class {@link Variable} is
- * sent to other objects that don't need to change the value.
+ * subscribe to those changes. This is usually created by variable owners that
+ * need to change the value. Usually, a cast to the parent class
+ * {@link Variable} is sent to other objects that don't need to change the
+ * value.
  */
 var WritableVariable = /** @class */ (function (_super) {
     __extends(WritableVariable, _super);
@@ -26,9 +27,15 @@ var WritableVariable = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(WritableVariable.prototype, "value", {
+        /**
+         * @returns The value of the variable
+         */
         get: function () {
             return this._value;
         },
+        /**
+         * @param value The new value of the variable
+         */
         set: function (value) {
             this._value = value;
             for (var _i = 0, _a = this._subscribers; _i < _a.length; _i++) {

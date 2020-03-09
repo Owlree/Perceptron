@@ -1,10 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * A mixin that allows a class to watch {@link Variable} objects by using
+ * {@link DecoratorWatchvAriable}.
+ */
 var MixinVariableListener = /** @class */ (function () {
     function MixinVariableListener() {
         this._variableCallbacks = {};
     }
     MixinVariableListener.prototype.saveVariableCallbackRef = function (key, callback, variable) {
+        // Lazy create the property. Mixins don't initialize properties in the host
+        // class, so we have to do it here.
         if (this._variableCallbacks === undefined) {
             this._variableCallbacks = {};
         }

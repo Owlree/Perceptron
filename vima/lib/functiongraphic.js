@@ -36,6 +36,7 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var parametriccurvegraphic_1 = require("./parametriccurvegraphic");
+var vector2_1 = require("./vector2");
 /**
  * Class that represents the graph of an one variable function.
  */
@@ -51,8 +52,19 @@ var FunctionGraphic = /** @class */ (function (_super) {
         this._to = bounds.right;
         this.build();
     };
+    /**
+     * Returns the y-coordinate given the x-coordinate.
+     * @param x The x coordinate
+     */
     FunctionGraphic.prototype.yAtX = function (x) {
         return this.getY(x);
+    };
+    /**
+     * Returns a {@link Vector2} point at coordinates given by the x-coordinate.
+     * @param x The x-coordinate
+     */
+    FunctionGraphic.prototype.pointAtX = function (x) {
+        return new vector2_1.Vector2(x, this.getY(x));
     };
     return FunctionGraphic;
 }(parametriccurvegraphic_1.ParametricCurveGraphic));

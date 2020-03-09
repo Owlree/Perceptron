@@ -24,6 +24,10 @@ var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
 var graphic_1 = require("./graphic");
 var vector2_1 = require("./vector2");
 var _1 = require(".");
+/**
+ * Represents a text that can be added to {@link GraphingCalculator}, most
+ * often as label.
+ */
 var TextGraphic = /** @class */ (function (_super) {
     __extends(TextGraphic, _super);
     function TextGraphic(_a) {
@@ -32,12 +36,12 @@ var TextGraphic = /** @class */ (function (_super) {
         _this._offset = new vector2_1.Vector2(0, 0);
         _this._rotation = 0;
         _this._text = _this._item = new paper.PointText({
-            point: [0, 0],
             content: content,
             fontFamily: fontFamily,
-            fontWeight: fontWeight,
             fontSize: fontSize,
-            insert: false
+            fontWeight: fontWeight,
+            insert: false,
+            point: [0, 0]
         });
         _this.color = color;
         _this.offset = offset;
@@ -45,9 +49,15 @@ var TextGraphic = /** @class */ (function (_super) {
         return _this;
     }
     Object.defineProperty(TextGraphic.prototype, "rotation", {
+        /**
+         * @returns The rotation of the text
+         */
         get: function () {
             return this._rotation;
         },
+        /**
+         * @param rotation The new rotation of the text
+         */
         set: function (rotation) {
             this._rotation = rotation;
             if (this._screenMatrix === undefined) {
@@ -68,6 +78,9 @@ var TextGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(TextGraphic.prototype, "position", {
+        /**
+         * @param position The new position of the text
+         */
         set: function (position) {
             var pv2 = position;
             this._text.position = new paper.Point(pv2.x + this._offset.x, pv2.y + this._offset.y);
@@ -76,6 +89,11 @@ var TextGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(TextGraphic.prototype, "offset", {
+        /**
+         * Sets the offset of the text. The final position on the canvas is calculed
+         * by add the offset to the position.
+         * @param offset The new offset of the text
+         */
         set: function (offset) {
             var ov2 = offset;
             this._text.position =
@@ -86,6 +104,9 @@ var TextGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(TextGraphic.prototype, "color", {
+        /**
+         * @param color The new color of the text
+         */
         set: function (color) {
             this._text.fillColor = color;
         },

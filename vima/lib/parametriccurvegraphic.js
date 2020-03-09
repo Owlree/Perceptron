@@ -44,8 +44,6 @@ var ParametricCurveGraphic = /** @class */ (function (_super) {
         var _this = _super.call(this, options) || this;
         _this._from = 0;
         _this._to = 1;
-        _this._xfn = undefined;
-        _this._yfn = undefined;
         _this._varStr = 'x';
         _this._variables = {};
         // Compile math functions
@@ -66,15 +64,23 @@ var ParametricCurveGraphic = /** @class */ (function (_super) {
         _this.build();
         return _this;
     }
+    /**
+     * Returns the x-coordinate for the given parameter
+     * @param i The parameter to use
+     */
     ParametricCurveGraphic.prototype.getX = function (i) {
-        if (this._xfn !== undefined) {
-            var scope = this.getScope();
-            scope[this._varStr] = i;
-            return this._xfn.evaluate(scope);
-        }
-        else {
-            throw new Error('Missing x coordinate function');
-        }
+        var scope = this.getScope();
+        scope[this._varStr] = i;
+        return this._xfn.evaluate(scope);
+    };
+    /**
+     * Returns the y-coordinate for the given parameter
+     * @param i The parameter to use
+     */
+    ParametricCurveGraphic.prototype.getY = function (i) {
+        var scope = this.getScope();
+        scope[this._varStr] = i;
+        return this._yfn.evaluate(scope);
     };
     /**
      * Computes all the points in the curve path based on {@code this._xfn} and
@@ -91,16 +97,6 @@ var ParametricCurveGraphic = /** @class */ (function (_super) {
         var segment = new paper.Segment(point);
         this._path.add(segment);
         this.notify();
-    };
-    ParametricCurveGraphic.prototype.getY = function (i) {
-        if (this._yfn !== undefined) {
-            var scope = this.getScope();
-            scope[this._varStr] = i;
-            return this._yfn.evaluate(scope);
-        }
-        else {
-            throw new Error('Missing y coordinate function');
-        }
     };
     /**
      * @returns The scope containing the current values of the all the current

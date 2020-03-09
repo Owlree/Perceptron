@@ -1,6 +1,11 @@
 import { IVariableListener } from './ivariablelistener';
 import { Variable } from './variable';
 
+
+/**
+ * A mixin that allows a class to watch {@link Variable} objects by using
+ * {@link DecoratorWatchvAriable}.
+ */
 export class MixinVariableListener implements IVariableListener {
   private _variableCallbacks: {
     [key: string]: {
@@ -12,6 +17,8 @@ export class MixinVariableListener implements IVariableListener {
   public saveVariableCallbackRef(
     key: string, callback: (self: Variable<any>) => void,
     variable: Variable<any>): void {
+    // Lazy create the property. Mixins don't initialize properties in the host
+    // class, so we have to do it here.
     if (this._variableCallbacks === undefined) {
       this._variableCallbacks = {};
     }
@@ -31,7 +38,10 @@ export class MixinVariableListener implements IVariableListener {
     }
   }
 
-  public getVariableCallbackRef(key: string): {variable?: Variable<any>; callback?: (self: Variable<any>) => void} {
+  public getVariableCallbackRef(key: string): {
+    variable?: Variable<any>;
+    callback?: (self: Variable<any>) => void
+  } {
     if (this._variableCallbacks === undefined) return {};
     if (key in this._variableCallbacks) {
       return this._variableCallbacks[key];

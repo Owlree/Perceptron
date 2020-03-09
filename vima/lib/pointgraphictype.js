@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * The kinds of graphic that may represent a point.
+ */
 var PointGraphicType;
 (function (PointGraphicType) {
     PointGraphicType[PointGraphicType["Circle"] = 0] = "Circle";

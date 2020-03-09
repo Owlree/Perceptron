@@ -20,8 +20,8 @@ class ParametricCurveGraphic extends CurveGraphic {
 
   protected _from: number = 0;
   protected _to: number = 1;
-  private readonly _xfn: math.EvalFunction | undefined = undefined;
-  private readonly _yfn: math.EvalFunction | undefined = undefined;
+  private readonly _xfn: math.EvalFunction;
+  private readonly _yfn: math.EvalFunction;
   private _varStr: string = 'x';
   private readonly _variables: IVariablesDictionary = {};
 
@@ -57,14 +57,24 @@ class ParametricCurveGraphic extends CurveGraphic {
     this.build();
   }
 
+  /**
+   * Returns the x-coordinate for the given parameter
+   * @param i The parameter to use
+   */
   protected getX(i: number): number {
-    if (this._xfn !== undefined) {
-      const scope: { [key: string]: number; } = this.getScope();
-      scope[this._varStr] = i;
-      return this._xfn.evaluate(scope);
-    } else {
-      throw new Error('Missing x coordinate function');
-    }
+    const scope: { [key: string]: number; } = this.getScope();
+    scope[this._varStr] = i;
+    return this._xfn.evaluate(scope);
+  }
+
+  /**
+   * Returns the y-coordinate for the given parameter
+   * @param i The parameter to use
+   */
+  protected getY(i: number): number {
+    const scope: { [key: string]: number; } = this.getScope();
+    scope[this._varStr] = i;
+    return this._yfn.evaluate(scope);
   }
 
   /**
@@ -82,16 +92,6 @@ class ParametricCurveGraphic extends CurveGraphic {
     const segment = new paper.Segment(point);
     this._path.add(segment);
     this.notify();
-  }
-
-  protected getY(i: number): number {
-    if (this._yfn !== undefined) {
-      const scope: { [key: string]: number; } = this.getScope();
-      scope[this._varStr] = i;
-      return this._yfn.evaluate(scope);
-    } else {
-      throw new Error('Missing y coordinate function');
-    }
   }
 
   /**

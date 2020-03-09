@@ -35,7 +35,7 @@ var rectangle_1 = require("./rectangle");
 var PointGraphic = /** @class */ (function (_super) {
     __extends(PointGraphic, _super);
     function PointGraphic(_a) {
-        var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? Colors.mainColor : _c, _d = _b.radius, radius = _d === void 0 ? 10 : _d, _e = _b.type, type = _e === void 0 ? pointgraphictype_1.PointGraphicType.Circle : _e, _f = _b.interactive, interactive = _f === void 0 ? true : _f;
+        var _b = _a === void 0 ? {} : _a, _c = _b.color, color = _c === void 0 ? Colors.mainColor : _c, _d = _b.radius, radius = _d === void 0 ? 10 : _d, _e = _b.type, type = _e === void 0 ? pointgraphictype_1.PointGraphicType.Circle : _e;
         var _this = _super.call(this) || this;
         _this._interactive = true;
         _this._radius = 1;
@@ -67,17 +67,12 @@ var PointGraphic = /** @class */ (function (_super) {
         _this.radius = radius;
         _this._positionVariable = new writablevariable_1.WritableVariable(new vector2_1.Vector2(0, 0));
         _this._position = _this._positionVariable;
-        _this.interactive = interactive;
         return _this;
     }
-    Object.defineProperty(PointGraphic.prototype, "interactive", {
-        set: function (interactive) {
-            this._interactive = interactive;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(PointGraphic.prototype, "color", {
+        /**
+         * @param color The new color of the point graphic.
+         */
         set: function (color) {
             if (this._interactive) {
                 this._path.fillColor = color;
@@ -92,9 +87,15 @@ var PointGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(PointGraphic.prototype, "radius", {
+        /**
+         * @returns The radius of the point graphic
+         */
         get: function () {
             return this._radius;
         },
+        /**
+         * @param radius The new radius of the point graphic
+         */
         set: function (radius) {
             this._path.scale(1 / this._radius);
             this._path.scale(radius);
@@ -104,9 +105,15 @@ var PointGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(PointGraphic.prototype, "rotation", {
+        /**
+         * @returns The rotation of the point graphic
+         */
         get: function () {
             return this._rotation;
         },
+        /**
+         * @param rotation The new rotation of the point graphic
+         */
         set: function (rotation) {
             this._rotation = rotation;
             if (this._screenMatrix === undefined) {
@@ -135,9 +142,15 @@ var PointGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(PointGraphic.prototype, "position", {
+        /**
+         * @returns The position of the point.
+         */
         get: function () {
             return this._positionVariable.value;
         },
+        /**
+         * @param position The new position of the point.
+         */
         set: function (position) {
             this._positionVariable.value = position;
         },
@@ -145,8 +158,21 @@ var PointGraphic = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(PointGraphic.prototype, "positionVariable", {
+        /**
+         * @returns A variable in sync with the position of the point.
+         */
         get: function () {
             return this._positionVariable;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PointGraphic.prototype, "bounds", {
+        /**
+         * @returns The bounds of the point graphic.
+         */
+        get: function () {
+            return new rectangle_1.Rectangle(new vector2_1.Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y), new vector2_1.Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y));
         },
         enumerable: true,
         configurable: true
@@ -164,13 +190,6 @@ var PointGraphic = /** @class */ (function (_super) {
         this._screenMatrix = matrix;
         this._item.position = oldPosition;
     };
-    Object.defineProperty(PointGraphic.prototype, "bounds", {
-        get: function () {
-            return new rectangle_1.Rectangle(new vector2_1.Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y), new vector2_1.Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y));
-        },
-        enumerable: true,
-        configurable: true
-    });
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], PointGraphic.prototype, "color", null);

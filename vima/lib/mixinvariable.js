@@ -1,5 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * A mixin that allows a class to accept subscribers and notify them when
+ * something changes.
+ */
 var MixinVariable = /** @class */ (function () {
     function MixinVariable() {
         this._subscribers = [];

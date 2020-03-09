@@ -14,13 +14,21 @@ declare class ParametricCurveGraphic extends CurveGraphic {
     private _varStr;
     private readonly _variables;
     constructor(xFuncStr: string, yFuncStr: string, { from, to, variables, varStr, ...options }?: IParametricCurveGraphicOptions);
+    /**
+     * Returns the x-coordinate for the given parameter
+     * @param i The parameter to use
+     */
     protected getX(i: number): number;
+    /**
+     * Returns the y-coordinate for the given parameter
+     * @param i The parameter to use
+     */
+    protected getY(i: number): number;
     /**
      * Computes all the points in the curve path based on {@code this._xfn} and
      * {@code this._yfn}.
      */
     protected build(): void;
-    protected getY(i: number): number;
     /**
      * @returns The scope containing the current values of the all the current
      * values

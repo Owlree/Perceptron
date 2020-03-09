@@ -28,8 +28,7 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
   public constructor({
     color = Colors.mainColor,
     radius = 10,
-    type = PointGraphicType.Circle,
-    interactive = true
+    type = PointGraphicType.Circle
   }: IPointGraphicOptions = {}) {
     super();
     switch (type) {
@@ -52,20 +51,19 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
       }
       default:
         // TODO (Owlree) Isn't there a better way to handle this case in TS?
-        throw new Error(`No path was created for type ${PointGraphicType[type]}`);
+        throw new Error(
+          `No path was created for type ${PointGraphicType[type]}`);
     }
     this._path.applyMatrix = false;
     this.color = color;
     this.radius = radius;
     this._positionVariable = new WritableVariable<Vector2>(new Vector2(0, 0));
     this._position = this._positionVariable;
-    this.interactive = interactive;
   }
 
-  private set interactive(interactive: boolean) {
-    this._interactive = interactive;
-  }
-
+  /**
+   * @param color The new color of the point graphic.
+   */
   @DecoratorWatchVariable
   public set color(color: paper.Color | Variable<paper.Color>) {
     if (this._interactive) {
@@ -77,16 +75,25 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     }
   }
 
+  /**
+   * @param radius The new radius of the point graphic
+   */
   public set radius(radius: number) {
     this._path.scale(1 / this._radius);
     this._path.scale(radius);
     this._radius = radius;
   }
 
+  /**
+   * @returns The radius of the point graphic
+   */
   public get radius(): number {
     return this._radius;
   }
 
+  /**
+   * @param rotation The new rotation of the point graphic
+   */
   public set rotation(rotation: number) {
     this._rotation = rotation;
     if (this._screenMatrix === undefined) {
@@ -107,6 +114,9 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     this._item.transform(this._screenMatrix.inverted());
   }
 
+  /**
+   * @returns The rotation of the point graphic
+   */
   public get rotation(): number {
     return this._rotation;
   }
@@ -117,16 +127,35 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     this._path.position = new paper.Point(pv2.x, pv2.y);
   }
 
+  /**
+   * @returns The position of the point.
+   */
   public get position(): Vector2 {
     return this._positionVariable.value;
   }
 
+  /**
+   * @param position The new position of the point.
+   */
   public set position(position: Vector2) {
     this._positionVariable.value = position;
   }
 
+  /**
+   * @returns A variable in sync with the position of the point.
+   */
   public get positionVariable(): Variable<Vector2> {
     return this._positionVariable as Variable<Vector2>;
+  }
+
+  /**
+   * @returns The bounds of the point graphic.
+   */
+  public get bounds(): Rectangle {
+    return new Rectangle(
+      new Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y),
+      new Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y),
+    );
   }
 
   public onScreenTransformUpdated(matrix: paper.Matrix): void {
@@ -146,12 +175,5 @@ export abstract class PointGraphic extends Graphic implements IScreenTransformSu
     this._item.transform(matrix.inverted());
     this._screenMatrix = matrix;
     this._item.position = oldPosition;
-  }
-
-  public get bounds(): Rectangle {
-    return new Rectangle(
-      new Vector2(this._item.bounds.bottomLeft.x, this._item.bounds.bottomLeft.y),
-      new Vector2(this._item.bounds.topRight.x, this._item.bounds.topRight.y),
-    );
   }
 }
