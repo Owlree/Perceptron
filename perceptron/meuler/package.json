@@ -1,5 +1,5 @@
 {
-  "name": "constacc",
+  "name": "meuler",
   "version": "0.0.0",
   "description": "A demosntration of particles being thrown in a system with constant acceleration",
   "main": "index.js",
