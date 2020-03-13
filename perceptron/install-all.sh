@@ -8,7 +8,7 @@ echo "
        /             / |
       /____________ /  |
      | ___________ |   |
-     || Building  ||   |
+     ||Installing ||   |
      ||   all     ||   |
      ||     demos ||   |
      ||___________||   |
@@ -22,7 +22,7 @@ rm -rf _dist
 for d in */ ; do
   cd "$d"
   echo "
-  ♫ building $d ♫
+  ♫ installing $d ♫
        _________
      _|_________|_
     /             \\
@@ -30,11 +30,6 @@ for d in */ ; do
    | ###       ### |
     \_____________/
 "
-  npm run build
+  npm install
   cd ..
-done
-
-for d in */ ; do
-  mkdir -p "_dist/$d"
-  cp -r "$d/dist/" "_dist/$d/"
 done
