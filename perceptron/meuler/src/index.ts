@@ -6,8 +6,10 @@ const bounds: vima.Rectangle = new vima.Rectangle(
 // Create an instance of the graphing calculator
 const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
 
-const slopeField = new vima.SlopeField('sin(x + y)', bounds);
+const slopeField = new vima.SlopeField('sin(x) + cos(y)', bounds);
 graphingCalculator.add(slopeField);
 
 const point = new vima.FreePointGraphic();
 graphingCalculator.add(point);
+
+slopeField.solutionPosition = point.positionVariable;

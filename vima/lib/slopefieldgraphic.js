@@ -25,6 +25,7 @@ var math = require("mathjs");
 var Colors = require("./colors");
 var graphic_1 = require("./graphic");
 var decoratorwatchvariable_1 = require("./decoratorwatchvariable");
+var vector2_1 = require("./vector2");
 /**
  * A graphic that represents a slope field
  */
@@ -40,48 +41,60 @@ var SlopeField = /** @class */ (function (_super) {
             for (var j = bounds.bottom; j <= bounds.top; j += vstep) {
                 var line = new paper.Path.Line(new paper.Point(i - 0.1, j), new paper.Point(i + 0.1, j));
                 line.rotate(180 / Math.PI * Math.atan2(_this._slopeFunction.evaluate({ x: i, y: j }), 1));
+                line.strokeWidth = 0.005;
+                line.strokeColor = Colors.mainColor.value;
+                line.opacity = 0.5;
                 _this._group.addChild(line);
             }
         }
-        // let current = new paper.Point(0.5, 0.5);
-        // const segments = [new paper.Segment(current)];
-        // let prevAngle: number | undefined = undefined;
-        // for (let i = 0; i < 500; ++i) {
-        //   segments.push(new paper.Segment(current));
-        //   const line = new paper.Path.Line(
-        //     new paper.Point(current.x, current.y),
-        //     new paper.Point(current.x + 0.05, current.y)
-        //   );
-        //   let angle = Math.atan2(this._slopeFunction.evaluate({x: current.x, y: current.y}), 1);
-        //   if (prevAngle !== undefined) {
-        //     if (angle < prevAngle) {
-        //       while (Math.abs(angle + Math.PI - prevAngle) < Math.abs(angle - prevAngle)) {
-        //         angle += Math.PI;
-        //       }
-        //     } else if (angle > prevAngle) {
-        //       while (Math.abs(angle - Math.PI - prevAngle) < Math.abs(angle - prevAngle)) {
-        //         angle -= Math.PI;
-        //       }
-        //     }
-        //   }
-        //   line.rotate(180 / Math.PI * angle);
-        //   const vec = new Vector2(
-        //     Math.cos(angle) * 0.1,
-        //     Math.sin(angle) * 0.1
-        //   );
-        //   prevAngle = angle;
-        //   current = new paper.Point(current.x + vec.x, current.y + vec.y);
-        //   this._group.addChild(line);
-        // }
-        // const line = new paper.Path.Line(
-        //   new paper.Point(bounds.left, 0),
-        //   new paper.Point(bounds.right, 0)
-        // );
-        // this._group.addChild(line);
-        _this._group.strokeWidth = 0.005;
-        _this.color = Colors.mainColor;
+        _this._solution = new paper.Path();
+        _this._solution.strokeWidth = 0.02;
+        _this._solution.strokeColor = Colors.blueColor.value;
+        _this._group.addChild(_this._solution);
         return _this;
     }
+    Object.defineProperty(SlopeField.prototype, "solutionPosition", {
+        set: function (position_) {
+            var position = position_;
+            var segments = [new paper.Segment(position.array)];
+            var current = new paper.Point(position.array);
+            var prevAngle = undefined;
+            for (var i = 0; i < 100; ++i) {
+                var angle = Math.atan2(this._slopeFunction.evaluate({
+                    x: current.x,
+                    y: current.y
+                }), 1);
+                if (prevAngle !== undefined) {
+                    if (angle < prevAngle) {
+                        while (Math.abs(angle + Math.PI - prevAngle) < Math.abs(angle - prevAngle)) {
+                            angle += Math.PI;
+                        }
+                    }
+                    else if (angle > prevAngle) {
+                        while (Math.abs(angle - Math.PI - prevAngle) < Math.abs(angle - prevAngle)) {
+                            angle -= Math.PI;
+                        }
+                    }
+                }
+                var vector = new vector2_1.Vector2(Math.cos(angle) * 0.2, Math.sin(angle) * 0.2);
+                prevAngle = angle;
+                current = new paper.Point(current.x + vector.x, current.y + vector.y);
+                segments.push(new paper.Segment(current));
+                this._solution.removeSegments();
+                this._solution.addSegments(segments);
+            }
+            //
+            //   this._group.addChild(line);
+            // }
+            // const line = new paper.Path.Line(
+            //   new paper.Point(bounds.left, 0),
+            //   new paper.Point(bounds.right, 0)
+            // );
+            // this._group.addChild(line);
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(SlopeField.prototype, "color", {
         set: function (color) {
             this._group.strokeColor = color;
@@ -90,6 +103,9 @@ var SlopeField = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        decoratorwatchvariable_1.DecoratorWatchVariable
+    ], SlopeField.prototype, "solutionPosition", null);
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], SlopeField.prototype, "color", null);
