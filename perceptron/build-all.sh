@@ -36,5 +36,5 @@ done
 
 for d in */ ; do
   mkdir -p "_dist/$d"
-  cp -r "$d/dist/" "_dist/$d/"
+  cp -r "$d/dist/." "_dist/$d/"
 done
