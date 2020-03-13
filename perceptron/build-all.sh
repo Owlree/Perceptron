@@ -38,3 +38,10 @@ for d in */ ; do
   mkdir -p "_dist/$d"
   cp -r "$d/dist/." "_dist/$d/"
 done
+
+cd _dist
+echo '<h1>Perceptron</h1>' > index.html
+
+for d in */ ; do
+  echo "<a href='$d/index.html'>$d</a>" >> index.html
+done
