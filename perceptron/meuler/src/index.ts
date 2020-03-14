@@ -14,7 +14,8 @@ const cVariable = new vima.WritableVariable<number>(0);
 const fn = new vima.FunctionGraphic('c * e^x + sin(x) / 2 - cos(x) / 2', {
   variables: {
     c: cVariable
-  }
+  },
+  strokeColor: vima.Colors.blueColor
 });
 graphingCalculator.add(fn);
 

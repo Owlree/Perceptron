@@ -37,20 +37,22 @@ var SlopeField = /** @class */ (function (_super) {
         _this._item = _this._group = new paper.Group();
         var hstep = Math.abs(bounds.left - bounds.right) / 25;
         var vstep = Math.abs(bounds.bottom - bounds.top) / 15;
+        _this._slopeField = new paper.Group();
         for (var i = bounds.left; i <= bounds.right; i += hstep) {
             for (var j = bounds.bottom; j <= bounds.top; j += vstep) {
                 var line = new paper.Path.Line(new paper.Point(i - 0.1, j), new paper.Point(i + 0.1, j));
                 line.rotate(180 / Math.PI * Math.atan2(_this._slopeFunction.evaluate({ x: i, y: j }), 1));
-                line.strokeWidth = 0.005;
-                line.strokeColor = Colors.mainColor.value;
-                line.opacity = 0.5;
-                _this._group.addChild(line);
+                _this._slopeField.addChild(line);
             }
         }
+        _this._slopeField.opacity = 0.5;
+        _this._slopeField.strokeWidth = 0.005;
+        _this._group.addChild(_this._slopeField);
+        _this.color = Colors.mainColor;
         _this._solution = new paper.Path();
         _this._solution.strokeWidth = 0.02;
-        _this._solution.strokeColor = Colors.blueColor.value;
         _this._group.addChild(_this._solution);
+        _this.solutionColor = Colors.redColor;
         return _this;
     }
     Object.defineProperty(SlopeField.prototype, "solutionPosition", {
@@ -83,22 +85,21 @@ var SlopeField = /** @class */ (function (_super) {
                 this._solution.removeSegments();
                 this._solution.addSegments(segments);
             }
-            //
-            //   this._group.addChild(line);
-            // }
-            // const line = new paper.Path.Line(
-            //   new paper.Point(bounds.left, 0),
-            //   new paper.Point(bounds.right, 0)
-            // );
-            // this._group.addChild(line);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(SlopeField.prototype, "color", {
         set: function (color) {
-            this._group.strokeColor = color;
-            this._group.opacity = 0.5;
+            this._slopeField.strokeColor = color;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SlopeField.prototype, "solutionColor", {
+        set: function (color) {
+            this._solution.strokeColor = color;
+            console.log('going here');
         },
         enumerable: true,
         configurable: true
@@ -109,6 +110,9 @@ var SlopeField = /** @class */ (function (_super) {
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], SlopeField.prototype, "color", null);
+    __decorate([
+        decoratorwatchvariable_1.DecoratorWatchVariable
+    ], SlopeField.prototype, "solutionColor", null);
     return SlopeField;
 }(graphic_1.Graphic));
 exports.SlopeField = SlopeField;

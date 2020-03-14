@@ -18,6 +18,7 @@ export class SlopeField extends Graphic {
   private readonly _slopeFunction: math.EvalFunction;
   private readonly _group: paper.Group;
   private readonly _solution: paper.Path;
+  private readonly _slopeField: paper.Group;
 
   constructor(slopeFunctionStr: string, bounds: Rectangle) {
     super();
@@ -28,6 +29,8 @@ export class SlopeField extends Graphic {
     const hstep = Math.abs(bounds.left - bounds.right) / 25;
     const vstep = Math.abs(bounds.bottom - bounds.top) / 15;
 
+    this._slopeField = new paper.Group();
+
     for (let i = bounds.left; i <= bounds.right; i += hstep) {
       for (let j = bounds.bottom; j <= bounds.top; j += vstep) {
         const line = new paper.Path.Line(
@@ -35,17 +38,19 @@ export class SlopeField extends Graphic {
           new paper.Point(i + 0.1, j)
         );
         line.rotate(180 / Math.PI * Math.atan2(this._slopeFunction.evaluate({x: i, y: j}), 1));
-        line.strokeWidth = 0.005;
-        line.strokeColor = Colors.mainColor.value;
-        line.opacity = 0.5;
-        this._group.addChild(line);
+        this._slopeField.addChild(line);
       }
     }
 
+    this._slopeField.opacity = 0.5;
+    this._slopeField.strokeWidth = 0.005;
+    this._group.addChild(this._slopeField);
+    this.color = Colors.mainColor;
+
     this._solution = new paper.Path();
     this._solution.strokeWidth = 0.02;
-    this._solution.strokeColor = Colors.blueColor.value;
     this._group.addChild(this._solution);
+    this.solutionColor = Colors.redColor;
   }
 
   @DecoratorWatchVariable
@@ -85,21 +90,16 @@ export class SlopeField extends Graphic {
       this._solution.removeSegments();
       this._solution.addSegments(segments);
     }
-    //
-    //   this._group.addChild(line);
-    // }
-
-    // const line = new paper.Path.Line(
-    //   new paper.Point(bounds.left, 0),
-    //   new paper.Point(bounds.right, 0)
-    // );
-    // this._group.addChild(line);
-
   }
 
   @DecoratorWatchVariable
   set color(color: paper.Color | Variable<paper.Color>) {
-    this._group.strokeColor = (color as paper.Color);
-    this._group.opacity = 0.5;
+    this._slopeField.strokeColor = color as paper.Color;
+  }
+
+  @DecoratorWatchVariable
+  set solutionColor(color: paper.Color | Variable<paper.Color>) {
+    this._solution.strokeColor = color as paper.Color;
+    console.log('going here');
   }
 }
