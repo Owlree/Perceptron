@@ -16,8 +16,6 @@ function getC(position: vima.Vector2): number {
   return 1 / 2 * Math.exp(-x) * (Math.cos(x) - Math.sin(x) + 2 * y);
 }
 
-
-
 const point = new vima.FreePointGraphic({
   x: defaultPosition.x, y: defaultPosition.y
 });
@@ -38,5 +36,26 @@ slopeField.solutionPosition = point.positionVariable;
 
 point.positionVariable.register((variable: vima.Variable<vima.Vector2>) => {
   cVariable.value = getC(variable.value);
-  console.log(variable.value.array);
 });
+
+let touching: boolean = true;
+
+function touchDown(_: TouchEvent) {
+  touching = true;
+  point.position = graphingCalculator.mousePosition;
+}
+
+function touchMove(_: TouchEvent) {
+  if (touching) {
+    point.position = graphingCalculator.mousePosition;
+  }
+}
+
+function touchUp(_: TouchEvent) {
+  touching = false;
+}
+
+// Add support for touch interaction
+graphingCalculator.canvas.addEventListener('touchstart', touchDown);
+graphingCalculator.canvas.addEventListener('touchmove', touchMove);
+graphingCalculator.canvas.addEventListener('touchend', touchUp);

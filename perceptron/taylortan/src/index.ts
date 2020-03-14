@@ -192,7 +192,6 @@ let touchingError = false;
 function touchDown(_: TouchEvent) {
   const x = graphingCalculator.mousePosition.x;
   const middle = (tangentPoint.position.x + xPlusDt.value) / 2;
-  console.log(x, middle);
   if (x < middle) {
     touchingTangentPoint = true;
     tangentPoint.x = graphingCalculator.mousePosition.x
@@ -204,7 +203,6 @@ function touchDown(_: TouchEvent) {
 }
 
 function touchMove(_: TouchEvent) {
-  console.log(touchingTangentPoint, touchingError);
   if (touchingTangentPoint) {
     tangentPoint.x = graphingCalculator.mousePosition.x
   } else if (touchingError) {

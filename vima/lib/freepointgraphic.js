@@ -36,7 +36,6 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var paper = require("paper");
-var Colors = require("./colors");
 var pointgraphic_1 = require("./pointgraphic");
 var vector2_1 = require("./vector2");
 /**
@@ -51,8 +50,6 @@ var FreePointGraphic = /** @class */ (function (_super) {
         var _this = _super.call(this, __assign({ interactive: interactive }, options)) || this;
         _this._mouseDown = false;
         _this._mouseOver = false;
-        _this._path.shadowColor = Colors.blueColor.value;
-        _this._path.shadowBlur = 0;
         _this.position = new vector2_1.Vector2(x, y);
         if (interactive) {
             _this._path.on('mouseenter', function () {
@@ -82,15 +79,12 @@ var FreePointGraphic = /** @class */ (function (_super) {
     }
     FreePointGraphic.prototype.updateStyle = function () {
         if (this._mouseDown) {
-            this._path.shadowBlur = this.radius;
             document.body.style.cursor = 'grabbing';
         }
         else if (this._mouseOver) {
-            this._path.shadowBlur = this.radius;
             document.body.style.cursor = 'grab';
         }
         else {
-            this._path.shadowBlur = 0;
             document.body.style.cursor = '';
         }
     };

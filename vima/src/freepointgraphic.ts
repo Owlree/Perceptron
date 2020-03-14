@@ -1,6 +1,5 @@
 import * as paper from 'paper';
 
-import * as Colors from './colors';
 import { IFreePointGraphicOptions } from './ifreepointgraphicoptions';
 import { PointGraphic } from './pointgraphic';
 import { Vector2 } from './vector2';
@@ -21,8 +20,6 @@ export class FreePointGraphic extends PointGraphic {
   }: IFreePointGraphicOptions = {}) {
     super({interactive: interactive, ...options});
 
-    this._path.shadowColor = Colors.blueColor.value;
-    this._path.shadowBlur = 0;
     this.position = new Vector2(x, y);
 
     if (interactive) {
@@ -53,13 +50,10 @@ export class FreePointGraphic extends PointGraphic {
 
   private updateStyle(): void {
     if (this._mouseDown) {
-      this._path.shadowBlur = this.radius;
       document.body.style.cursor = 'grabbing';
     } else if (this._mouseOver) {
-      this._path.shadowBlur = this.radius;
       document.body.style.cursor = 'grab';
     } else {
-      this._path.shadowBlur = 0;
       document.body.style.cursor = '';
     }
   }
