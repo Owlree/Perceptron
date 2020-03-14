@@ -9,6 +9,11 @@ const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
 const slopeField = new vima.SlopeField('cos(x) + y', bounds);
 graphingCalculator.add(slopeField);
 
+function getC(position: vima.Vector2): number {
+  let [x, y] = variable.value.array;
+  return 1 / 2 * Math.exp(-x) * (Math.cos(x) - Math.sin(x) + 2 * y);
+}
+
 const cVariable = new vima.WritableVariable<number>(0);
 
 const fn = new vima.FunctionGraphic('c * e^x + sin(x) / 2 - cos(x) / 2', {
@@ -25,6 +30,5 @@ graphingCalculator.add(point);
 slopeField.solutionPosition = point.positionVariable;
 
 point.positionVariable.register((variable: vima.Variable<vima.Vector2>) => {
-  let [x, y] = variable.value.array;
-  cVariable.value = 1 / 2 * Math.exp(-x) * (Math.cos(x) - Math.sin(x) + 2 * y);
+  cVariable.value = getC(variable.value);
 });
