@@ -41,8 +41,7 @@ let fromPoint: vima.FreePointGraphic | undefined = undefined;
 let toPoint: vima.FreePointGraphic | undefined = undefined;
 let vector: vima.VectorGraphic | undefined = undefined;
 
-const mouseDown = (event: MouseEvent | TouchEvent) => {
-  event.preventDefault();
+const mouseDown = (_: MouseEvent | TouchEvent) => {
   fromPoint = new vima.FreePointGraphic({
     x: graphingCalculator.mousePosition.x,
     y: graphingCalculator.mousePosition.y,
@@ -60,15 +59,13 @@ const mouseDown = (event: MouseEvent | TouchEvent) => {
   graphingCalculator.add(fromPoint);
 };
 
-const mouseMove = (event: MouseEvent | TouchEvent) => {
-  event.preventDefault();
+const mouseMove = (_: MouseEvent | TouchEvent) => {
   if (toPoint !== undefined) {
     toPoint.position = graphingCalculator.mousePosition;
   }
 };
 
-const mouseUp = (event: MouseEvent | TouchEvent) => {
-  event.preventDefault();
+const mouseUp = (_: MouseEvent | TouchEvent) => {
   let newBall = {
     point: new vima.FreePointGraphic({interactive: false}),
     s0: fromPoint!.position,
@@ -88,11 +85,14 @@ const mouseUp = (event: MouseEvent | TouchEvent) => {
   vector = undefined;
 };
 
-document.body.addEventListener('mousedown', mouseDown);
-document.body.addEventListener('mousemove', mouseMove);
-document.body.addEventListener('mouseup', mouseUp);
-
-// Add support for touch interaction
-document.body.addEventListener('touchstart', mouseDown);
-document.body.addEventListener('touchmove', mouseMove);
-document.body.addEventListener('touchend', mouseUp);
+if ('ontouchstart' in window) {
+  console.log('touch');
+  document.body.addEventListener('touchstart', mouseDown);
+  document.body.addEventListener('touchmove', mouseMove);
+  document.body.addEventListener('touchend', mouseUp);
+} else {
+  console.log('mouse');
+  document.body.addEventListener('mousedown', mouseDown);
+  document.body.addEventListener('mousemove', mouseMove);
+  document.body.addEventListener('mouseup', mouseUp);
+}
