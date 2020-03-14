@@ -48,7 +48,7 @@ export class SlopeField extends Graphic {
     this.color = Colors.mainColor;
 
     this._solution = new paper.Path();
-    this._solution.strokeWidth = 0.02;
+    this._solution.strokeWidth = 0.05;
     this._group.addChild(this._solution);
     this.solutionColor = Colors.redColor;
   }

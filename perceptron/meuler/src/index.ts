@@ -28,7 +28,8 @@ const fn = new vima.FunctionGraphic('c * e^x + sin(x) / 2 - cos(x) / 2', {
   variables: {
     c: cVariable
   },
-  strokeColor: vima.Colors.blueColor
+  strokeColor: vima.Colors.blueColor,
+  strokeWidth: 0.05
 });
 graphingCalculator.add(fn);
 graphingCalculator.add(point);

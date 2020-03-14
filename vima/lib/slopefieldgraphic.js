@@ -50,7 +50,7 @@ var SlopeField = /** @class */ (function (_super) {
         _this._group.addChild(_this._slopeField);
         _this.color = Colors.mainColor;
         _this._solution = new paper.Path();
-        _this._solution.strokeWidth = 0.02;
+        _this._solution.strokeWidth = 0.05;
         _this._group.addChild(_this._solution);
         _this.solutionColor = Colors.redColor;
         return _this;
