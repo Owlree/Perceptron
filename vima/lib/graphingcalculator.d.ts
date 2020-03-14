@@ -36,6 +36,7 @@ declare class GraphingCalculator implements IVariableListener {
     on(event: string, callback: (event: Event) => void): void;
     get mousePosition(): Vector2;
     contains(position: Vector2): boolean;
+    get canvas(): HTMLCanvasElement;
 }
 interface GraphingCalculator extends MixinVariableListener {
 }

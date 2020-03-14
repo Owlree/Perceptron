@@ -1,6 +1,7 @@
 import { IConstrainedPointFunctionGraphicOptions } from './iconstrainedpointfunctiongraphicoptions';
 import { FunctionGraphic } from './functiongraphic';
 import { PointGraphic } from './pointgraphic';
+import { Variable } from './variable';
 /**
  * Class that represents a point constrained to move along a
  * {@link FunctionGraphic}. Provides mouse interaction out of the
@@ -15,7 +16,7 @@ export declare class ConstrainedPointFunctionGraphic extends PointGraphic {
     /**
      * @param x The new abscissa of the point
      */
-    private set x(value);
+    set x(x: number | Variable<number>);
     /**
      * Updates the cursor style based on what actions are performed on the object
      */

@@ -169,6 +169,10 @@ class GraphingCalculator implements IVariableListener {
   public contains(position: Vector2) {
     return paper.view.bounds.contains(new paper.Point(position.x, position.y));
   }
+
+  public get canvas(): HTMLCanvasElement {
+    return paper.view.element;
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix

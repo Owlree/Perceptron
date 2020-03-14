@@ -185,3 +185,39 @@ function rotateLabels(): void {
 tangentPointX.register(rotateLabels);
 constrainedPointTangent.positionVariable.register(rotateLabels);
 rotateLabels();
+
+let touchingTangentPoint = false;
+let touchingError = false;
+
+function touchDown(_: TouchEvent) {
+  const x = graphingCalculator.mousePosition.x;
+  const middle = (tangentPoint.position.x + xPlusDt.value) / 2;
+  console.log(x, middle);
+  if (x < middle) {
+    touchingTangentPoint = true;
+    tangentPoint.x = graphingCalculator.mousePosition.x
+  } else {
+    touchingError = true;
+    xPlusDt.value = graphingCalculator.mousePosition.x;
+    dt = xPlusDt.value - tangentPoint.position.x;
+  }
+}
+
+function touchMove(_: TouchEvent) {
+  console.log(touchingTangentPoint, touchingError);
+  if (touchingTangentPoint) {
+    tangentPoint.x = graphingCalculator.mousePosition.x
+  } else if (touchingError) {
+    xPlusDt.value = graphingCalculator.mousePosition.x;
+    dt = xPlusDt.value - tangentPoint.position.x;
+  }
+}
+
+function touchUp(_: TouchEvent) {
+  touchingTangentPoint = touchingError = false;
+}
+
+// Add support for touch interaction
+graphingCalculator.canvas.addEventListener('touchstart', touchDown);
+graphingCalculator.canvas.addEventListener('touchmove', touchMove);
+graphingCalculator.canvas.addEventListener('touchend', touchUp);

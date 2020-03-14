@@ -145,6 +145,13 @@ var GraphingCalculator = /** @class */ (function () {
     GraphingCalculator.prototype.contains = function (position) {
         return paper.view.bounds.contains(new paper.Point(position.x, position.y));
     };
+    Object.defineProperty(GraphingCalculator.prototype, "canvas", {
+        get: function () {
+            return paper.view.element;
+        },
+        enumerable: true,
+        configurable: true
+    });
     __decorate([
         decoratorwatchvariable_1.DecoratorWatchVariable
     ], GraphingCalculator.prototype, "backgroundColor", null);

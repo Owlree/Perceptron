@@ -75,7 +75,7 @@ export class ConstrainedPointFunctionGraphic extends PointGraphic {
    * @param x The new abscissa of the point
    */
   @DecoratorWatchVariable
-  private set x(x: number | Variable<number>) {
+  public set x(x: number | Variable<number>) {
     const xn: number = x as number;
     this.position = new Vector2(xn, this._functionGraphic.yAtX(xn));
   }
