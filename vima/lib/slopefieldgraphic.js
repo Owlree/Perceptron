@@ -99,7 +99,6 @@ var SlopeField = /** @class */ (function (_super) {
     Object.defineProperty(SlopeField.prototype, "solutionColor", {
         set: function (color) {
             this._solution.strokeColor = color;
-            console.log('going here');
         },
         enumerable: true,
         configurable: true

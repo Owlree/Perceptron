@@ -100,6 +100,5 @@ export class SlopeField extends Graphic {
   @DecoratorWatchVariable
   set solutionColor(color: paper.Color | Variable<paper.Color>) {
     this._solution.strokeColor = color as paper.Color;
-    console.log('going here');
   }
 }
