@@ -10,7 +10,7 @@ const slopeField = new vima.SlopeField('cos(x) + y', bounds);
 graphingCalculator.add(slopeField);
 
 function getC(position: vima.Vector2): number {
-  let [x, y] = variable.value.array;
+  let [x, y] = position.array;
   return 1 / 2 * Math.exp(-x) * (Math.cos(x) - Math.sin(x) + 2 * y);
 }
 
