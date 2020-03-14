@@ -41,7 +41,9 @@ let fromPoint: vima.FreePointGraphic | undefined = undefined;
 let toPoint: vima.FreePointGraphic | undefined = undefined;
 let vector: vima.VectorGraphic | undefined = undefined;
 
-const mouseDown = (_: MouseEvent | TouchEvent) => {
+const mouseDown = (event: MouseEvent | TouchEvent) => {
+  if (!event.cancelable) return;
+  event.preventDefault();
   fromPoint = new vima.FreePointGraphic({
     x: graphingCalculator.mousePosition.x,
     y: graphingCalculator.mousePosition.y,
@@ -59,13 +61,18 @@ const mouseDown = (_: MouseEvent | TouchEvent) => {
   graphingCalculator.add(fromPoint);
 };
 
-const mouseMove = (_: MouseEvent | TouchEvent) => {
+const mouseMove = (event: MouseEvent | TouchEvent) => {
+  if (!event.cancelable) return;
+  event.preventDefault();
   if (toPoint !== undefined) {
     toPoint.position = graphingCalculator.mousePosition;
   }
 };
 
-const mouseUp = (_: MouseEvent | TouchEvent) => {
+const mouseUp = (event: MouseEvent | TouchEvent) => {
+  if (!event.cancelable) return;
+  if (fromPoint === undefined || toPoint === undefined || vector === undefined) return;
+  event.preventDefault();
   let newBall = {
     point: new vima.FreePointGraphic({interactive: false}),
     s0: fromPoint!.position,
@@ -86,13 +93,11 @@ const mouseUp = (_: MouseEvent | TouchEvent) => {
 };
 
 if ('ontouchstart' in window) {
-  console.log('touch');
-  document.body.addEventListener('touchstart', mouseDown);
-  document.body.addEventListener('touchmove', mouseMove);
+  graphingCalculator.canvas.addEventListener('touchstart', mouseDown);
+  graphingCalculator.canvas.addEventListener('touchmove', mouseMove);
   document.body.addEventListener('touchend', mouseUp);
 } else {
-  console.log('mouse');
-  document.body.addEventListener('mousedown', mouseDown);
-  document.body.addEventListener('mousemove', mouseMove);
-  document.body.addEventListener('mouseup', mouseUp);
+  graphingCalculator.canvas.addEventListener('mousedown', mouseDown);
+  graphingCalculator.canvas.addEventListener('mousemove', mouseMove);
+  graphingCalculator.canvas.addEventListener('mouseup', mouseUp);
 }
