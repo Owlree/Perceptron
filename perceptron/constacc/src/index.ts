@@ -127,6 +127,7 @@ const mouseUp = (_: MouseEvent | TouchEvent) => {
 };
 
 if ('ontouchstart' in window) {
+  // TODO (Owlree) Implement multitouch
   graphingCalculator.canvas.addEventListener('touchstart', mouseDown);
   graphingCalculator.canvas.addEventListener('touchmove', mouseMove);
   graphingCalculator.canvas.addEventListener('touchend', mouseUp);
