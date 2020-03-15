@@ -83,10 +83,9 @@ const mouseDown = (event: MouseEvent | TouchEvent) => {
 
 const mouseMove = (event: MouseEvent | TouchEvent) => {
 
-  // Do not interrupt scrolling on mobile
-  if (!event.cancelable) return;
-
-  event.preventDefault();
+  if (event.cancelable) {
+    event.preventDefault();
+  }
 
   if (toPoint !== undefined) {
     toPoint.position = graphingCalculator.mousePosition;
