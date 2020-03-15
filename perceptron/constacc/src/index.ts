@@ -120,9 +120,7 @@ const mouseUp = (_: MouseEvent | TouchEvent) => {
   graphingCalculator.remove(vector);
 
   // Delete all references
-  fromPoint = undefined;
-  toPoint = undefined;
-  vector = undefined;
+  fromPoint = toPoint = vector = undefined;
 };
 
 if ('ontouchstart' in window) {
