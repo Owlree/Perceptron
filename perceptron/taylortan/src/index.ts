@@ -189,10 +189,16 @@ rotateLabels();
 let touchingTangentPoint = false;
 let touchingError = false;
 
-function touchDown(_: TouchEvent) {
+// On touch devices use the entire screen as touch input
+graphingCalculator.canvas.addEventListener('touchstart', () => {
   const x = graphingCalculator.mousePosition.x;
   const middle = (tangentPoint.position.x + xPlusDt.value) / 2;
-  if (x < middle) {
+  if (tangentPoint.position.x < constrainedPointFunction.position.x) {
+    var compare = (a: number, b: number): boolean => a < b;
+  } else {
+    var compare = (a: number, b: number): boolean => a > b;
+  }
+  if (compare(x, middle)) {
     touchingTangentPoint = true;
     tangentPoint.x = graphingCalculator.mousePosition.x
   } else {
@@ -200,22 +206,15 @@ function touchDown(_: TouchEvent) {
     xPlusDt.value = graphingCalculator.mousePosition.x;
     dt = xPlusDt.value - tangentPoint.position.x;
   }
-}
-
-function touchMove(_: TouchEvent) {
+});
+graphingCalculator.canvas.addEventListener('touchmove', () => {
   if (touchingTangentPoint) {
     tangentPoint.x = graphingCalculator.mousePosition.x
   } else if (touchingError) {
     xPlusDt.value = graphingCalculator.mousePosition.x;
     dt = xPlusDt.value - tangentPoint.position.x;
   }
-}
-
-function touchUp(_: TouchEvent) {
+});
+graphingCalculator.canvas.addEventListener('touchend', () => {
   touchingTangentPoint = touchingError = false;
-}
-
-// Add support for touch interaction
-graphingCalculator.canvas.addEventListener('touchstart', touchDown);
-graphingCalculator.canvas.addEventListener('touchmove', touchMove);
-graphingCalculator.canvas.addEventListener('touchend', touchUp);
+});

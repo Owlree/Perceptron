@@ -56,21 +56,15 @@ slopeField.solutionPosition = initialConditionPoint.positionVariable;
 
 // On touch devices use the entire canvas to move the initial condition point
 let touching: boolean = true;
-graphingCalculator.canvas.addEventListener('touchstart',
-(_: TouchEvent): void => {
-    touching = true;
+graphingCalculator.canvas.addEventListener('touchstart', (): void => {
+  touching = true;
+  initialConditionPoint.position = graphingCalculator.mousePosition;
+});
+graphingCalculator.canvas.addEventListener('touchmove', (): void => {
+  if (touching) {
     initialConditionPoint.position = graphingCalculator.mousePosition;
   }
-);
-graphingCalculator.canvas.addEventListener('touchmove',
-  (_: TouchEvent): void => {
-    if (touching) {
-      initialConditionPoint.position = graphingCalculator.mousePosition;
-    }
-  }
-);
-graphingCalculator.canvas.addEventListener('touchend',
-  (_: TouchEvent): void => {
-    touching = false;
-  }
-);
+});
+graphingCalculator.canvas.addEventListener('touchend', (): void => {
+  touching = false;
+});
