@@ -5,7 +5,7 @@ import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 import * as s3 from '@aws-cdk/aws-s3';
 
 
-export class PipelineStack extends cdk.Stack {
+export class BlogPipelineStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -19,19 +19,18 @@ export class PipelineStack extends cdk.Stack {
         phases: {
           install: {
             commands: [
-              'cd perceptron',
-              './install-all.sh'
+              'npm install'
             ]
           },
           build: {
-            commands: ['./build-all.sh']
+            commands: ['npm run build']
           }
         },
         artifacts: {
           files: [
             '**/*'
           ],
-          'base-directory': 'perceptron/_dist'
+          'base-directory': 'dist'
         }
       })
     });
@@ -49,8 +48,8 @@ export class PipelineStack extends cdk.Stack {
               oauthToken: oauth,
               output: githubSourceArtifact,
               owner: 'Owlree',
-              repo: 'Perceptron',
-              branch: 'ts-rewrite'
+              repo: 'blog',
+              branch: 'master'
             })
           ]
         },
@@ -73,7 +72,6 @@ export class PipelineStack extends cdk.Stack {
               input: blogBuildOutputArtifact,
               extract: true,
               actionName: 's3-deploy',
-              objectKey: 'experiments',
               accessControl: s3.BucketAccessControl.PUBLIC_READ
             })
           ]
