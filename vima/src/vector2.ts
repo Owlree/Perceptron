@@ -30,4 +30,23 @@ export class Vector2 {
   public multiply(a: number): Vector2 {
     return new Vector2(this.x * a, this.y * a);
   }
+
+  public add(v: Vector2): Vector2 {
+    return new Vector2(this.x + v.x, this.y + v.y);
+  }
+
+  public distance(v: Vector2): number {
+    const dx = this.x - v.x;
+    const dy = this.y - v.y;
+    return Math.sqrt((dx * dx + dy * dy));
+  }
+
+  public normalize(): Vector2 {
+    const length = Math.sqrt(this.x * this.x +this.y * this.y);
+    return this.multiply(1 / length);
+  }
+
+  public subtract(v: Vector2): Vector2 {
+    return new Vector2(this.x - v.x, this.y - v.y);
+  }
 }

@@ -30,6 +30,21 @@ var Vector2 = /** @class */ (function () {
     Vector2.prototype.multiply = function (a) {
         return new Vector2(this.x * a, this.y * a);
     };
+    Vector2.prototype.add = function (v) {
+        return new Vector2(this.x + v.x, this.y + v.y);
+    };
+    Vector2.prototype.distance = function (v) {
+        var dx = this.x - v.x;
+        var dy = this.y - v.y;
+        return Math.sqrt((dx * dx + dy * dy));
+    };
+    Vector2.prototype.normalize = function () {
+        var length = Math.sqrt(this.x * this.x + this.y * this.y);
+        return this.multiply(1 / length);
+    };
+    Vector2.prototype.subtract = function (v) {
+        return new Vector2(this.x - v.x, this.y - v.y);
+    };
     return Vector2;
 }());
 exports.Vector2 = Vector2;

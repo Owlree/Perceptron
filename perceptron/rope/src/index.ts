@@ -1,221 +1,103 @@
 import * as vima from 'vima';
 
+const NODES = 20;
+
+interface PointWithMetadata {
+  graphic: vima.FreePointGraphic;
+  previousPosition: vima.Vector2;
+  grabbed: boolean;
+}
+
 const bounds: vima.Rectangle = new vima.Rectangle(
-  new vima.Vector2(-Math.PI, 1.2), new vima.Vector2(Math.PI, -1.2));
+  new vima.Vector2(-20.4, 10.2), new vima.Vector2(20.4, -10.2));
 
-// Create an instance of the graphing calculator
-const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
+const graphingCalculator: vima.GraphingCalculator =
+  new vima.GraphingCalculator('canvas', bounds);
 
-// Create the main function
-const functionGraphic: vima.FunctionGraphic =
-  new vima.FunctionGraphic('x * x', {
-    strokeWidth: 0.015
+const points: Array<PointWithMetadata> = []
+
+for (let i = 0; i < NODES; ++i) {
+  const virtualHeight = bounds.height * 0.75;
+  const position = new vima.Vector2(
+    0,
+    bounds.bottom + virtualHeight / NODES * (i + 1) - (virtualHeight / NODES) / 2
+  )
+  const graphic = new vima.FreePointGraphic({
+    x: position.x,
+    y: position.y,
+    type: i < NODES - 1 ? vima.PointGraphicType.Triangle : vima.PointGraphicType.Circle,
+    interactive: false
   });
-
-// Create a point that is constrained to stay on the main function graphic
-const tangentPoint = new vima.ConstrainedPointFunctionGraphic(
-  functionGraphic, {
-    radius: 5,
-    color: vima.Colors.blueColor
-  });
-
-tangentPoint.position = new vima.Vector2(-Math.PI / 3, 0);
-
-// Create a variable that extracts the tangent point's abscissa
-const tangentPointX: vima.WritableVariable<number> =
-  new vima.WritableVariable<number>(tangentPoint.position.x);
-tangentPoint.positionVariable.register(
-  (variable: vima.Variable<vima.Vector2>): void => {
-    tangentPointX.value = variable.value.x;
-  });
-
-// Create a tangent line to the function at the tangent point's abscissa
-const tangentGraphic: vima.FunctionGraphic = new vima.FunctionGraphic(
-  'cos(p) * x + sin(p) - cos(p) * p', {
-    variables: {
-      p: tangentPointX
-    },
-    strokeColor: vima.Colors.blueColor,
-    strokeWidth: 0.015
-  });
-
-let dt: number = 1;
-
-// Create a variable that follows the tangent point's abscissa plus dt
-let xPlusDt: vima.WritableVariable<number> =
-  new vima.WritableVariable<number>(0.5);
-tangentPoint.positionVariable.register(
-  (variable: vima.Variable<vima.Vector2>): void => {
-    xPlusDt.value = variable.value.x + dt;
-  });
-
-// Create a point constrained on the function graphic at x + dt
-const constrainedPointFunction = new vima.ConstrainedPointFunctionGraphic(
-  functionGraphic, {
-    x: xPlusDt,
-    radius: 5,
-    color: vima.Colors.redColor
-  });
-
-// Create a point constrained on the tangent graphic at x + dt
-const constrainedPointTangent = new vima.ConstrainedPointFunctionGraphic(
-  tangentGraphic, {
-    x: xPlusDt,
-    radius: 5,
-    color: vima.Colors.redColor
-  });
-
-// Create a vector that highlights the difference between the point on the
-// function and its approximation via the tangent
-const errorVector: vima.VectorGraphic = new vima.VectorGraphic(
-  constrainedPointFunction, constrainedPointTangent, {
-    color: vima.Colors.redColor,
-    strokeWidth: 0.03
-  });
-
-// Add all elements to the calculator
-graphingCalculator.add(functionGraphic);
-graphingCalculator.add(tangentGraphic);
-graphingCalculator.add(tangentPoint);
-graphingCalculator.add(errorVector);
-graphingCalculator.add(constrainedPointFunction);
-graphingCalculator.add(constrainedPointTangent);
-
-// Make sure the error vector is always vertical
-function updateDt(event: any): void {
-  xPlusDt.value = event.point.x;
-  dt = xPlusDt.value - tangentPoint.position.x;
-}
-errorVector.on('mousedrag', updateDt);
-constrainedPointFunction.on('mousedrag', updateDt);
-constrainedPointTangent.on('mousedrag', updateDt);
-
-let mouseOver = false;
-let mouseDown = false;
-
-function updateCursorStyle(): void {
-  if (mouseDown) {
-    document.body.style.cursor = 'grabbing';
-  } else if (mouseOver) {
-    document.body.style.cursor = 'grab';
-  } else {
-    document.body.style.cursor = '';
+  const point = {
+    graphic: graphic,
+    previousPosition: position,
+    grabbed: i == NODES - 1
   }
+  points.push(point);
+  graphic.on('mousedrag', (e: any) => {
+    point.grabbed = true;
+    graphic.position = new vima.Vector2(e.point.x, e.point.y);
+  });
+  graphic.on('mousedown', () => {
+    point.grabbed = true;
+  });
 }
-errorVector.on('mouseenter', (): void => {
-  mouseOver = true;
-  updateCursorStyle();
-});
-errorVector.on('mouseleave', (): void => {
-  mouseOver = false;
-  updateCursorStyle();
-});
-errorVector.on('mousedown', (): void => {
-  mouseDown = true;
-  updateCursorStyle();
-});
-graphingCalculator.on('mouseup', (): void => {
-  mouseDown = false;
-  updateCursorStyle();
-});
 
-// Create and add labels
-const approixationLabel = new vima.TextGraphic({
-  content: 'f(t)+Δtf\'(t)',
-  fontFamily: 'Latin Modern Roman',
-  position: constrainedPointTangent.positionVariable,
-  fontWeight: 'bold',
-  fontSize: 18
-});
-const exactLabel = new vima.TextGraphic({
-  content: 'f(t+Δt)',
-  fontFamily: 'Latin Modern Roman',
-  position: constrainedPointFunction.positionVariable,
-  fontWeight: 'bold',
-  fontSize: 18
-});
-const fxLabel = new vima.TextGraphic({
-  content: 'f(t)',
-  fontFamily: 'Latin Modern Roman',
-  position: tangentPoint.positionVariable,
-  fontWeight: 'bold',
-  offset: new vima.Vector2(0, 0.15),
-  fontSize: 18
-});
-graphingCalculator.add(approixationLabel);
-graphingCalculator.add(exactLabel);
-graphingCalculator.add(fxLabel);
+for (let i = 1; i < NODES; ++i) {
+  const vector = new vima.VectorGraphic(points[i].graphic, points[i - 1].graphic);
+  graphingCalculator.add(vector);
+}
 
-// Rotate labels when their positions change
-function getTangentAngleAt(x: number): number {
-  return Math.atan(Math.cos(x));
+for (let point of points) {
+  graphingCalculator.add(point.graphic);
 }
-function getUnitCircleVectorAtAngle(angle: number): vima.Vector2 {
-  return new vima.Vector2(Math.cos(angle), Math.sin(angle));
-}
-function rotateExactLabel(): void {
-  const angle: number = getTangentAngleAt(
-    constrainedPointFunction.positionVariable.value.x);
-  exactLabel.rotation = angle * 180 / Math.PI;
-  if (constrainedPointTangent.position.y >
-    constrainedPointFunction.position.y) {
-    exactLabel.offset =
-      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
-  } else {
-    exactLabel.offset =
-      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
+
+let myTime = 0;
+let time = 0;
+
+const DELTA = 1 / 30;
+const ACC = -100;
+const DISTANCE = 0.5;
+
+function tick() {
+  for (let point of points) {
+    if (point.grabbed) continue;
+    const x = 2 * point.graphic.position.x - point.previousPosition.x;
+    const y = 2 * point.graphic.position.y - point.previousPosition.y + DELTA * DELTA * ACC;
+    point.previousPosition = point.graphic.position;
+    point.graphic.position = new vima.Vector2(x, y);
   }
-}
-function rotateApproximationLabel(): void {
-  const angle: number = Math.atan(Math.cos(tangentPointX.value));
-  approixationLabel.rotation = angle * 180 / Math.PI;
-  if (constrainedPointTangent.position.y >
-    constrainedPointFunction.position.y) {
-    approixationLabel.offset =
-      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
-  } else {
-    approixationLabel.offset =
-      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
-  }
-}
-function rotateLabels(): void {
-  rotateApproximationLabel();
-  rotateExactLabel();
-}
-tangentPointX.register(rotateLabels);
-constrainedPointTangent.positionVariable.register(rotateLabels);
-rotateLabels();
+  for (let _ = 0; _ < 20; ++_) {
+    for (let i = 1; i < NODES; ++i) {
+      const p1 = points[i];
+      const p2 = points[i - 1];
+      const dist = p1.graphic.position.distance(p2.graphic.position);
+      const deltad = DISTANCE - dist;
+      const r = p2.graphic.position.subtract(p1.graphic.position).normalize();
 
-let touchingTangentPoint = false;
-let touchingError = false;
+      let np1 = p1.graphic.position;
+      let np2 = p2.graphic.position;
 
-function touchDown(_: TouchEvent) {
-  const x = graphingCalculator.mousePosition.x;
-  const middle = (tangentPoint.position.x + xPlusDt.value) / 2;
-  if (x < middle) {
-    touchingTangentPoint = true;
-    tangentPoint.x = graphingCalculator.mousePosition.x
-  } else {
-    touchingError = true;
-    xPlusDt.value = graphingCalculator.mousePosition.x;
-    dt = xPlusDt.value - tangentPoint.position.x;
+      if (!p1.grabbed && !p2.grabbed) {
+        np1 = p1.graphic.position.subtract(r.multiply(deltad / 2));
+        np2 = p2.graphic.position.add(r.multiply(deltad / 2));
+      } else if (p1.grabbed && !p2.grabbed) {
+        np2 = p2.graphic.position.add(r.multiply(deltad));
+      } else if (!p1.grabbed && p2.grabbed) {
+        np1 = p1.graphic.position.subtract(r.multiply(deltad));
+      }
+
+      p1.graphic.position = np1;
+      p2.graphic.position = np2;
+    }
   }
 }
 
-function touchMove(_: TouchEvent) {
-  if (touchingTangentPoint) {
-    tangentPoint.x = graphingCalculator.mousePosition.x
-  } else if (touchingError) {
-    xPlusDt.value = graphingCalculator.mousePosition.x;
-    dt = xPlusDt.value - tangentPoint.position.x;
+graphingCalculator.on('frame', ({delta}) => {
+  if (delta > 1) return;
+  time += delta;
+  while (myTime < time) {
+    tick();
+    myTime += DELTA;
   }
-}
-
-function touchUp(_: TouchEvent) {
-  touchingTangentPoint = touchingError = false;
-}
-
-// Add support for touch interaction
-graphingCalculator.canvas.addEventListener('touchstart', touchDown);
-graphingCalculator.canvas.addEventListener('touchmove', touchMove);
-graphingCalculator.canvas.addEventListener('touchend', touchUp);
+});

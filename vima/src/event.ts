@@ -1,3 +1,4 @@
 export interface Event {
-  time: number
+  time: number,
+  delta: number
 }

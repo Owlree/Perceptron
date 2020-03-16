@@ -19,5 +19,9 @@ export declare class Vector2 {
      * @returns The vector multiplied by the given scalar
      */
     multiply(a: number): Vector2;
+    add(v: Vector2): Vector2;
+    distance(v: Vector2): number;
+    normalize(): Vector2;
+    subtract(v: Vector2): Vector2;
 }
 //# sourceMappingURL=vector2.d.ts.map

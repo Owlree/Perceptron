@@ -155,7 +155,7 @@ class GraphingCalculator implements IVariableListener {
   public on(event: string, callback: (event: Event) => void): void {
     if (event === 'frame') {
       paper.view.on(event, (event: any) => {
-        callback({time: event.time})
+        callback({time: event.time, delta: event.delta})
       });
     } else {
       paper.view.on(event, callback);

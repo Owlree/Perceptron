@@ -128,7 +128,7 @@ var GraphingCalculator = /** @class */ (function () {
     GraphingCalculator.prototype.on = function (event, callback) {
         if (event === 'frame') {
             paper.view.on(event, function (event) {
-                callback({ time: event.time });
+                callback({ time: event.time, delta: event.delta });
             });
         }
         else {
