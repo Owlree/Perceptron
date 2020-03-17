@@ -1,3 +1,4 @@
+import { Rectangle } from "./rectangle";
 /**
  * A simple immutable two-dimensional vector class that can represent points,
  * sizes, etc.
@@ -22,6 +23,8 @@ export declare class Vector2 {
     add(v: Vector2): Vector2;
     distance(v: Vector2): number;
     normalize(): Vector2;
+    length(): number;
     subtract(v: Vector2): Vector2;
+    coordinatesTransform(from: Rectangle, to: Rectangle): Vector2;
 }
 //# sourceMappingURL=vector2.d.ts.map

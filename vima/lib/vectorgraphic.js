@@ -38,7 +38,7 @@ var VectorGraphic = /** @class */ (function (_super) {
             insert: false,
             strokeWidth: strokeWidth,
             applyMatrix: false,
-            strokeColor: color,
+            strokeColor: color
         });
         _this._group.addChild(_this._segment);
         if (point2 !== undefined) { // Create a vector from point1 to point2
@@ -63,6 +63,10 @@ var VectorGraphic = /** @class */ (function (_super) {
             _this._v1 = new vector2_1.Vector2(0, 0);
             _this._v2 = point1.position;
         }
+        _this._segment.addSegments([
+            new paper.Segment(_this._v1.array),
+            new paper.Segment(_this._v2.array)
+        ]);
         _this._build();
         // Save the color variable
         _this.color = color;
@@ -85,8 +89,10 @@ var VectorGraphic = /** @class */ (function (_super) {
     VectorGraphic.prototype._build = function () {
         var a = new paper.Point(this._v1.x, this._v1.y);
         var b = new paper.Point(this._v2.x, this._v2.y);
-        this._segment.removeSegments();
-        this._segment.addSegments([new paper.Segment(a), new paper.Segment(b)]);
+        this._segment.segments[0].point.x = this._v1.x;
+        this._segment.segments[0].point.y = this._v1.y;
+        this._segment.segments[1].point.x = this._v2.x;
+        this._segment.segments[1].point.y = this._v2.y;
         if (this._screenMatrix !== undefined) {
             var angle = Math.atan2(b.y - a.y, b.x - a.x);
             this._toPoint.rotation = angle * 180 / Math.PI - 90;

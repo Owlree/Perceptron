@@ -39,11 +39,25 @@ var Vector2 = /** @class */ (function () {
         return Math.sqrt((dx * dx + dy * dy));
     };
     Vector2.prototype.normalize = function () {
-        var length = Math.sqrt(this.x * this.x + this.y * this.y);
-        return this.multiply(1 / length);
+        return this.multiply(1 / this.length());
+    };
+    Vector2.prototype.length = function () {
+        return Math.sqrt(this.x * this.x + this.y * this.y);
     };
     Vector2.prototype.subtract = function (v) {
         return new Vector2(this.x - v.x, this.y - v.y);
+    };
+    Vector2.prototype.coordinatesTransform = function (from, to) {
+        var _a = [this.x, this.y], x = _a[0], y = _a[1];
+        x -= from.center.x;
+        x /= (from.right - from.left);
+        x *= (to.right - to.left);
+        x += to.center.x;
+        y -= from.center.y;
+        y /= (from.top - from.bottom);
+        y *= (to.top - to.bottom);
+        y += to.center.y;
+        return new Vector2(x, y);
     };
     return Vector2;
 }());

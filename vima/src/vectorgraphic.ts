@@ -34,7 +34,7 @@ export class VectorGraphic extends Graphic {
       insert: false,
       strokeWidth: strokeWidth,
       applyMatrix: false,
-      strokeColor: color,
+      strokeColor: color
     });
     this._group.addChild(this._segment);
 
@@ -60,6 +60,11 @@ export class VectorGraphic extends Graphic {
       this._v2 = point1.position;
     }
 
+    this._segment.addSegments([
+      new paper.Segment(this._v1.array),
+      new paper.Segment(this._v2.array)
+    ]);
+
     this._build();
 
     // Save the color variable
@@ -82,8 +87,10 @@ export class VectorGraphic extends Graphic {
   private _build(): void {
     const a: paper.Point = new paper.Point(this._v1.x, this._v1.y);
     const b: paper.Point = new paper.Point(this._v2.x, this._v2.y);
-    this._segment.removeSegments();
-    this._segment.addSegments([new paper.Segment(a), new paper.Segment(b)]);
+    this._segment.segments[0].point.x = this._v1.x;
+    this._segment.segments[0].point.y = this._v1.y;
+    this._segment.segments[1].point.x = this._v2.x;
+    this._segment.segments[1].point.y = this._v2.y;
     if (this._screenMatrix !== undefined) {
       const angle: number = Math.atan2(b.y! - a.y!, b.x! - a.x!);
       this._toPoint.rotation = angle * 180 / Math.PI - 90;

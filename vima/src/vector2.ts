@@ -1,3 +1,5 @@
+import { Rectangle } from "./rectangle";
+
 /**
  * A simple immutable two-dimensional vector class that can represent points,
  * sizes, etc.
@@ -42,11 +44,30 @@ export class Vector2 {
   }
 
   public normalize(): Vector2 {
-    const length = Math.sqrt(this.x * this.x +this.y * this.y);
-    return this.multiply(1 / length);
+    return this.multiply(1 / this.length());
+  }
+
+  public length(): number {
+    return Math.sqrt(this.x * this.x +this.y * this.y);
   }
 
   public subtract(v: Vector2): Vector2 {
     return new Vector2(this.x - v.x, this.y - v.y);
+  }
+
+  public coordinatesTransform(from: Rectangle, to: Rectangle): Vector2 {
+    let [x, y] = [this.x, this.y];
+
+    x -= from.center.x;
+    x /= (from.right - from.left);
+    x *= (to.right - to.left);
+    x += to.center.x;
+
+    y -= from.center.y;
+    y /= (from.top - from.bottom);
+    y *= (to.top - to.bottom);
+    y += to.center.y;
+
+    return new Vector2(x, y);
   }
 }
