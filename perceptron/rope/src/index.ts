@@ -295,6 +295,10 @@ const onMouseMove = (event: MouseEvent) => {
 };
 
 const onTouchMove = (event: TouchEvent): void => {
+
+  if (!event.cancelable) return;
+  event.preventDefault();
+
   const [x, y] = [
     event.touches[0].pageX - canvas.offsetLeft,
     event.touches[0].pageY - canvas.offsetTop
