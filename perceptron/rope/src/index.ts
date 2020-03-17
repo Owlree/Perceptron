@@ -13,6 +13,8 @@ class Point extends Node {
     bounds:       Rectangle,
     canvasBounds: Rectangle)
   {
+    if (!this.visible) return;
+
     const r: number = this.grabbed ? 10 : 2;
     const position: Vector2 = this.position.coordinatesTransform(bounds, canvasBounds);
     context.fillStyle = Colors.blueColor.value.toCSS();
@@ -99,20 +101,27 @@ class Constraint extends Node {
   }
 }
 
-function buildRope(): { points: Array<Point>; constraints: Array<Constraint> } {
+function buildRope(bounds: Rectangle): { points: Array<Point>; constraints: Array<Constraint> } {
 
   let points: Array<Point> = [];
   let constraints: Array<Constraint> = [];
 
-  for (let i = 0; i < 75; ++i) {
-    points.push(new Point(8, - 3 - 0.05 * i));
+  const d = 1 / 75 * bounds.height * 0.5;
+
+  const nodes = 75;
+
+  for (let i = 0; i < nodes; ++i) {
+    const point = new Point(bounds.center.x, bounds.center.y - i * d + nodes * d / 2);
+    point.visible = false;
+    points.push(point);
   }
   points[0].grabbed = true;
+  points[0].visible = true;
 
   for (let i = 1; i < 10; ++i) {
     for (let j = i; j < points.length; j += 1) {
-      const constraint = new Constraint(points[j - i], points[j], 0, 0.05 * i);
-      constraint.visible = i == 1;
+      const constraint = new Constraint(points[j - i], points[j], 0, d * i);
+      constraint.visible = false;
       constraints.push(constraint);
     }
   }
@@ -170,14 +179,15 @@ function buildCloth(bounds: Rectangle): { points: Array<Point>; constraints: Arr
 }
 
 // Initialize the canvas
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-const context = canvas.getContext('2d')!;
+const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanvasElement;
+const context: CanvasRenderingContext2D = canvas.getContext('2d')!;
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 let bounds = new Rectangle(new Vector2(0, 0), new Vector2(40, -20));
 let canvasBounds = new Rectangle(new Vector2(0, 0), new Vector2(canvas.width, canvas.height));
 
-let {points, constraints} = buildCloth(bounds);
+let isRope: boolean = true;
+let {points, constraints} = buildRope(bounds);
 
 window.addEventListener('resize', () => {
   canvas.width = canvas.clientWidth;
@@ -186,8 +196,16 @@ window.addEventListener('resize', () => {
 })
 
 function draw() {
-  context.lineWidth = 2;
-  context.strokeStyle = Colors.blueColor.value.toCSS();
+  if (isRope) {
+    context.strokeStyle = Colors.blueColor.value.toCSS();
+    context.lineWidth = 2;
+    context.beginPath();
+    for (let point of points) {
+      const p: Vector2 = point.position.coordinatesTransform(bounds, canvasBounds);
+      context.lineTo(p.x, p.y);
+    }
+    context.stroke();
+  }
 
   for (let constraint of constraints) {
     constraint.draw(context, bounds, canvasBounds);
@@ -200,7 +218,7 @@ function draw() {
 
 function simulate(_: number) {
 
-  const acc = new Vector2(0, -50);
+  const acc = new Vector2(0, -30);
 
   for (let point of points) {
     if (point.grabbed) continue;
@@ -276,8 +294,37 @@ const onMouseMove = (event: MouseEvent) => {
   }
 };
 
-canvas.addEventListener('mousedown', onMouseDown);
-canvas.addEventListener('mouseup', onMouseUp);
-canvas.addEventListener('mousemove', onMouseMove);
+const onTouchMove = (event: TouchEvent): void => {
+  const [x, y] = [
+    event.touches[0].pageX - canvas.offsetLeft,
+    event.touches[0].pageY - canvas.offsetTop
+  ];
+  points[0].position = new Vector2(x, y)
+    .coordinatesTransform(canvasBounds, bounds);
+}
+
+if ('ontouchstart' in window) {
+  canvas.addEventListener('touchmove', onTouchMove);
+} else {
+  canvas.addEventListener('mousedown', onMouseDown);
+  canvas.addEventListener('mouseup', onMouseUp);
+  canvas.addEventListener('mousemove', onMouseMove);
+}
+
+
+
+document.body.addEventListener('keypress', (_: KeyboardEvent) => {
+  if (isRope) {
+    let bb = buildCloth(bounds);
+    points = bb.points;
+    constraints = bb.constraints;
+    isRope = false;
+  } else {
+    let bb = buildRope(bounds);
+    points = bb.points;
+    constraints = bb.constraints;
+    isRope = true;
+  }
+});
 
 })();
