@@ -26,5 +26,6 @@ export declare class Vector2 {
     length(): number;
     subtract(v: Vector2): Vector2;
     coordinatesTransform(from: Rectangle, to: Rectangle): Vector2;
+    middle(to: Vector2): Vector2;
 }
 //# sourceMappingURL=vector2.d.ts.map

@@ -4,20 +4,20 @@ import { Node } from './node';
 (function() {
 
 class Point extends Node {
-
   public grabbed: boolean = false;
   public position: Vector2;
   public previousPosition: Vector2;
 
-  public draw(context:      CanvasRenderingContext2D,
-              bounds:       Rectangle,
-              canvasBounds: Rectangle)
+  public draw(
+    context:      CanvasRenderingContext2D,
+    bounds:       Rectangle,
+    canvasBounds: Rectangle)
   {
-    // Convert position
+    const r: number = this.grabbed ? 10 : 2;
     const position: Vector2 = this.position.coordinatesTransform(bounds, canvasBounds);
-    context.fillStyle = Colors.redColor.value.toCSS();
+    context.fillStyle = Colors.blueColor.value.toCSS();
     context.beginPath();
-    context.arc(position.x, position.y, 5, 0, 2 * Math.PI);
+    context.arc(position.x, position.y, r, 0, 2 * Math.PI);
     context.fill();
   }
 
@@ -29,32 +29,35 @@ class Point extends Node {
 }
 
 class Constraint extends Node {
-
   private _point1: Point;
   private _point2: Point;
   private _minDistance: number;
   private _maxDistance: number;
 
-  constructor(point1: Point, point2: Point, minDistance: number, maxDistance: number) {
+  constructor(
+    point1:      Point,
+    point2:      Point,
+    minDistance: number,
+    maxDistance: number)
+  {
     super();
     [this._point1, this._point2] = [point1, point2];
     [this._minDistance, this._maxDistance] = [minDistance, maxDistance];
   }
 
   public relax() {
-    const r = this._point2.position.subtract(this._point1.position).normalize();
-    const d = this._point2.position.subtract(this._point1.position).length();
-
-    let dd = 0;
-
+    const p: Vector2 = this._point1.position;
+    const r: Vector2 = this._point2.position.subtract(p).normalize();
+    const d: number = this._point2.position.subtract(p).length();
+    let dd: number = 0;
     if (d < this._minDistance) {
       dd = d - this._minDistance;
     } else if (this._maxDistance < d) {
       dd = d - this._maxDistance;
     }
 
-    let w1 = 1 / 2;
-    let w2 = 1 / 2;
+    let w1: number = 1 / 2;
+    let w2: number = 1 / 2;
 
     if (this._point1.grabbed && this._point2.grabbed) {
       w1 = w2 = 0;
@@ -70,9 +73,10 @@ class Constraint extends Node {
     this._point2.position = this._point2.position.subtract(r.multiply(dd * w2));
   }
 
-  public draw(context:      CanvasRenderingContext2D,
-              bounds:       Rectangle,
-              canvasBounds: Rectangle)
+  public draw(
+    context:      CanvasRenderingContext2D,
+    bounds:       Rectangle,
+    canvasBounds: Rectangle)
   {
     if (!this.visible) return;
 
@@ -85,7 +89,7 @@ class Constraint extends Node {
     } else {
       context.strokeStyle = Colors.blueColor.value.toCSS();
     }
-    context.lineWidth = 5;
+    context.lineWidth = 2;
     context.lineCap = 'round';
 
     context.beginPath();
@@ -95,56 +99,108 @@ class Constraint extends Node {
   }
 }
 
-const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-const context = canvas.getContext('2d')!;
+function buildRope(): { points: Array<Point>; constraints: Array<Constraint> } {
 
-canvas.width = canvas.clientWidth;
-canvas.height = canvas.clientHeight;
+  let points: Array<Point> = [];
+  let constraints: Array<Constraint> = [];
 
-let bounds = new Rectangle(new Vector2(0, 0), new Vector2(16, -9));
-let canvasBounds = new Rectangle(new Vector2(0, 0), new Vector2(canvas.width, canvas.height));
+  for (let i = 0; i < 75; ++i) {
+    points.push(new Point(8, - 3 - 0.05 * i));
+  }
+  points[0].grabbed = true;
 
-const points: Array<Point> = [];
+  for (let i = 1; i < 10; ++i) {
+    for (let j = i; j < points.length; j += 1) {
+      const constraint = new Constraint(points[j - i], points[j], 0, 0.05 * i);
+      constraint.visible = i == 1;
+      constraints.push(constraint);
+    }
+  }
 
-for (let i = 1; i <= 75; ++i) {
-  points.push(new Point((i - 1) / 75, 0.5 - i / 75));
+  return {
+    points: points,
+    constraints: constraints
+  };
 }
 
-points[0].grabbed = true;
+function buildCloth(bounds: Rectangle): { points: Array<Point>; constraints: Array<Constraint> } {
+
+  let points: Array<Point> = [];
+  let constraints: Array<Constraint> = [];
+
+  const columns = 15;
+  const rows = 25;
+
+  for (let i = 0; i < rows; ++i) {
+    for (let j = 0; j < columns; ++j) {
+      points.push(
+        new Point(
+          bounds.left + j / (columns - 1) * bounds.width / 4 + bounds.width / 4 + bounds.width / 8,
+          bounds.top - i / (rows - 1) * bounds.height / 2 - bounds.height / 4
+        )
+      );
+    }
+  }
+
+  for (let i = 0; i < columns * rows; ++i) {
+    const p1 = points[i];
+
+    // To the right
+    if ((i + 1) % columns > 0 && i + 1 < columns * rows) {
+      const p2 = points[i + 1];
+      const d: number = p1.position.distance(p2.position);
+      constraints.push(new Constraint(p1, p2, d, d));
+    }
+
+    // Below
+    if (i + columns < columns * rows) {
+      const p2 = points[i + columns];
+      const d: number = p1.position.distance(p2.position) * 0.9;
+      constraints.push(new Constraint(p1, p2, d, d));
+    }
+  }
+
+  points[0].grabbed = true;
+  points[columns - 1].grabbed = true;
+
+  return {
+    points: points,
+    constraints: constraints
+  };
+}
+
+// Initialize the canvas
+const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+const context = canvas.getContext('2d')!;
+canvas.width = canvas.clientWidth;
+canvas.height = canvas.clientHeight;
+let bounds = new Rectangle(new Vector2(0, 0), new Vector2(40, -20));
+let canvasBounds = new Rectangle(new Vector2(0, 0), new Vector2(canvas.width, canvas.height));
+
+let {points, constraints} = buildCloth(bounds);
 
 window.addEventListener('resize', () => {
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
-
-  bounds = new Rectangle(new Vector2(0, 0), new Vector2(16, -9));
   canvasBounds = new Rectangle(new Vector2(0, 0), new Vector2(canvas.width, canvas.height));
 })
 
-const constraints: Array<Constraint> = [];
-
-for (let i = 1; i < 10; ++i) {
-  for (let j = i; j < points.length; j += 1) {
-    const constraint = new Constraint(points[j - i], points[j], 0, 0.09 * i);
-    constraint.visible = i == 1;
-    constraints.push(constraint);
-  }
-}
-
-// constraints.push(new Constraint(points[0], points[99], 0, 0.01 * points.length + 0.15));
-// constraints[constraints.length - 1].visible = false;
-
 function draw() {
+  context.lineWidth = 2;
+  context.strokeStyle = Colors.blueColor.value.toCSS();
+
   for (let constraint of constraints) {
     constraint.draw(context, bounds, canvasBounds);
   }
-  // for (let point of points) {
-  //   point.draw(context, bounds, canvasBounds);
-  // }
+
+  for (let point of points) {
+    point.draw(context, bounds, canvasBounds);
+  }
 }
 
 function simulate(_: number) {
 
-  const acc = new Vector2(0, -10);
+  const acc = new Vector2(0, -50);
 
   for (let point of points) {
     if (point.grabbed) continue;
@@ -153,7 +209,7 @@ function simulate(_: number) {
     point.previousPosition = previousPosition;
   }
 
-  for (let i = 0; i < 10; ++i) {
+  for (let i = 0; i < 15; ++i) {
     for (let constraint of constraints) {
       constraint.relax();
     }
@@ -162,7 +218,7 @@ function simulate(_: number) {
 
 let time = new Date().getTime() / 1000;
 let myTime = new Date().getTime() / 1000;
-const DELTA = 1 / 30;
+const DELTA = 1 / 60;
 
 function loop() {
 
@@ -173,13 +229,13 @@ function loop() {
   time = new Date().getTime() / 1000;
 
   let count: number = 0;
-  while (myTime < time && count < 20) {
-    simulate(myTime);
+  while (myTime < time) {
+    if (count < 3) {
+      simulate(myTime);
+    }
     myTime += DELTA;
     count += 1;
   }
-
-  console.log(count);
 
   draw();
 
@@ -188,8 +244,40 @@ function loop() {
 
 loop();
 
-canvas.addEventListener('mousemove', (event: MouseEvent) => {
-  points[0].position = new Vector2(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop).coordinatesTransform(canvasBounds, bounds);
-});
+let mouseDown: boolean = false;
+
+const onMouseDown = (event: MouseEvent) => {
+  const [x, y] = [
+    event.pageX - canvas.offsetLeft,
+    event.pageY - canvas.offsetTop
+  ];
+  const p1: Vector2 = new Vector2(x, y);
+  const p2: Vector2 = points[0].position.coordinatesTransform(bounds, canvasBounds);
+
+  console.log(p1.array, p2.array);
+
+  if (p1.distance(p2) < 20) {
+    mouseDown = true;
+  }
+};
+
+const onMouseUp = (_: MouseEvent) => {
+  mouseDown = false;
+};
+
+const onMouseMove = (event: MouseEvent) => {
+  if (mouseDown) {
+    const [x, y] = [
+      event.pageX - canvas.offsetLeft,
+      event.pageY - canvas.offsetTop
+    ];
+    points[0].position = new Vector2(x, y)
+      .coordinatesTransform(canvasBounds, bounds);
+  }
+};
+
+canvas.addEventListener('mousedown', onMouseDown);
+canvas.addEventListener('mouseup', onMouseUp);
+canvas.addEventListener('mousemove', onMouseMove);
 
 })();

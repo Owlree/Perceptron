@@ -59,6 +59,9 @@ var Vector2 = /** @class */ (function () {
         y += to.center.y;
         return new Vector2(x, y);
     };
+    Vector2.prototype.middle = function (to) {
+        return new Vector2((this.x + to.x) / 2, (this.y + to.y) / 2);
+    };
     return Vector2;
 }());
 exports.Vector2 = Vector2;

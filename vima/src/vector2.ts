@@ -70,4 +70,11 @@ export class Vector2 {
 
     return new Vector2(x, y);
   }
+
+  public middle(to: Vector2): Vector2 {
+    return new Vector2(
+      (this.x + to.x) / 2,
+      (this.y + to.y) / 2
+    );
+  }
 }
