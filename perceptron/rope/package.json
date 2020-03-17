@@ -1,11 +1,13 @@
 {
   "name": "rope",
   "version": "0.0.0",
-  "description": "A demosntration of approximating a function by using the linear terms of the Taylor expansion (i.e. the tangent)",
+  "description": "A demonstration of the Jakobsen method for simulating soft bodies",
   "main": "index.js",
   "keywords": [
     "matheamtics",
-    "visualisation"
+    "visualisation",
+    "games",
+    "physics"
   ],
   "author": "owlree128@gmail.com",
   "license": "ISC",

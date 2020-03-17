@@ -15,7 +15,7 @@ class Point extends Node {
   {
     if (!this.visible) return;
 
-    const r: number = this.grabbed ? 10 : 2;
+    const r: number = this.grabbed ? HANDLE_RADIUS : 2;
     const position: Vector2 = this.position.coordinatesTransform(bounds, canvasBounds);
     context.fillStyle = Colors.blueColor.value.toCSS();
     context.beginPath();
@@ -84,13 +84,8 @@ class Constraint extends Node {
 
     const v1 = this._point1.position.coordinatesTransform(bounds, canvasBounds);
     const v2 = this._point2.position.coordinatesTransform(bounds, canvasBounds);
-    const d = this._point1.position.distance(this._point2.position);
 
-    if (d < this._minDistance - 0.001 || this._maxDistance + 0.001 < d) {
-      context.strokeStyle = Colors.redColor.value.toCSS();
-    } else {
-      context.strokeStyle = Colors.blueColor.value.toCSS();
-    }
+    context.strokeStyle = Colors.blueColor.value.toCSS();
     context.lineWidth = 2;
     context.lineCap = 'round';
 
@@ -183,8 +178,20 @@ const canvas: HTMLCanvasElement = document.getElementById('canvas') as HTMLCanva
 const context: CanvasRenderingContext2D = canvas.getContext('2d')!;
 canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
-let bounds = new Rectangle(new Vector2(0, 0), new Vector2(40, -20));
-let canvasBounds = new Rectangle(new Vector2(0, 0), new Vector2(canvas.width, canvas.height));
+let bounds = new Rectangle(
+  new Vector2(
+    -canvas.width / canvas.height * 20 / 2,
+    canvas.height / canvas.height * 20 / 2
+  ),
+  new Vector2(
+    canvas.width / canvas.height * 20 / 2,
+    -canvas.height / canvas.height * 20 / 2
+  )
+);
+let canvasBounds = new Rectangle(
+  new Vector2(0, 0),
+  new Vector2(canvas.width, canvas.height)
+);
 
 let isRope: boolean = true;
 let {points, constraints} = buildRope(bounds);
@@ -192,7 +199,20 @@ let {points, constraints} = buildRope(bounds);
 window.addEventListener('resize', () => {
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
-  canvasBounds = new Rectangle(new Vector2(0, 0), new Vector2(canvas.width, canvas.height));
+  bounds = new Rectangle(
+    new Vector2(
+      -canvas.width / canvas.height * 20 / 2,
+      canvas.height / canvas.height * 20 / 2
+    ),
+    new Vector2(
+      canvas.width / canvas.height * 20 / 2,
+      -canvas.height / canvas.height * 20 / 2
+    )
+  );
+  canvasBounds = new Rectangle(
+    new Vector2(0, 0),
+    new Vector2(canvas.width, canvas.height)
+  );
 })
 
 function draw() {
@@ -218,7 +238,7 @@ function draw() {
 
 function simulate(_: number) {
 
-  const acc = new Vector2(0, -30);
+  const acc = new Vector2(3 * Math.sin(time) + 3, -30);
 
   for (let point of points) {
     if (point.grabbed) continue;
@@ -262,7 +282,7 @@ function loop() {
 
 loop();
 
-let mouseDown: boolean = false;
+let mouseDownPoint: Point | undefined = undefined
 
 const onMouseDown = (event: MouseEvent) => {
   const [x, y] = [
@@ -270,26 +290,30 @@ const onMouseDown = (event: MouseEvent) => {
     event.pageY - canvas.offsetTop
   ];
   const p1: Vector2 = new Vector2(x, y);
-  const p2: Vector2 = points[0].position.coordinatesTransform(bounds, canvasBounds);
 
-  console.log(p1.array, p2.array);
+  for (let point of points) {
+    if (point.grabbed == true) {
+      const p2: Vector2 = point.position.coordinatesTransform(bounds, canvasBounds);
+      if (p1.distance(p2) < 2 * HANDLE_RADIUS) {
+        mouseDownPoint = point;
+        break;
+      }
+    }
 
-  if (p1.distance(p2) < 20) {
-    mouseDown = true;
   }
 };
 
 const onMouseUp = (_: MouseEvent) => {
-  mouseDown = false;
+  mouseDownPoint = undefined;
 };
 
 const onMouseMove = (event: MouseEvent) => {
-  if (mouseDown) {
+  if (mouseDownPoint !== undefined) {
     const [x, y] = [
       event.pageX - canvas.offsetLeft,
       event.pageY - canvas.offsetTop
     ];
-    points[0].position = new Vector2(x, y)
+    mouseDownPoint.position = new Vector2(x, y)
       .coordinatesTransform(canvasBounds, bounds);
   }
 };
@@ -315,7 +339,7 @@ if ('ontouchstart' in window) {
   canvas.addEventListener('mousemove', onMouseMove);
 }
 
-
+const HANDLE_RADIUS: number = 10;
 
 document.body.addEventListener('keypress', (_: KeyboardEvent) => {
   if (isRope) {
@@ -324,6 +348,20 @@ document.body.addEventListener('keypress', (_: KeyboardEvent) => {
     constraints = bb.constraints;
     isRope = false;
   } else {
+    let bb = buildRope(bounds);
+    points = bb.points;
+    constraints = bb.constraints;
+    isRope = true;
+  }
+});
+
+window.addEventListener('message', (event: MessageEvent) => {
+  if (event.data === 'cloth') {
+    let bb = buildCloth(bounds);
+    points = bb.points;
+    constraints = bb.constraints;
+    isRope = false;
+  } else if (event.data === 'rope') {
     let bb = buildRope(bounds);
     points = bb.points;
     constraints = bb.constraints;

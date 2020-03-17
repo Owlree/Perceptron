@@ -22,7 +22,7 @@ const taylortanConfig = {
     extensions: ['.ts', '.js']
   },
   plugins: [new HtmlWebpackPlugin({
-    title: 'Linear Taylor',
+    title: 'Rope / Cloth',
     template: 'canvas-template.html',
     filename: 'index.html'
   })]
