@@ -256,6 +256,7 @@ function simulate(_: number) {
 
 let time = new Date().getTime() / 1000;
 let myTime = new Date().getTime() / 1000;
+let started: boolean = false;
 const DELTA = 1 / 60;
 
 function loop() {
@@ -268,7 +269,7 @@ function loop() {
 
   let count: number = 0;
   while (myTime < time) {
-    if (count < 3) {
+    if (count < 3 && started) {
       simulate(myTime);
     }
     myTime += DELTA;
@@ -285,6 +286,9 @@ loop();
 let mouseDownPoint: Point | undefined = undefined
 
 const onMouseDown = (event: MouseEvent) => {
+
+  if (!started) return;
+
   const [x, y] = [
     event.pageX - canvas.offsetLeft,
     event.pageY - canvas.offsetTop
@@ -299,7 +303,6 @@ const onMouseDown = (event: MouseEvent) => {
         break;
       }
     }
-
   }
 };
 
@@ -318,8 +321,28 @@ const onMouseMove = (event: MouseEvent) => {
   }
 };
 
-const onTouchMove = (event: TouchEvent): void => {
+const onTouchStart = (event: TouchEvent): void => {
 
+  if (!started) return;
+
+  const [x, y] = [
+    event.touches[0].pageX - canvas.offsetLeft,
+    event.touches[0].pageY - canvas.offsetTop
+  ];
+  const p1: Vector2 = new Vector2(x, y);
+
+  for (let point of points) {
+    if (point.grabbed == true) {
+      const p2: Vector2 = point.position.coordinatesTransform(bounds, canvasBounds);
+      if (p1.distance(p2) < 2 * HANDLE_RADIUS) {
+        mouseDownPoint = point;
+        break;
+      }
+    }
+  }
+}
+
+const onTouchMove = (event: TouchEvent): void => {
   if (!event.cancelable) return;
   event.preventDefault();
 
@@ -327,12 +350,21 @@ const onTouchMove = (event: TouchEvent): void => {
     event.touches[0].pageX - canvas.offsetLeft,
     event.touches[0].pageY - canvas.offsetTop
   ];
-  points[0].position = new Vector2(x, y)
-    .coordinatesTransform(canvasBounds, bounds);
+
+  if (mouseDownPoint !== undefined) {
+    mouseDownPoint.position = new Vector2(x, y)
+      .coordinatesTransform(canvasBounds, bounds);
+  }
+}
+
+const onTouchEnd = () => {
+  mouseDownPoint = undefined;
 }
 
 if ('ontouchstart' in window) {
+  canvas.addEventListener('touchstart', onTouchStart);
   canvas.addEventListener('touchmove', onTouchMove);
+  canvas.addEventListener('touchend', onTouchEnd);
 } else {
   canvas.addEventListener('mousedown', onMouseDown);
   canvas.addEventListener('mouseup', onMouseUp);
@@ -366,6 +398,10 @@ window.addEventListener('message', (event: MessageEvent) => {
     points = bb.points;
     constraints = bb.constraints;
     isRope = true;
+  } else if (event.data === 'start') {
+    started = true;
+  } else if (event.data === 'pause') {
+    started = false;
   }
 });
 
