@@ -3,6 +3,8 @@
  */
 import * as Colors from './colors';
 export { Colors };
+export { Canvas } from './canvas';
+export { CanvasObject } from './canvasobject';
 export { ConstrainedPointFunctionGraphic } from './constrainedpointfunctiongraphic';
 export { CurveGraphic } from './curvegraphic';
 export { DecoratorWatchVariable } from './decoratorwatchvariable';

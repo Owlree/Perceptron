@@ -5,6 +5,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Colors = require("./colors");
 exports.Colors = Colors;
+var canvas_1 = require("./canvas");
+exports.Canvas = canvas_1.Canvas;
+var canvasobject_1 = require("./canvasobject");
+exports.CanvasObject = canvasobject_1.CanvasObject;
 var constrainedpointfunctiongraphic_1 = require("./constrainedpointfunctiongraphic");
 exports.ConstrainedPointFunctionGraphic = constrainedpointfunctiongraphic_1.ConstrainedPointFunctionGraphic;
 var curvegraphic_1 = require("./curvegraphic");
