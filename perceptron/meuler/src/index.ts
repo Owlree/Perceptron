@@ -16,11 +16,13 @@ class SlopeField extends CanvasObject {
               bounds:       Rectangle,
               canvasBounds: Rectangle): void
   {
-    const columns: number = Math.floor(canvasBounds.width / 30);
-    const rows: number = Math.floor(canvasBounds.height / 30);
+    const columns: number = Math.max(8, Math.floor(canvasBounds.width / 30));
+    const rows: number = Math.max(8, Math.floor(canvasBounds.height / 30));
 
     const horizontalSpacing = canvasBounds.width / columns;
     const verticalSpacing = canvasBounds.height / rows;
+
+    const len = canvasBounds.width / columns * 0.5;
 
     for (let i = 1; i < columns; ++i) {
       for (let j = 1; j < rows; ++j) {
@@ -32,10 +34,10 @@ class SlopeField extends CanvasObject {
         );
         const direction: Vector2 = new Vector2(
           1, this._slopeFunction(point.x, point.y)
-        ).normalize().multiply(10);
+        ).normalize();
         const p1: Vector2 = point.subtract(direction).coordinatesTransform(bounds, canvasBounds);
         const p2: Vector2 = point.add(direction).coordinatesTransform(bounds, canvasBounds);
-        const diff: Vector2 = p2.subtract(p1).normalize().multiply(10);
+        const diff: Vector2 = p2.subtract(p1).normalize().multiply(len / 2);
         const cp1: Vector2 = canvasPoint.add(diff);
         const cp2: Vector2 = canvasPoint.subtract(diff);
         const [r, g, b]: [number, number, number] = [
