@@ -213,7 +213,7 @@ function getMatchingEulerIndex(p1: Vector2, mult: number = 1): number | undefine
   return undefined;
 }
 
-window.document.addEventListener('mousedown', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
   if (canvas.paused) return;
 
   const [x, y] = [
@@ -238,7 +238,7 @@ window.document.addEventListener('mousedown', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('mouseup', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
   mouseDown = false;
   mouseDownEulerIndex = undefined;
   solutions.eulerFillIndex = undefined;
@@ -256,7 +256,7 @@ window.document.addEventListener('mouseup', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('mousemove', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
   if (canvas.paused) return;
 
   const [x, y] = [
@@ -294,7 +294,7 @@ window.document.addEventListener('mousemove', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('touchstart', (event: TouchEvent): void => {
+canvas.canvasElement.addEventListener('touchstart', (event: TouchEvent): void => {
   if (canvas.paused) return;
 
   if (!event.cancelable) return;
@@ -321,7 +321,7 @@ window.document.addEventListener('touchstart', (event: TouchEvent): void => {
   }
 });
 
-window.document.addEventListener('touchmove', (event: TouchEvent): void => {
+canvas.canvasElement.addEventListener('touchmove', (event: TouchEvent): void => {
   if (canvas.paused) return;
   if (!event.cancelable) return;
   event.preventDefault();
@@ -347,7 +347,7 @@ window.document.addEventListener('touchmove', (event: TouchEvent): void => {
   }
 });
 
-window.document.addEventListener('touchend', () => {
+canvas.canvasElement.addEventListener('touchend', () => {
   solutions.fill = false;
   solutions.eulerFillIndex = undefined;
   mouseDown = false;
