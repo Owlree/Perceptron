@@ -7,7 +7,7 @@ import { Colors, CanvasObject, Canvas, Rectangle, Vector2 } from 'vima';
 
 class Taylortan extends CanvasObject {
 
-  public _x: number = -1.25;
+  private _x: number = -1.25;
   public dx: number = 1;
   public fill: boolean = false;
   public fillError: boolean = false;
@@ -44,7 +44,6 @@ class Taylortan extends CanvasObject {
 
     const point: Vector2 = new Vector2(this.x, Math.sin(this.x));
     const pointCanvas: Vector2 = point.coordinatesTransform(bounds, canvasBounds);
-
 
     const slope: Vector2 = new Vector2(1, Math.cos(this.x)).multiply(bounds.width);
 
@@ -105,6 +104,41 @@ class Taylortan extends CanvasObject {
     context.arc(p2c.x, p2c.y, 7, 0, 2 * Math.PI);
     context.fill();
     context.stroke();
+
+    const sign: number = p1c.y < p2c.y ? -1 : 1
+
+    context.save();
+    context.translate(p2c.x, p2c.y);
+    context.rotate(-Math.atan(Math.cos(this.x)));
+    context.fillStyle = Colors.mainColor.value.toCSS(false);
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
+    context.font = 'italic 19px "Latin Modern Roman"';
+    context.fillText('f(t) + Δt f\'(t)', 0, -24 * sign);
+    context.restore();
+
+
+    context.save();
+    context.translate(p1c.x, p1c.y);
+    context.rotate(-Math.atan(Math.cos(p1.x)));
+    context.fillStyle = Colors.mainColor.value.toCSS(false);
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
+    context.font = 'italic 19px "Latin Modern Roman"';
+    context.fillText('f(t + Δt)', 0, 24 * sign);
+    context.restore();
+
+    context.shadowColor = '';
+    context.shadowBlur = 0;
+
+    if (Math.abs(pointCanvas.x - p1c.x) > 50) {
+      // Draw f(x) text
+      context.textBaseline = 'middle';
+      context.fillStyle = Colors.mainColor.value.toCSS(false);
+      context.textAlign = 'center';
+      context.font = 'italic 19px "Latin Modern Roman"';
+      context.fillText('f(t)', pointCanvas.x, pointCanvas.y - 30);
+    }
   }
 
   public get point(): Vector2 {
@@ -146,11 +180,13 @@ canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
   } else {
     const p2: Vector2 = taylortan.point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
 
-    if (p1.distance(p2) < 10) {
-      taylortan.fill = true;
-      document.body.style.cursor = 'grab';
-    } else if (taylortan.matchesError(p1)) {
+    if (taylortan.matchesError(p1)) {
       taylortan.fillError = true;
+      taylortan.fill = false;
+      document.body.style.cursor = 'grab';
+    } else if (p1.distance(p2) < 10) {
+      taylortan.fillError = false;
+      taylortan.fill = true;
       document.body.style.cursor = 'grab';
     } else {
       taylortan.fill = false;
@@ -175,16 +211,16 @@ canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
   const p1: Vector2 = new Vector2(x, y);
   const p2: Vector2 = taylortan.point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
 
-  if (p1.distance(p2) < 10) {
-    taylortan.fill = true;
-    taylortan.fillError = false;
-    document.body.style.cursor = 'grabbing';
-    mouseDownMain = true;
-  } else if (taylortan.matchesError(p1)) {
+  if (taylortan.matchesError(p1)) {
     taylortan.fill = false;
     taylortan.fillError = true;
     document.body.style.cursor = 'grabbing';
     mouseDownError = true;
+  } else if (p1.distance(p2) < 10) {
+    taylortan.fill = true;
+    taylortan.fillError = false;
+    document.body.style.cursor = 'grabbing';
+    mouseDownMain = true;
   }
 
 });
