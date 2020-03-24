@@ -7,7 +7,7 @@ import { Colors, CanvasObject, Canvas, Rectangle, Vector2 } from 'vima';
 
 class Taylortan extends CanvasObject {
 
-  public _x: number = 0;
+  public _x: number = -1.25;
   public dx: number = 1;
   public fill: boolean = false;
   public fillError: boolean = false;
