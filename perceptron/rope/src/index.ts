@@ -2,6 +2,19 @@ import { Rectangle, CanvasObject, Canvas, Vector2, Colors } from 'vima';
 
 (function() {
 
+function getParameters(url: string): {[key: string]: string} {
+  const params: {[key: string]: string} = {};
+  const parser: HTMLAnchorElement = document.createElement('a');
+  parser.href = url;
+  const query: string = parser.search.substring(1);
+  const vars: Array<string> = query.split('&');
+  for (let v of vars) {
+    var pair: Array<string> = v.split('=');
+    params[pair[0]] = decodeURIComponent(pair[1]);
+  }
+  return params;
+};
+
 class ConstraintDistance {
 
   private _particle1: VerletParticle;
@@ -334,7 +347,13 @@ class RopeObject extends SoftBodyObject {
 }
 
 const canvas: Canvas = new Canvas('canvas');
-let softBody: SoftBodyObject = new RopeObject();
+const params = getParameters(window.location.href);
+
+if (params['type'] === 'cloth') {
+  var softBody: SoftBodyObject = new ClothObject();
+} else {
+  var softBody: SoftBodyObject = new RopeObject();
+}
 canvas.addObject(softBody);
 
 let mouseDownParticle: VerletParticle | undefined = undefined;
@@ -362,8 +381,28 @@ window.document.addEventListener('mousedown', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('mouseup', (_: MouseEvent) => {
-  mouseDownParticle = undefined;
+window.document.addEventListener('mouseup', (event: MouseEvent) => {
+  if (mouseDownParticle !== undefined) {
+    mouseDownParticle.fill = false;
+    mouseDownParticle = undefined;
+  }
+
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+  const p1: Vector2 = new Vector2(x, y);
+
+  for (let particle of softBody.particles) {
+    if (particle.fixed == true) {
+      const p2: Vector2 = particle.position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+      if (p1.distance(p2) < 2 * HANDLE_RADIUS) {
+        particle.fill = true;
+        document.body.style.cursor = 'grab';
+        break;
+      }
+    }
+  }
 });
 
 window.document.addEventListener('mousemove', (event: MouseEvent) => {

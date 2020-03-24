@@ -1,0 +1,13 @@
+{
+  "name": "perceptron",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "./install-all.sh",
+    "build": "./build-all.sh",
+    "serve": "python3 -m http.server 8081 --directory _dist"
+  },
+  "author": "",
+  "license": "ISC"
+}

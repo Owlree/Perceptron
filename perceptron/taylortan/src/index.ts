@@ -1,220 +1,367 @@
-import * as vima from 'vima';
+import { Colors, CanvasObject, Canvas, Rectangle, Vector2 } from 'vima';
 
-const bounds: vima.Rectangle = new vima.Rectangle(
-  new vima.Vector2(-Math.PI, 1.2), new vima.Vector2(Math.PI, -1.2));
 
-// Create an instance of the graphing calculator
-const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
+// Script scope
+(function() {
 
-// Create the main function
-const functionGraphic: vima.FunctionGraphic =
-  new vima.FunctionGraphic('sin(x)', {
-    strokeWidth: 0.015
-  });
 
-// Create a point that is constrained to stay on the main function graphic
-const tangentPoint = new vima.ConstrainedPointFunctionGraphic(
-  functionGraphic, {
-    radius: 5,
-    color: vima.Colors.blueColor
-  });
+class Taylortan extends CanvasObject {
 
-tangentPoint.position = new vima.Vector2(-Math.PI / 3, 0);
+  public _x: number = 0;
+  public dx: number = 1;
+  public fill: boolean = false;
+  public fillError: boolean = false;
 
-// Create a variable that extracts the tangent point's abscissa
-const tangentPointX: vima.WritableVariable<number> =
-  new vima.WritableVariable<number>(tangentPoint.position.x);
-tangentPoint.positionVariable.register(
-  (variable: vima.Variable<vima.Vector2>): void => {
-    tangentPointX.value = variable.value.x;
-  });
+  constructor() {
+    super();
+  }
 
-// Create a tangent line to the function at the tangent point's abscissa
-const tangentGraphic: vima.FunctionGraphic = new vima.FunctionGraphic(
-  'cos(p) * x + sin(p) - cos(p) * p', {
-    variables: {
-      p: tangentPointX
-    },
-    strokeColor: vima.Colors.blueColor,
-    strokeWidth: 0.015
-  });
+  public set x(x: number) {
+    this._x = x;
+    if (x + this.dx > canvas.bounds.right) {
+      this.dx = canvas.bounds.right - x;
+    } else if (x + this.dx < canvas.bounds.left) {
+      this.dx = canvas.bounds.left - x;
+    }
+  }
 
-let dt: number = 1;
+  public get x(): number {
+    return this._x;
+  }
 
-// Create a variable that follows the tangent point's abscissa plus dt
-let xPlusDt: vima.WritableVariable<number> =
-  new vima.WritableVariable<number>(0.5);
-tangentPoint.positionVariable.register(
-  (variable: vima.Variable<vima.Vector2>): void => {
-    xPlusDt.value = variable.value.x + dt;
-  });
+  public draw(context:      CanvasRenderingContext2D,
+              bounds:       Rectangle,
+              canvasBounds: Rectangle)
+  {
+    context.strokeStyle = Colors.mainColor.value.toCSS(false);
+    context.lineWidth = 2;
+    context.beginPath();
+    for (let i = bounds.left; i <= bounds.right + 0.1; i += 0.1) {
+      const point = new Vector2(i, Math.sin(i)).coordinatesTransform(bounds, canvasBounds);
+      context.lineTo(point.x, point.y);
+    }
+    context.stroke();
 
-// Create a point constrained on the function graphic at x + dt
-const constrainedPointFunction = new vima.ConstrainedPointFunctionGraphic(
-  functionGraphic, {
-    x: xPlusDt,
-    radius: 5,
-    color: vima.Colors.redColor
-  });
+    const point: Vector2 = new Vector2(this.x, Math.sin(this.x));
+    const pointCanvas: Vector2 = point.coordinatesTransform(bounds, canvasBounds);
 
-// Create a point constrained on the tangent graphic at x + dt
-const constrainedPointTangent = new vima.ConstrainedPointFunctionGraphic(
-  tangentGraphic, {
-    x: xPlusDt,
-    radius: 5,
-    color: vima.Colors.redColor
-  });
 
-// Create a vector that highlights the difference between the point on the
-// function and its approximation via the tangent
-const errorVector: vima.VectorGraphic = new vima.VectorGraphic(
-  constrainedPointFunction, constrainedPointTangent, {
-    color: vima.Colors.redColor,
-    strokeWidth: 0.03
-  });
+    const slope: Vector2 = new Vector2(1, Math.cos(this.x)).multiply(bounds.width);
 
-// Add all elements to the calculator
-graphingCalculator.add(functionGraphic);
-graphingCalculator.add(tangentGraphic);
-graphingCalculator.add(tangentPoint);
-graphingCalculator.add(errorVector);
-graphingCalculator.add(constrainedPointFunction);
-graphingCalculator.add(constrainedPointTangent);
+    const t1: Vector2 = point.subtract(slope).coordinatesTransform(bounds, canvasBounds);
+    const t2: Vector2 = point.add(slope).coordinatesTransform(bounds, canvasBounds);
 
-// Make sure the error vector is always vertical
-function updateDt(event: any): void {
-  xPlusDt.value = event.point.x;
-  dt = xPlusDt.value - tangentPoint.position.x;
+    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.lineWidth = 2;
+    context.beginPath();
+    context.moveTo(t1.x, t1.y);
+    context.lineTo(t2.x, t2.y);
+    context.stroke();
+
+    if (this.fill) {
+      context.fillStyle = Colors.blueColor.value.toCSS(false);
+    } else {
+      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+    }
+    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.lineWidth = 2;
+    context.beginPath();
+    context.arc(pointCanvas.x, pointCanvas.y, 10, 0, 2 * Math.PI);
+    context.fill();
+    context.stroke();
+
+    const p1: Vector2 = new Vector2(this.x + this.dx, Math.sin(this.x + this.dx));
+    const p2: Vector2 = new Vector2(this.x + this.dx, Math.sin(this.x) + this.dx * Math.cos(this.x));
+    const p1c: Vector2 = p1.coordinatesTransform(bounds, canvasBounds);
+    const p2c: Vector2 = p2.coordinatesTransform(bounds, canvasBounds);
+
+    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.lineWidth = 3;
+    context.beginPath();
+    context.moveTo(p1c.x, p1c.y);
+    context.lineTo(p2c.x, p2c.y);
+    context.stroke();
+
+    if (this.fillError) {
+      context.fillStyle = Colors.redColor.value.toCSS(false);
+    } else {
+      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+    }
+    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.lineWidth = 2;
+    context.beginPath();
+    context.arc(p1c.x, p1c.y, 7, 0, 2 * Math.PI);
+    context.fill();
+    context.stroke();
+
+    if (this.fillError) {
+      context.fillStyle = Colors.redColor.value.toCSS(false);
+    } else {
+      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+    }
+    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.lineWidth = 2;
+    context.beginPath();
+    context.arc(p2c.x, p2c.y, 7, 0, 2 * Math.PI);
+    context.fill();
+    context.stroke();
+  }
+
+  public get point(): Vector2 {
+    return new Vector2(this.x, Math.sin(this.x));
+  }
+
+  public get errorPoint1(): Vector2 {
+    return new Vector2(this.x + this.dx, Math.sin(this.x + this.dx));
+  }
+
+  public get errorPoint2(): Vector2 {
+    return new Vector2(this.x + this.dx, Math.sin(this.x) + this.dx * Math.cos(this.x));
+  }
+
+  public matchesError(p1: Vector2): boolean {
+    const p2: Vector2 = taylortan.errorPoint1.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+    const p3: Vector2 = taylortan.errorPoint2.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+    return p1.distance(p2) < 10 || p1.distance(p3) < 10;
+  }
 }
-errorVector.on('mousedrag', updateDt);
-constrainedPointFunction.on('mousedrag', updateDt);
-constrainedPointTangent.on('mousedrag', updateDt);
 
-let mouseOver = false;
-let mouseDown = false;
+const canvas: Canvas = new Canvas('canvas');
+canvas.scale = 3;
+const taylortan = new Taylortan();
+canvas.addObject(taylortan);
 
-function updateCursorStyle(): void {
-  if (mouseDown) {
+canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
+
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+
+  const p1: Vector2 = new Vector2(x, y);
+  if (mouseDownMain) {
+    taylortan.x = p1.coordinatesTransform(canvas.canvasBounds, canvas.bounds).x;
+  } else if (mouseDownError) {
+    taylortan.dx = p1.coordinatesTransform(canvas.canvasBounds, canvas.bounds).x - taylortan.x;
+  } else {
+    const p2: Vector2 = taylortan.point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+
+    if (p1.distance(p2) < 10) {
+      taylortan.fill = true;
+      document.body.style.cursor = 'grab';
+    } else if (taylortan.matchesError(p1)) {
+      taylortan.fillError = true;
+      document.body.style.cursor = 'grab';
+    } else {
+      taylortan.fill = false;
+      taylortan.fillError = false;
+      document.body.style.cursor = '';
+    }
+  }
+
+});
+
+
+let mouseDownMain: boolean = false;
+let mouseDownError: boolean = false;
+
+canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
+
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+
+  const p1: Vector2 = new Vector2(x, y);
+  const p2: Vector2 = taylortan.point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+
+  if (p1.distance(p2) < 10) {
+    taylortan.fill = true;
+    taylortan.fillError = false;
     document.body.style.cursor = 'grabbing';
-  } else if (mouseOver) {
+    mouseDownMain = true;
+  } else if (taylortan.matchesError(p1)) {
+    taylortan.fill = false;
+    taylortan.fillError = true;
+    document.body.style.cursor = 'grabbing';
+    mouseDownError = true;
+  }
+
+});
+
+canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
+  mouseDownMain = false;
+  mouseDownError = false;
+
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+
+  const p1: Vector2 = new Vector2(x, y);
+  const p2: Vector2 = taylortan.point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+
+  if (p1.distance(p2) < 10) {
+    taylortan.fill = true;
+    taylortan.fillError = false;
+    document.body.style.cursor = 'grab';
+  } else if (taylortan.matchesError(p1)) {
+    taylortan.fill = false;
+    taylortan.fillError = true;
     document.body.style.cursor = 'grab';
   } else {
+    taylortan.fill = false;
+    taylortan.fillError = false;
     document.body.style.cursor = '';
   }
-}
-errorVector.on('mouseenter', (): void => {
-  mouseOver = true;
-  updateCursorStyle();
-});
-errorVector.on('mouseleave', (): void => {
-  mouseOver = false;
-  updateCursorStyle();
-});
-errorVector.on('mousedown', (): void => {
-  mouseDown = true;
-  updateCursorStyle();
-});
-graphingCalculator.on('mouseup', (): void => {
-  mouseDown = false;
-  updateCursorStyle();
 });
 
-// Create and add labels
-const approixationLabel = new vima.TextGraphic({
-  content: 'f(t)+Δtf\'(t)',
-  fontFamily: 'Latin Modern Roman',
-  position: constrainedPointTangent.positionVariable,
-  fontWeight: 'bold',
-  fontSize: 18
-});
-const exactLabel = new vima.TextGraphic({
-  content: 'f(t+Δt)',
-  fontFamily: 'Latin Modern Roman',
-  position: constrainedPointFunction.positionVariable,
-  fontWeight: 'bold',
-  fontSize: 18
-});
-const fxLabel = new vima.TextGraphic({
-  content: 'f(t)',
-  fontFamily: 'Latin Modern Roman',
-  position: tangentPoint.positionVariable,
-  fontWeight: 'bold',
-  offset: new vima.Vector2(0, 0.15),
-  fontSize: 18
-});
-graphingCalculator.add(approixationLabel);
-graphingCalculator.add(exactLabel);
-graphingCalculator.add(fxLabel);
+canvas.canvasElement.addEventListener('touchstart', (event: TouchEvent) => {
 
-// Rotate labels when their positions change
-function getTangentAngleAt(x: number): number {
-  return Math.atan(Math.cos(x));
-}
-function getUnitCircleVectorAtAngle(angle: number): vima.Vector2 {
-  return new vima.Vector2(Math.cos(angle), Math.sin(angle));
-}
-function rotateExactLabel(): void {
-  const angle: number = getTangentAngleAt(
-    constrainedPointFunction.positionVariable.value.x);
-  exactLabel.rotation = angle * 180 / Math.PI;
-  if (constrainedPointTangent.position.y >
-    constrainedPointFunction.position.y) {
-    exactLabel.offset =
-      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
-  } else {
-    exactLabel.offset =
-      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
-  }
-}
-function rotateApproximationLabel(): void {
-  const angle: number = Math.atan(Math.cos(tangentPointX.value));
-  approixationLabel.rotation = angle * 180 / Math.PI;
-  if (constrainedPointTangent.position.y >
-    constrainedPointFunction.position.y) {
-    approixationLabel.offset =
-      getUnitCircleVectorAtAngle(angle + Math.PI / 2).multiply(0.15);
-  } else {
-    approixationLabel.offset =
-      getUnitCircleVectorAtAngle(angle - Math.PI / 2).multiply(0.15);
-  }
-}
-function rotateLabels(): void {
-  rotateApproximationLabel();
-  rotateExactLabel();
-}
-tangentPointX.register(rotateLabels);
-constrainedPointTangent.positionVariable.register(rotateLabels);
-rotateLabels();
+  if (event.cancelable) event.preventDefault();
+  else return;
 
-let touchingTangentPoint = false;
-let touchingError = false;
+  const [x, y] = [
+    event.touches[0].pageX - canvas.canvasElement.offsetLeft,
+    event.touches[0].pageY - canvas.canvasElement.offsetTop
+  ];
+  const p1: Vector2 = new Vector2(x, y);
 
-// On touch devices use the entire screen as touch input
-graphingCalculator.canvas.addEventListener('touchstart', () => {
-  const x = graphingCalculator.mousePosition.x;
-  const middle = (tangentPoint.position.x + xPlusDt.value) / 2;
-  if (tangentPoint.position.x < constrainedPointFunction.position.x) {
-    var compare = (a: number, b: number): boolean => a < b;
+  const xb: number = p1.coordinatesTransform(canvas.canvasBounds, canvas.bounds).x;
+
+  if ((taylortan.dx < 0 && xb < taylortan.x + taylortan.dx / 2) ||
+      (taylortan.dx > 0 && xb > taylortan.x + taylortan.dx / 2))
+  {
+    taylortan.fill = false;
+    taylortan.fillError = true;
+    document.body.style.cursor = 'grabbing';
+    mouseDownError = true;
   } else {
-    var compare = (a: number, b: number): boolean => a > b;
+    taylortan.fill = true;
+    taylortan.fillError = false;
+    document.body.style.cursor = 'grabbing';
+    mouseDownMain = true;
   }
-  if (compare(x, middle)) {
-    touchingTangentPoint = true;
-    tangentPoint.x = graphingCalculator.mousePosition.x
+
+});
+
+canvas.canvasElement.addEventListener('touchmove', (event: TouchEvent) => {
+
+  if (event.cancelable) event.preventDefault();
+  else return;
+
+  const [x, y] = [
+    event.touches[0].pageX - canvas.canvasElement.offsetLeft,
+    event.touches[0].pageY - canvas.canvasElement.offsetTop
+  ];
+
+  const p1: Vector2 = new Vector2(x, y);
+  if (mouseDownMain) {
+    taylortan.x = p1.coordinatesTransform(canvas.canvasBounds, canvas.bounds).x;
+  } else if (mouseDownError) {
+    taylortan.dx = p1.coordinatesTransform(canvas.canvasBounds, canvas.bounds).x - taylortan.x;
   } else {
-    touchingError = true;
-    xPlusDt.value = graphingCalculator.mousePosition.x;
-    dt = xPlusDt.value - tangentPoint.position.x;
+    const p2: Vector2 = taylortan.point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+
+    if (p1.distance(p2) < 10) {
+      taylortan.fill = true;
+      document.body.style.cursor = 'grab';
+    } else if (taylortan.matchesError(p1)) {
+      taylortan.fillError = true;
+      document.body.style.cursor = 'grab';
+    } else {
+      taylortan.fill = false;
+      taylortan.fillError = false;
+      document.body.style.cursor = '';
+    }
   }
+
 });
-graphingCalculator.canvas.addEventListener('touchmove', () => {
-  if (touchingTangentPoint) {
-    tangentPoint.x = graphingCalculator.mousePosition.x
-  } else if (touchingError) {
-    xPlusDt.value = graphingCalculator.mousePosition.x;
-    dt = xPlusDt.value - tangentPoint.position.x;
-  }
+
+canvas.canvasElement.addEventListener('touchend', (_: TouchEvent) => {
+  mouseDownMain = false;
+  mouseDownError = false;
+  taylortan.fill = taylortan.fillError = false;
 });
-graphingCalculator.canvas.addEventListener('touchend', () => {
-  touchingTangentPoint = touchingError = false;
-});
+
+  // function loop() {
+
+  //   // Clear
+  //   context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+  //   context.fillRect(0, 0, canvas.width, canvas.height);
+
+  //   let slope = (f(x0 + 1) - f(x0 - 1)) / 2;
+
+
+  //   // Draw error
+  //   let dt: number = 200;
+  //   context.lineWidth = 4;
+  //   context.strokeStyle = 'salmon';
+  //   context.beginPath();
+  //   context.moveTo(x0 + dt, f(x0 + dt));
+  //   context.lineTo(x0 + dt, f(x0) + slope * dt);
+  //   context.stroke();
+
+  //   context.lineWidth = 2;
+
+  //   // Draw f
+  //   context.strokeStyle = Colors.mainColor.value.toCSS(false);
+  //   context.beginPath();
+  //   for (let x = 0; x <= canvas.width + 10; x += 5) {
+  //     context.lineTo(x, f(x));
+  //   }
+  //   context.stroke();
+
+  //   // Draw tangent
+  //   context.strokeStyle = 'DodgerBlue';
+  //   context.beginPath();
+  //   context.moveTo(x0, f(x0));
+  //   context.lineTo(canvas.width, f(x0) + slope * (canvas.width - x0));
+  //   context.moveTo(x0, f(x0));
+  //   context.lineTo(0, f(x0) - slope * x0);
+  //   context.stroke();
+
+  //   const textDistance = 30
+
+  //   // Draw f(x) text
+  //   context.textBaseline = 'middle';
+  //   context.fillStyle = Colors.mainColor.value.toCSS(false);
+  //   context.textAlign = 'center';
+  //   context.font = '21px "Latin Modern Roman"';
+  //   context.fillText('f(t)', x0, f(x0) - textDistance);
+  //   let direction = 1;
+  //   if (f(x0) + dt * slope - f(x0 + dt) < 0) {
+  //     direction = -1;
+  //   }
+
+  //   context.save();
+  //   context.translate(x0 + dt, f(x0) + dt * slope + textDistance * direction);
+  //   context.rotate(Math.atan(slope));
+  //   context.fillText('f(t) + Δt f\'(t)', 0, 0);
+  //   context.restore();
+
+  //   context.save();
+  //   context.translate(x0 + dt, f(x0 + dt) - textDistance * direction);
+  //   context.rotate(Math.atan((f(x0 + dt + 1) - f(x0 + dt - 1)) / 2));
+  //   context.fillText('f(t + Δt)', 0, 0);
+  //   context.restore();
+
+  //   // Draw dots
+  //   context.beginPath();
+  //   context.fillStyle = Colors.mainColor.value.toCSS(false);
+  //   context.arc(x0, f(x0), 4, 0, 2 * Math.PI);
+  //   context.arc(x0 + dt, f(x0) + dt * slope, 4, 0, 2 * Math.PI);
+  //   context.fill();
+
+  //   context.beginPath();
+  //   context.fillStyle = Colors.mainColor.value.toCSS(false);
+  //   context.arc(x0 + dt, f(x0 + dt), 4, 0, 2 * Math.PI);
+  //   context.fill();
+
+  //   window.requestAnimationFrame(loop);
+  // }
+
+  // loop();
+
+  // End script scope
+  })();
