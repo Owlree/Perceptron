@@ -297,6 +297,9 @@ window.document.addEventListener('mousemove', (event: MouseEvent) => {
 window.document.addEventListener('touchstart', (event: TouchEvent): void => {
   if (canvas.paused) return;
 
+  if (!event.cancelable) return;
+  event.preventDefault();
+
   const [x, y] = [
     event.touches[0].pageX - canvas.canvasElement.offsetLeft,
     event.touches[0].pageY - canvas.canvasElement.offsetTop
