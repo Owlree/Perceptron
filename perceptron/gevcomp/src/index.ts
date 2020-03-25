@@ -303,28 +303,20 @@ let newVerletParticle: VerletParticle | undefined = undefined;
 let newEulerParticle: EulerParticle | undefined = undefined;
 
 canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
-
   if (event.button !== 0) return;
 
-  if (newVerletParticle !== undefined && newEulerParticle !== undefined) {
-    canvas.removeOBject(newVerletParticle);
-    canvas.removeOBject(newEulerParticle);
-    newVerletParticle = newEulerParticle = undefined;
+  if (newVerletParticle === undefined && newEulerParticle === undefined) {
+    canvas.canvasElement.style.cursor = 'move';
+    const mousePositionCanvas: Vector2 = getMousePositionFromEvent(event);
+    const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
+    newVerletParticle = new VerletParticle({ position: mousePosition, velocity: new Vector2(0, 0), active: false });
+    canvas.addObject(newVerletParticle);
+    newEulerParticle = new EulerParticle({ position: mousePosition.multiply(-1), velocity: new Vector2(0, 0), active: false });
+    canvas.addObject(newEulerParticle);
   }
-
-  canvas.canvasElement.style.cursor = 'move';
-
-  const mousePositionCanvas: Vector2 = getMousePositionFromEvent(event);
-  const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
-
-  newVerletParticle = new VerletParticle({ position: mousePosition, velocity: new Vector2(0, 0), active: false });
-  canvas.addObject(newVerletParticle);
-  newEulerParticle = new EulerParticle({ position: mousePosition.multiply(-1), velocity: new Vector2(0, 0), active: false });
-  canvas.addObject(newEulerParticle);
 });
 
 canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
-
   if (newVerletParticle !== undefined && newEulerParticle !== undefined) {
     const mousePositionCanvas: Vector2 = getMousePositionFromEvent(event);
     const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
