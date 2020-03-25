@@ -20,6 +20,17 @@ var Canvas = /** @class */ (function () {
         });
         this.resetBounds();
         this.beginLoop();
+        window.addEventListener('message', function (event) {
+            switch (event.data) {
+                case 'start':
+                    _this.play();
+                    break;
+                case 'pause':
+                    _this.pause();
+                    document.body.style.cursor = '';
+                    break;
+            }
+        });
     }
     Canvas.prototype.resetBounds = function () {
         this._canvasElement.width = this._canvasElement.clientWidth;

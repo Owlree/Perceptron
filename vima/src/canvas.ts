@@ -27,6 +27,18 @@ export class Canvas {
     });
     this.resetBounds();
     this.beginLoop();
+
+    window.addEventListener('message', (event: MessageEvent) => {
+      switch (event.data) {
+        case 'start':
+          this.play();
+          break;
+        case 'pause':
+          this.pause();
+          document.body.style.cursor = '';
+          break;
+      }
+    });
   }
 
   private resetBounds(): void {

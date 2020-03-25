@@ -483,13 +483,6 @@ window.document.addEventListener('touchend', () => {
 
 window.addEventListener('message', (event: MessageEvent) => {
   switch (event.data) {
-    case 'start':
-      canvas.play();
-      break;
-    case 'pause':
-      canvas.pause();
-      document.body.style.cursor = '';
-      break;
     case 'rope':
       canvas.removeOBject(softBody);
       softBody = new RopeObject();
