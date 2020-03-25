@@ -1,136 +1,212 @@
-import * as vima from 'vima';
+import { Colors, Rectangle, Canvas, CanvasObject, Vector2 } from 'vima';
 
-interface PointWithMetadata {
-  point: vima.FreePointGraphic;
-  s0: vima.Vector2; // Initial position
-  v0: vima.Vector2; // Initial velocity
-  t0: number; // Initial time (spawn time)
+(function() {
+
+const TRACE: boolean = false;
+
+interface ParticleProps {
+  active?: boolean;
+  mass?: number;
+  position: Vector2;
+  velocity: Vector2;
 }
 
-const bounds: vima.Rectangle = new vima.Rectangle(
-  new vima.Vector2(-2.4, 1.2), new vima.Vector2(2.4, -1.2));
+class EulerParticle extends CanvasObject {
 
-// Create an instance of the graphing calculator
-const graphingCalculator = new vima.GraphingCalculator('canvas', bounds);
+  private _active: boolean;
+  private _position: Vector2;
+  private _time: number = 0;
+  private _velocity0: Vector2;
+  private _position0: Vector2;
+  private _trace: Array<Vector2>;
 
-// Constant acceleration vector (gravitational)
-const a0: vima.Vector2 = new vima.Vector2(0, -1);
+  constructor({active = true, position, velocity}: ParticleProps) {
+    super();
+    this._active = active;
+    this._position0 = this._position = position;
+    this._velocity0 = velocity;
 
-// An array of balls, each with a point and some metadata
-let balls: Array<PointWithMetadata> = [];
-
-let currentTime: number = 0;
-graphingCalculator.on('frame', ({time}: vima.Event) => {
-
-  // Update the current time
-  currentTime = time;
-
-  // Update the positions of all balls
-  for (let {point, s0, t0, v0} of balls) {
-    const t: number = time - t0;
-    const x: number = s0.x + v0.x * t + a0.x * t * t / 2;
-    const y: number = s0.y + v0.y * t + a0.y * t * t / 2;
-    point.position = new vima.Vector2(x, y);
+    this._trace = [];
   }
 
-  // Remove balls that are out of bounds and irrecuperrable
-  balls = balls.filter(({point}) => {
-    const isOut: boolean =
-      bounds.left   > point.bounds.right ||
-      bounds.bottom > point.bounds.top   ||
-      bounds.right  < point.bounds.left;
-    if (isOut) {
-      graphingCalculator.remove(point);
+  public set velocity(velocity: Vector2) {
+    this._velocity0 = velocity;
+  }
+
+  public get position(): Vector2 {
+    return this._position;
+  }
+
+  public activate() {
+    this._active = true;
+  }
+
+  public deactivate() {
+    this._active = false;
+  }
+
+  public update(dt: number, _: number): void {
+
+    if (!this._active) return;
+
+    this._time += dt;
+
+    const acceleration: Vector2 = new Vector2(0, -10);
+
+    this._position = this._position0.add(
+      this._velocity0.multiply(this._time)
+    ).add(
+      acceleration.multiply(
+        Math.pow(this._time, 2) / 2));
+
+    if (this._position.x < -canvas.bounds.width    ||
+        this._position.x > 2 * canvas.bounds.width ||
+        this._position.y < -canvas.bounds.height   ||
+        this._position.y > 2 * canvas.bounds.height)
+    {
+      canvas.removeOBject(this);
     }
-    return !isOut;
-  });
+  }
+
+
+  public draw(context: CanvasRenderingContext2D, _: Rectangle, __: Rectangle) {
+    const positionCanvas: Vector2 = this._position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+
+    if (!this._active) {
+      const velocity: Vector2 = this._velocity0;
+      const plusVelocity: Vector2 = this._position.add(velocity);
+      const plusVelocityCanvas: Vector2 = plusVelocity.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+
+      context.strokeStyle = Colors.blueColor.value.toCSS(false);
+      context.lineWidth = 2;
+      context.lineCap = 'round';
+      context.beginPath();
+      context.moveTo(positionCanvas.x, positionCanvas.y);
+      context.lineTo(plusVelocityCanvas.x, plusVelocityCanvas.y);
+      context.stroke();
+
+      const velocityDirectionCanvas: Vector2 = plusVelocityCanvas.subtract(positionCanvas).normalize();
+      const velocityDirectionPerpendicularCanvas: Vector2 = new Vector2(velocityDirectionCanvas.y, -velocityDirectionCanvas.x);
+      const triangleP1: Vector2 = plusVelocityCanvas.add(velocityDirectionCanvas.multiply(17.3205080757));
+      const triangleP2: Vector2 = plusVelocityCanvas.add(velocityDirectionPerpendicularCanvas.multiply(10));
+      const triangleP3: Vector2 = plusVelocityCanvas.add(velocityDirectionPerpendicularCanvas.multiply(-10));
+
+      context.fillStyle = Colors.blueColor.value.toCSS(false);
+      context.beginPath();
+      context.moveTo(plusVelocityCanvas.x, plusVelocityCanvas.y);
+      context.lineTo(triangleP1.x, triangleP1.y);
+      context.lineTo(triangleP2.x, triangleP2.y);
+      context.lineTo(triangleP3.x, triangleP3.y);
+      context.lineTo(triangleP1.x, triangleP1.y);
+      context.closePath();
+      context.fill();
+    }
+
+    context.fillStyle = Colors.blueColor.value.toCSS(false);
+    context.beginPath();
+    context.arc(positionCanvas.x, positionCanvas.y, 10, 0, 2 * Math.PI);
+    context.fill();
+
+    if (TRACE) {
+      context.strokeStyle = Colors.blueColor.value.toCSS(false);
+      context.lineWidth = 1;
+      context.beginPath();
+      for (let point of this._trace) {
+        const canvasPosition: Vector2 = point.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+        context.lineTo(canvasPosition.x, canvasPosition.y);
+      }
+      context.stroke();
+    }
+  }
+}
+
+const canvas: Canvas = new Canvas('canvas');
+
+canvas.canvasElement.style.cursor = 'pointer';
+
+function getMousePositionFromEvent(event: MouseEvent): Vector2 {
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+  return new Vector2(x, y);
+}
+
+function getTouchPositionFromEvent(event: TouchEvent): Vector2 {
+  const [x, y] = [
+    event.touches[0].pageX - canvas.canvasElement.offsetLeft,
+    event.touches[0].pageY - canvas.canvasElement.offsetTop
+  ];
+  return new Vector2(x, y);
+}
+
+let newEulerParticle: EulerParticle | undefined = undefined;
+
+canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
+  if (event.button !== 0) return;
+
+  if (newEulerParticle === undefined) {
+    canvas.canvasElement.style.cursor = 'move';
+    const mousePositionCanvas: Vector2 = getMousePositionFromEvent(event);
+    const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
+    newEulerParticle = new EulerParticle({ position: mousePosition, velocity: new Vector2(0, 0), active: false });
+    canvas.addObject(newEulerParticle);
+  }
 });
 
-let fromPoint: vima.FreePointGraphic | undefined = undefined;
-let toPoint: vima.FreePointGraphic | undefined = undefined;
-let vector: vima.VectorGraphic | undefined = undefined;
+canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
+  if (newEulerParticle !== undefined) {
+    const mousePositionCanvas: Vector2 = getMousePositionFromEvent(event);
+    const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
+    newEulerParticle.velocity = mousePosition.subtract(newEulerParticle.position);
+  }
+});
 
-const mouseDown = (event: MouseEvent | TouchEvent) => {
+canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
 
-  // Do not interrupt scrolling on mobile
+  if (event.button !== 0) return;
+
+  canvas.canvasElement.style.cursor = 'pointer';
+  if (newEulerParticle !== undefined) {
+    newEulerParticle.activate();
+    newEulerParticle = undefined;
+  }
+});
+
+canvas.canvasElement.addEventListener('touchstart', (event: TouchEvent) => {
+
   if (!event.cancelable) return;
-
   event.preventDefault();
 
-  // Create a point to represent the initial position
-  fromPoint = new vima.FreePointGraphic({
-    x: graphingCalculator.mousePosition.x,
-    y: graphingCalculator.mousePosition.y,
-    interactive: false
-  });
-
-  // Create a point to represent the head of the initial vector velocity
-  toPoint = new vima.FreePointGraphic({
-    type: vima.PointGraphicType.Triangle,
-    x: graphingCalculator.mousePosition.x,
-    y: graphingCalculator.mousePosition.y,
-    interactive: false
-  });
-
-  // Create a vector graphing to represnt the initial velocity
-  vector = new vima.VectorGraphic(fromPoint, toPoint);
-
-  // Add all of them to the graphing calculator
-  graphingCalculator.add(vector);
-  graphingCalculator.add(toPoint);
-  graphingCalculator.add(fromPoint);
-};
-
-const mouseMove = (event: MouseEvent | TouchEvent) => {
-
-  if (event.cancelable) {
-    event.preventDefault();
+  if (newEulerParticle !== undefined) {
+    canvas.removeOBject(newEulerParticle);
+    newEulerParticle = undefined;
   }
 
-  if (toPoint !== undefined) {
-    toPoint.position = graphingCalculator.mousePosition;
+  const mousePositionCanvas: Vector2 = getTouchPositionFromEvent(event);
+  const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
+
+  newEulerParticle = new EulerParticle({ position: mousePosition, velocity: new Vector2(0, 0), active: false });
+  canvas.addObject(newEulerParticle);
+});
+
+canvas.canvasElement.addEventListener('touchmove', (event: TouchEvent) => {
+
+  if (!event.cancelable) return;
+  event.preventDefault();
+
+  if (newEulerParticle !== undefined) {
+    const mousePositionCanvas: Vector2 = getTouchPositionFromEvent(event);
+    const mousePosition: Vector2 = mousePositionCanvas.coordinatesTransform(canvas.canvasBounds, canvas.bounds);
+    newEulerParticle.velocity = mousePosition.subtract(newEulerParticle.position);
   }
-};
+});
 
-const mouseUp = (_: MouseEvent | TouchEvent) => {
+canvas.canvasElement.addEventListener('touchend', (_: TouchEvent) => {
+  if (newEulerParticle !== undefined) {
+    newEulerParticle.activate();
+    newEulerParticle = undefined;
+  }
+});
 
-  // Guard against these object being absent
-  if (fromPoint === undefined ||
-      toPoint   === undefined ||
-      vector    === undefined) return;
-
-  // Spawn a new ball and retain some metadata
-  let newBall = {
-    point: new vima.FreePointGraphic({interactive: false}),
-    s0: fromPoint.position,
-    v0: vector.vector2,
-    t0: currentTime
-  };
-  balls.push(newBall);
-  graphingCalculator.add(newBall.point);
-
-  // Make sure to unregister callback in order to avoid memory leaks
-  fromPoint.unregisterAllVariableCallbacks();
-  toPoint.unregisterAllVariableCallbacks();
-  vector.unregisterAllVariableCallbacks();
-
-  // Remove all from the graphing calculator
-  graphingCalculator.remove(fromPoint);
-  graphingCalculator.remove(toPoint);
-  graphingCalculator.remove(vector);
-
-  // Delete all references
-  fromPoint = toPoint = vector = undefined;
-};
-
-if ('ontouchstart' in window) {
-  // TODO (Owlree) Implement multitouch
-  graphingCalculator.canvas.addEventListener('touchstart', mouseDown);
-  graphingCalculator.canvas.addEventListener('touchmove', mouseMove);
-  graphingCalculator.canvas.addEventListener('touchend', mouseUp);
-} else {
-  graphingCalculator.canvas.addEventListener('mousedown', mouseDown);
-  graphingCalculator.canvas.addEventListener('mousemove', mouseMove);
-  graphingCalculator.canvas.addEventListener('mouseup', mouseUp);
-  graphingCalculator.canvas.addEventListener('mouseleave', mouseUp);
-}
+})();
