@@ -59,6 +59,7 @@ var Canvas = /** @class */ (function () {
                     }
                     done += 1;
                 }
+                _this._objects.sort(function (a, b) { return (a.zIndex > b.zIndex) ? 1 : -1; });
                 for (var _b = 0, _c = _this._objects; _b < _c.length; _b++) {
                     var object = _c[_b];
                     object.draw(_this._context, _this._bounds, _this._canvasBounds);

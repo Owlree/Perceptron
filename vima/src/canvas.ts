@@ -81,6 +81,7 @@ export class Canvas {
           done += 1;
         }
 
+        this._objects.sort((a, b) => (a.zIndex > b.zIndex) ? 1 : -1)
         for (let object of this._objects) {
           object.draw(this._context, this._bounds, this._canvasBounds);
         }

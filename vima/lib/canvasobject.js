@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var CanvasObject = /** @class */ (function () {
     function CanvasObject() {
+        this.zIndex = 1;
         this.visible = true;
     }
     CanvasObject.prototype.update = function (_, __) { };
