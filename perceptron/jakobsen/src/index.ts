@@ -17,10 +17,10 @@ class Jakobsen extends CanvasObject {
     super();
 
     const positions: Array<number> = [];
-    this._desiredSegmentLength = 0.04 / 2;
+    this._desiredSegmentLength = 0.1 / 2;
     this._timeElapsed = 0;
 
-    for (let i = 0; i < 1; i += 0.04) {
+    for (let i = 0; i < 1; i += 0.1) {
       positions.push(i);
     }
     positions.push(1);
@@ -90,11 +90,14 @@ class Jakobsen extends CanvasObject {
       const color: Color = Colors.blueColor.mix(Colors.redColor, percentage);
 
       context.fillStyle = color.toCSS();
+      context.strokeStyle = Colors.backgroundColor.toCSS();
+      context.lineWidth = 2;
 
       const canvasBegin: number = canvas.canvasBounds.left + positions[i] * canvas.canvasBounds.width;
       const canvasEnd: number = canvas.canvasBounds.left + positions[i + 1] * canvas.canvasBounds.width;
 
       context.fillRect(Math.floor(canvasBegin), canvas.canvasBounds.top, Math.ceil(canvasEnd - canvasBegin), canvas.canvasBounds.height);
+      context.strokeRect(Math.floor(canvasBegin), canvas.canvasBounds.top, Math.ceil(canvasEnd - canvasBegin), canvas.canvasBounds.height);
     }
 
   }
@@ -104,7 +107,7 @@ const canvas = new Canvas('canvas');
 canvas.canvasElement.style.cursor = 'pointer';
 let jakobsen = new Jakobsen();
 canvas.addObject(jakobsen);
-let paused: boolean = false;
+let paused: boolean = true;
 
 
 canvas.canvasElement.addEventListener('dblclick', (_: MouseEvent) => {
