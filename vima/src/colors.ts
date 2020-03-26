@@ -1,45 +1,39 @@
-import * as paper from 'paper';
-
-import { WritableVariable } from './writablevariable';
+import { Color } from './color';
 
 /**
  * To be used as the main color, say for unimportant / unremarkable objects.
  */
-export const mainColor: WritableVariable<paper.Color> =
-  new WritableVariable(new paper.Color('black'));
+export let mainColor: Color = new Color(0, 0, 0);
 
 /**
  * To be used as a background color.
  */
-export const backgroundColor: WritableVariable<paper.Color> =
-  new WritableVariable(new paper.Color('black'));
+export let backgroundColor: Color = new Color(255, 255, 255);
 
 /**
  * A red shade to be used for highlighting various objects.
  */
-export const redColor: WritableVariable<paper.Color> = new WritableVariable(
-  new paper.Color('salmon'));
+export let redColor: Color = new Color(250, 128, 114);
 
 /**
  * A blue shade to be used for highlighting various objects.
  */
-export const blueColor: WritableVariable<paper.Color> = new WritableVariable(
-  new paper.Color('dodgerblue'));
+export let blueColor: Color = new Color(30, 144, 255);
 
 /**
  * Changes all colors to dark their dark mode.
  */
 function activateDarkMode(): void {
-  mainColor.value = new paper.Color('#FAFAFA');
-  backgroundColor.value = new paper.Color('#121212');
+  mainColor = new Color(250, 250, 250);
+  backgroundColor = new Color(18, 18, 18);
 }
 
 /**
  * Changes all colors to their light mode.
  */
 function activateLightMode(): void {
-  mainColor.value = new paper.Color('black');
-  backgroundColor.value = new paper.Color('white');
+  mainColor = new Color(0, 0, 0);
+  backgroundColor = new Color(255, 255, 255);
 }
 
 /**

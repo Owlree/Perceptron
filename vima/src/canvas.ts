@@ -66,7 +66,7 @@ export class Canvas {
   }
 
   private clear() {
-    this._context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+    this._context.fillStyle = Colors.backgroundColor.toCSS();
     this._context.fillRect(0, 0, this._canvasElement.width, this._canvasElement.height);
   }
 

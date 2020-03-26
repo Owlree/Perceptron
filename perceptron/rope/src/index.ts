@@ -114,8 +114,8 @@ class VerletParticle {
 
     const canvasPosition: Vector2 =
       this.position.coordinatesTransform(bounds, canvasBounds);
-    context.fillStyle = this.fill ? Colors.blueColor.value.toCSS(false):
-                                    Colors.backgroundColor.value.toCSS(false);
+    context.fillStyle = this.fill ? Colors.blueColor.toCSS():
+                                    Colors.backgroundColor.toCSS();
     context.beginPath();
     context.arc(canvasPosition.x, canvasPosition.y, 10, 0, 2 * Math.PI);
     context.fill();
@@ -223,7 +223,7 @@ class ClothObject extends SoftBodyObject {
               bounds:       Rectangle,
               canvasBounds: Rectangle): void
   {
-    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.strokeStyle = Colors.blueColor.toCSS();
     context.lineCap = 'round';
     context.lineWidth = 2;
 
@@ -314,7 +314,7 @@ class RopeObject extends SoftBodyObject {
               bounds:       Rectangle,
               canvasBounds: Rectangle): void
   {
-    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.strokeStyle = Colors.blueColor.toCSS();
     context.lineCap = 'round';
     context.lineWidth = 2;
 

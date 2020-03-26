@@ -33,8 +33,8 @@ class Taylortan extends CanvasObject {
               bounds:       Rectangle,
               canvasBounds: Rectangle)
   {
-    context.strokeStyle = Colors.mainColor.value.toCSS(false);
-    context.lineWidth = 2;
+    context.strokeStyle = Colors.mainColor.toCSS();
+    context.lineWidth = 1;
     context.beginPath();
     for (let i = bounds.left; i <= bounds.right + 0.1; i += 0.1) {
       const point = new Vector2(i, Math.sin(i)).coordinatesTransform(bounds, canvasBounds);
@@ -50,7 +50,7 @@ class Taylortan extends CanvasObject {
     const t1: Vector2 = point.subtract(slope).coordinatesTransform(bounds, canvasBounds);
     const t2: Vector2 = point.add(slope).coordinatesTransform(bounds, canvasBounds);
 
-    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.strokeStyle = Colors.blueColor.toCSS();
     context.lineWidth = 2;
     context.beginPath();
     context.moveTo(t1.x, t1.y);
@@ -58,11 +58,11 @@ class Taylortan extends CanvasObject {
     context.stroke();
 
     if (this.fill) {
-      context.fillStyle = Colors.blueColor.value.toCSS(false);
+      context.fillStyle = Colors.blueColor.toCSS();
     } else {
-      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+      context.fillStyle = Colors.backgroundColor.toCSS();
     }
-    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.strokeStyle = Colors.blueColor.toCSS();
     context.lineWidth = 2;
     context.beginPath();
     context.arc(pointCanvas.x, pointCanvas.y, 10, 0, 2 * Math.PI);
@@ -74,7 +74,7 @@ class Taylortan extends CanvasObject {
     const p1c: Vector2 = p1.coordinatesTransform(bounds, canvasBounds);
     const p2c: Vector2 = p2.coordinatesTransform(bounds, canvasBounds);
 
-    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.strokeStyle = Colors.redColor.toCSS();
     context.lineWidth = 3;
     context.beginPath();
     context.moveTo(p1c.x, p1c.y);
@@ -82,11 +82,11 @@ class Taylortan extends CanvasObject {
     context.stroke();
 
     if (this.fillError) {
-      context.fillStyle = Colors.redColor.value.toCSS(false);
+      context.fillStyle = Colors.redColor.toCSS();
     } else {
-      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+      context.fillStyle = Colors.backgroundColor.toCSS();
     }
-    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.strokeStyle = Colors.redColor.toCSS();
     context.lineWidth = 2;
     context.beginPath();
     context.arc(p1c.x, p1c.y, 7, 0, 2 * Math.PI);
@@ -94,11 +94,11 @@ class Taylortan extends CanvasObject {
     context.stroke();
 
     if (this.fillError) {
-      context.fillStyle = Colors.redColor.value.toCSS(false);
+      context.fillStyle = Colors.redColor.toCSS();
     } else {
-      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+      context.fillStyle = Colors.backgroundColor.toCSS();
     }
-    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.strokeStyle = Colors.redColor.toCSS();
     context.lineWidth = 2;
     context.beginPath();
     context.arc(p2c.x, p2c.y, 7, 0, 2 * Math.PI);
@@ -110,7 +110,7 @@ class Taylortan extends CanvasObject {
     context.save();
     context.translate(p2c.x, p2c.y);
     context.rotate(-Math.atan(Math.cos(this.x)));
-    context.fillStyle = Colors.mainColor.value.toCSS(false);
+    context.fillStyle = Colors.mainColor.toCSS();
     context.textBaseline = 'middle';
     context.textAlign = 'center';
     context.font = 'italic 19px "Latin Modern Roman"';
@@ -121,7 +121,7 @@ class Taylortan extends CanvasObject {
     context.save();
     context.translate(p1c.x, p1c.y);
     context.rotate(-Math.atan(Math.cos(p1.x)));
-    context.fillStyle = Colors.mainColor.value.toCSS(false);
+    context.fillStyle = Colors.mainColor.toCSS();
     context.textBaseline = 'middle';
     context.textAlign = 'center';
     context.font = 'italic 19px "Latin Modern Roman"';
@@ -134,7 +134,7 @@ class Taylortan extends CanvasObject {
     if (Math.abs(pointCanvas.x - p1c.x) > 50) {
       // Draw f(x) text
       context.textBaseline = 'middle';
-      context.fillStyle = Colors.mainColor.value.toCSS(false);
+      context.fillStyle = Colors.mainColor.toCSS();
       context.textAlign = 'center';
       context.font = 'italic 19px "Latin Modern Roman"';
       context.fillText('f(t)', pointCanvas.x, pointCanvas.y - 30);

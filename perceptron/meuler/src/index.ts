@@ -40,12 +40,7 @@ class SlopeField extends CanvasObject {
         const diff: Vector2 = p2.subtract(p1).normalize().multiply(len / 2);
         const cp1: Vector2 = canvasPoint.add(diff);
         const cp2: Vector2 = canvasPoint.subtract(diff);
-        const [r, g, b]: [number, number, number] = [
-          Colors.mainColor.value.red * 255,
-          Colors.mainColor.value.green * 255,
-          Colors.mainColor.value.blue * 255
-        ];
-        context.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.25)`;
+        context.strokeStyle = Colors.mainColor.withAlpha(0.25).toCSS();
         context.lineCap = 'round';
         context.lineWidth = 1;
         context.beginPath();
@@ -87,7 +82,7 @@ class Solutions extends CanvasObject {
     // Draw Euler solution
     context.beginPath();
     context.lineWidth = 2;
-    context.strokeStyle = Colors.redColor.value.toCSS(false);
+    context.strokeStyle = Colors.redColor.toCSS();
     for (let point of this._eulerSolutionPoints) {
       context.lineTo(point.x, point.y);
     }
@@ -99,9 +94,9 @@ class Solutions extends CanvasObject {
       context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
 
       if (this._eulerFillIndex !== undefined && this._eulerFillIndex === i) {
-        context.fillStyle = Colors.redColor.value.toCSS(false);
+        context.fillStyle = Colors.redColor.toCSS();
       } else {
-        context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+        context.fillStyle = Colors.backgroundColor.toCSS();
       }
 
       context.fill();
@@ -112,7 +107,7 @@ class Solutions extends CanvasObject {
     // Draw exact solution
     context.beginPath();
     context.lineWidth = 2;
-    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.strokeStyle = Colors.blueColor.toCSS();
     for (let point of this._exactSolutionPoints) {
       context.lineTo(point.x, point.y);
     }
@@ -122,12 +117,12 @@ class Solutions extends CanvasObject {
 
     context.beginPath();
     context.lineWidth = 2;
-    context.strokeStyle = Colors.blueColor.value.toCSS(false);
+    context.strokeStyle = Colors.blueColor.toCSS();
 
     if (this.fill) {
-      context.fillStyle = Colors.blueColor.value.toCSS(false);
+      context.fillStyle = Colors.blueColor.toCSS();
     } else {
-      context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+      context.fillStyle = Colors.backgroundColor.toCSS();
     }
     context.beginPath();
     context.arc(canvasPoint.x, canvasPoint.y, 10, 0, 2 * Math.PI);

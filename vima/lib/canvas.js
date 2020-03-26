@@ -47,7 +47,7 @@ var Canvas = /** @class */ (function () {
         configurable: true
     });
     Canvas.prototype.clear = function () {
-        this._context.fillStyle = Colors.backgroundColor.value.toCSS(false);
+        this._context.fillStyle = Colors.backgroundColor.toCSS();
         this._context.fillRect(0, 0, this._canvasElement.width, this._canvasElement.height);
     };
     Canvas.prototype.beginLoop = function () {

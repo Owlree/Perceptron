@@ -99,7 +99,7 @@ class VerletParticle extends CanvasObject {
       const plusVelocity: Vector2 = this._position.add(velocity);
       const plusVelocityCanvas: Vector2 = plusVelocity.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
 
-      context.strokeStyle = Colors.blueColor.value.toCSS(false);
+      context.strokeStyle = Colors.blueColor.toCSS();
       context.lineWidth = 2;
       context.lineCap = 'round';
       context.beginPath();
@@ -113,7 +113,7 @@ class VerletParticle extends CanvasObject {
       const triangleP2: Vector2 = plusVelocityCanvas.add(velocityDirectionPerpendicularCanvas.multiply(10));
       const triangleP3: Vector2 = plusVelocityCanvas.add(velocityDirectionPerpendicularCanvas.multiply(-10));
 
-      context.fillStyle = Colors.blueColor.value.toCSS(false);
+      context.fillStyle = Colors.blueColor.toCSS();
       context.beginPath();
       context.moveTo(plusVelocityCanvas.x, plusVelocityCanvas.y);
       context.lineTo(triangleP1.x, triangleP1.y);
@@ -124,13 +124,13 @@ class VerletParticle extends CanvasObject {
       context.fill();
     }
 
-    context.fillStyle = Colors.blueColor.value.toCSS(false);
+    context.fillStyle = Colors.blueColor.toCSS();
     context.beginPath();
     context.arc(positionCanvas.x, positionCanvas.y, 10, 0, 2 * Math.PI);
     context.fill();
 
     if (TRACE) {
-      context.strokeStyle = Colors.blueColor.value.toCSS(false);
+      context.strokeStyle = Colors.blueColor.toCSS();
       context.lineWidth = 1;
       context.beginPath();
       for (let point of this._trace) {
@@ -224,7 +224,7 @@ class EulerParticle extends CanvasObject {
       const plusVelocity: Vector2 = this._position.add(velocity);
       const plusVelocityCanvas: Vector2 = plusVelocity.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
 
-      context.strokeStyle = Colors.redColor.value.toCSS(false);
+      context.strokeStyle = Colors.redColor.toCSS();
       context.lineWidth = 2;
       context.lineCap = 'round';
       context.beginPath();
@@ -238,7 +238,7 @@ class EulerParticle extends CanvasObject {
       const triangleP2: Vector2 = plusVelocityCanvas.add(velocityDirectionPerpendicularCanvas.multiply(10));
       const triangleP3: Vector2 = plusVelocityCanvas.add(velocityDirectionPerpendicularCanvas.multiply(-10));
 
-      context.fillStyle = Colors.redColor.value.toCSS(false);
+      context.fillStyle = Colors.redColor.toCSS();
       context.beginPath();
       context.moveTo(plusVelocityCanvas.x, plusVelocityCanvas.y);
       context.lineTo(triangleP1.x, triangleP1.y);
@@ -249,13 +249,13 @@ class EulerParticle extends CanvasObject {
       context.fill();
     }
 
-    context.fillStyle = Colors.redColor.value.toCSS(false);
+    context.fillStyle = Colors.redColor.toCSS();
     context.beginPath();
     context.arc(positionCanvas.x, positionCanvas.y, 10, 0, 2 * Math.PI);
     context.fill();
 
     if (TRACE) {
-      context.strokeStyle = Colors.redColor.value.toCSS(false);
+      context.strokeStyle = Colors.redColor.toCSS();
       context.lineWidth = 1;
       context.beginPath();
       for (let point of this._trace) {
@@ -270,7 +270,7 @@ class EulerParticle extends CanvasObject {
 class Sun extends CanvasObject {
   public draw(context: CanvasRenderingContext2D, _: Rectangle, __: Rectangle) {
     const p: Vector2 = new Vector2(0, 0).coordinatesTransform(canvas.bounds, canvas.canvasBounds);
-    context.fillStyle = Colors.mainColor.value.toCSS(false);
+    context.fillStyle = Colors.mainColor.toCSS();
     context.beginPath();
     context.arc(p.x, p.y, 30, 0, 2 * Math.PI);
     context.fill();

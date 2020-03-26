@@ -1,18 +1,18 @@
-import { WritableVariable } from './writablevariable';
+import { Color } from './color';
 /**
  * To be used as the main color, say for unimportant / unremarkable objects.
  */
-export declare const mainColor: WritableVariable<paper.Color>;
+export declare let mainColor: Color;
 /**
  * To be used as a background color.
  */
-export declare const backgroundColor: WritableVariable<paper.Color>;
+export declare let backgroundColor: Color;
 /**
  * A red shade to be used for highlighting various objects.
  */
-export declare const redColor: WritableVariable<paper.Color>;
+export declare let redColor: Color;
 /**
  * A blue shade to be used for highlighting various objects.
  */
-export declare const blueColor: WritableVariable<paper.Color>;
+export declare let blueColor: Color;
 //# sourceMappingURL=colors.d.ts.map

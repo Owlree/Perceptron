@@ -1,122 +1,182 @@
-import { Colors } from 'vima';
+import { Color, Colors, CanvasObject, Rectangle, Canvas, Vector2 } from 'vima';
 
 // Script scope
 (function() {
 
-  function makeWorld(canvas: HTMLCanvasElement, initd: number, targd: number) {
+class Jakobsen extends CanvasObject {
 
-    // Create the 2D context used for drawing
-    let context: CanvasRenderingContext2D = canvas.getContext('2d')!;
+  private _timeElapsed: number;
+  private _desiredSegmentLength: number;
+  private _states: Array<{
+    positions: Array<number>;
+    segment: number;
+    steps: number;
+  }>;
 
-    // Set the proper size
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+  constructor() {
+    super();
 
-    let totalTime: number = 0;
-    let previousTime: number = new Date().getTime() / 1000.0;
-    let timeFloor: number = 0;
+    const positions: Array<number> = [];
+    this._desiredSegmentLength = 0.04 / 2;
+    this._timeElapsed = 0;
 
-    /**
-     * Clears the global context
-     * @param color Color to use for clearing
-     */
-    function clear(color: string) {
-      context.fillStyle = color;
-      context.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < 1; i += 0.04) {
+      positions.push(i);
     }
-    let seg: number = 0;
-    let positions: number[] = [];
-    function create() {
-      positions = [];
-      seg = 0;
-      for (let i = 0; i < 10; ++i) {
-        positions.push(canvas.width / 2 + initd * (i - 4.5));
-      }
+    positions.push(1);
 
-      initd = positions[1] - positions[0];
-    }
-    create();
-
-    function relax(i: number) {
-      let diff: number = positions[i + 1] - positions[i] - targd;
-      positions[i] += diff / 2;
-      positions[i + 1] -= diff / 2;
-    }
-
-    function work() {
-      relax(seg);
-      seg += 1;
-      if (seg === positions.length - 1) {
-        seg = 0;
-      }
-    }
-
-    let playing: boolean = false;
-    canvas.addEventListener('click', () => {
-      playing = !playing;
-    });
-    canvas.addEventListener('dblclick', () => {
-      playing = false;
-      create();
-    })
-
-
-    function looper() {
-      const time: number = new Date().getTime() / 1000;
-      const dt: number = Math.min(time - previousTime, 1); // Cap dt at 1 second
-      previousTime = time;
-      totalTime += dt;
-
-      if (Math.floor(totalTime * 5) > timeFloor && playing) {
-        work();
-        timeFloor = Math.floor(totalTime * 5);
-      }
-
-      clear(Colors.backgroundColor.value.toCSS(false));
-
-      for (let i: number = 0; i < positions.length - 1; ++i) {
-        const p1: number = positions[i];
-        const p2: number = positions[i + 1];
-        context.fillStyle = 'salmon';
-        context.fillRect(p1, 0, p2 - p1, canvas.height);
-        let perc: number = 1 - Math.abs(Math.abs(p2 - p1) - targd) / Math.abs(targd - initd);
-        if (perc < 0) {
-          context.fillStyle = `rgba(250, 138, 124, ${ -perc })`;
-          context.fillRect(p1, 0, p2 - p1, canvas.height);
-        } else {
-          context.fillStyle = `rgba(30, 144, 255, ${ perc })`;
-          context.fillRect(p1, 0, p2 - p1, canvas.height);
-        }
-      }
-
-      for (let x of positions) {
-        context.beginPath();
-        context.moveTo(x, 0);
-        context.lineTo(x, canvas.height);
-        context.strokeStyle = Colors.backgroundColor.value.toCSS(false);
-        context.lineWidth = 1;
-        context.stroke();
-      }
-
-      context.beginPath();
-      context.moveTo(positions[0], 0);
-      context.lineTo(positions[positions.length - 1], 0);
-      context.moveTo(positions[0], canvas.height);
-      context.lineTo(positions[positions.length - 1], canvas.height);
-      context.lineWidth = 1;
-      context.strokeStyle = Colors.backgroundColor.value.toCSS(false);
-      context.stroke();
-
-      window.requestAnimationFrame(looper);
-    }
-
-    looper();
+    this._states = [{
+      positions: positions,
+      segment: 0,
+      steps: 0
+    }];
   }
 
-  // Acquire the necessary HTML elements
-  let canvas: HTMLCanvasElement =
-    document.getElementById('canvas') as HTMLCanvasElement;
+  private getNextState({
+    positions, segment, steps
+  }: {
+    positions: Array<number>;
+    segment: number;
+    steps: number;
+  }): {
+    positions: Array<number>;
+    segment: number;
+    steps: number;
+  } {
+    const newPositions: Array<number> = [];
+    for (let i of positions) {
+      newPositions.push(i);
+    }
+    const i: number = segment;
+    const difference: number = newPositions[i + 1] - newPositions[i] - this._desiredSegmentLength;
+    newPositions[i] += difference / 2;
+    newPositions[i + 1] -= difference / 2;
 
-  makeWorld(canvas, canvas.clientWidth / 9, canvas.clientWidth / 18);
+    return {
+      positions: newPositions,
+      segment: (segment + 1) % (positions.length - 1),
+      steps: steps + 1
+    };
+  }
 
-  })();
+  public update(dt: number, _: number) {
+    if (paused || dragStartPosition !== undefined) {
+      this._timeElapsed = this._states.length * 0.05;
+      return;
+    }
+    this._timeElapsed += dt;
+    while (this._timeElapsed / 0.05 > this._states.length) {
+      this.next();
+    }
+  }
+
+  public next(): void {
+    this._states.push(this.getNextState(this._states[this._states.length - 1]));
+  }
+
+  public prev(): void {
+    if (this._states.length > 1) {
+      this._states.pop();
+    }
+  }
+
+  public draw(context: CanvasRenderingContext2D, _: Rectangle, __: Rectangle) {
+
+    const { positions } = this._states[this._states.length - 1];
+
+    for (let i = 0; i < positions.length - 1; ++i) {
+      const segmentLength: number = positions[i + 1] - positions[i];
+      const percentage: number = Math.abs(1 - segmentLength / this._desiredSegmentLength);
+      const color: Color = Colors.blueColor.mix(Colors.redColor, percentage);
+
+      context.fillStyle = color.toCSS();
+
+      const canvasBegin: number = canvas.canvasBounds.left + positions[i] * canvas.canvasBounds.width;
+      const canvasEnd: number = canvas.canvasBounds.left + positions[i + 1] * canvas.canvasBounds.width;
+
+      context.fillRect(Math.floor(canvasBegin), canvas.canvasBounds.top, Math.ceil(canvasEnd - canvasBegin), canvas.canvasBounds.height);
+    }
+
+  }
+}
+
+const canvas = new Canvas('canvas');
+canvas.canvasElement.style.cursor = 'pointer';
+let jakobsen = new Jakobsen();
+canvas.addObject(jakobsen);
+let paused: boolean = true;
+
+
+canvas.canvasElement.addEventListener('dblclick', (_: MouseEvent) => {
+  paused = true;
+  canvas.removeOBject(jakobsen);
+  jakobsen = new Jakobsen();
+  canvas.addObject(jakobsen);
+});
+
+let dragStartPosition: Vector2 | undefined = undefined;
+let stepsTaken: number = 0;
+canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
+  if (dragStartPosition === undefined) {
+    const [x, y] = [
+      event.pageX - canvas.canvasElement.offsetLeft,
+      event.pageY - canvas.canvasElement.offsetTop
+    ];
+    canvas.canvasElement.style.cursor = 'move';
+    dragStartPosition = new Vector2(x, y);
+    stepsTaken = 0;
+  }
+});
+
+canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
+
+  if (dragStartPosition !== undefined) {
+    const [x, y] = [
+      event.pageX - canvas.canvasElement.offsetLeft,
+      event.pageY - canvas.canvasElement.offsetTop
+    ];
+    const position: Vector2 = new Vector2(x, y);
+    const percentage: number = (position.x - dragStartPosition.x) / canvas.canvasBounds.width;
+    const steps: number = percentage / 0.01;
+    if (steps < 0) {
+      while (stepsTaken > steps) {
+        stepsTaken -= 1;
+        jakobsen.prev();
+      }
+      while (stepsTaken < steps) {
+        stepsTaken += 1;
+        jakobsen.next();
+      }
+    } else {
+      while (stepsTaken < steps) {
+        stepsTaken += 1;
+        jakobsen.next();
+      }
+      while (stepsTaken > steps) {
+        stepsTaken -= 1;
+        jakobsen.prev();
+      }
+    }
+  }
+});
+
+canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
+  if (dragStartPosition !== undefined) {
+    const [x, y] = [
+      event.pageX - canvas.canvasElement.offsetLeft,
+      event.pageY - canvas.canvasElement.offsetTop
+    ];
+    const position: Vector2 = new Vector2(x, y);
+    if (Math.abs(position.x - dragStartPosition.x) / canvas.canvasBounds.width > 0.01) {
+      paused = true;
+    } else {
+      paused = !paused;
+    }
+  }
+  canvas.canvasElement.style.cursor = 'pointer';
+  dragStartPosition = undefined;
+});
+
+
+
+})();
