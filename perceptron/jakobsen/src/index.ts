@@ -104,7 +104,7 @@ const canvas = new Canvas('canvas');
 canvas.canvasElement.style.cursor = 'pointer';
 let jakobsen = new Jakobsen();
 canvas.addObject(jakobsen);
-let paused: boolean = true;
+let paused: boolean = false;
 
 
 canvas.canvasElement.addEventListener('dblclick', (_: MouseEvent) => {
