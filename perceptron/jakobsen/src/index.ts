@@ -20,8 +20,8 @@ class Jakobsen extends CanvasObject {
     this._desiredSegmentLength = 0.1 / 2;
     this._timeElapsed = 0;
 
-    for (let i = 0; i < 1; i += 0.1) {
-      positions.push(i);
+    for (let i = 0; i < 11; i += 1) {
+      positions.push(i / 10);
     }
 
     this._states = [{
