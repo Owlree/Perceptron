@@ -359,7 +359,7 @@ canvas.addObject(softBody);
 let mouseDownParticle: VerletParticle | undefined = undefined;
 const HANDLE_RADIUS: number = 10;
 
-window.document.addEventListener('mousedown', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
   if (canvas.paused) return;
 
   const [x, y] = [
@@ -381,7 +381,7 @@ window.document.addEventListener('mousedown', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('mouseup', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
   if (mouseDownParticle !== undefined) {
     mouseDownParticle.fill = false;
     mouseDownParticle = undefined;
@@ -405,7 +405,7 @@ window.document.addEventListener('mouseup', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('mousemove', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
   if (canvas.paused) return;
 
   const [x, y] = [
@@ -435,8 +435,11 @@ window.document.addEventListener('mousemove', (event: MouseEvent) => {
   }
 });
 
-window.document.addEventListener('touchstart', (event: TouchEvent): void => {
+canvas.canvasElement.addEventListener('touchstart', (event: TouchEvent): void => {
   if (canvas.paused) return;
+
+  if (!event.cancelable) return;
+  event.preventDefault();
 
   const [x, y] = [
     event.touches[0].pageX - canvas.canvasElement.offsetLeft,
@@ -458,7 +461,7 @@ window.document.addEventListener('touchstart', (event: TouchEvent): void => {
   }
 });
 
-window.document.addEventListener('touchmove', (event: TouchEvent): void => {
+canvas.canvasElement.addEventListener('touchmove', (event: TouchEvent): void => {
   if (canvas.paused) return;
   if (!event.cancelable) return;
   event.preventDefault();
@@ -474,7 +477,7 @@ window.document.addEventListener('touchmove', (event: TouchEvent): void => {
   }
 });
 
-window.document.addEventListener('touchend', () => {
+canvas.canvasElement.addEventListener('touchend', () => {
   if (mouseDownParticle !== undefined) {
     mouseDownParticle.fill = false;
     mouseDownParticle = undefined;

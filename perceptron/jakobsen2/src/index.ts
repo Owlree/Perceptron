@@ -114,7 +114,7 @@ class Jakobsen extends CanvasObject {
       const percentage: number = (segmentLength - this._desiredSegmentLength) / (0.1 - this._desiredSegmentLength);
       const color: Color = Colors.blueColor.mix(Colors.redColor, percentage);
       context.strokeStyle = color.toCSS();
-      context.lineWidth = 10;
+      context.lineWidth = 5;
       context.lineCap = 'round';
 
       const p1: Vector2 = positions[i].coordinatesTransform(canvas.bounds, canvas.canvasBounds);
@@ -146,25 +146,57 @@ canvas.canvasElement.addEventListener('dblclick', (_: MouseEvent) => {
 let dragStartPosition: Vector2 | undefined = undefined;
 let stepsTaken: number = 0;
 canvas.canvasElement.addEventListener('mousedown', (event: MouseEvent) => {
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+  pressDown(new Vector2(x, y));
+});
+canvas.canvasElement.addEventListener('touchstart', (event: TouchEvent) => {
+
+  if (event.cancelable) {
+    event.preventDefault();
+  } else {
+    return;
+  }
+
+
+  const [x, y] = [
+    event.touches[0].pageX - canvas.canvasElement.offsetLeft,
+    event.touches[0].pageY - canvas.canvasElement.offsetTop
+  ];
+  pressDown(new Vector2(x, y));
+});
+function pressDown(position: Vector2) {
   if (dragStartPosition === undefined) {
-    const [x, y] = [
-      event.pageX - canvas.canvasElement.offsetLeft,
-      event.pageY - canvas.canvasElement.offsetTop
-    ];
     canvas.canvasElement.style.cursor = 'move';
-    dragStartPosition = new Vector2(x, y);
+    dragStartPosition = new Vector2(position.x, position.y);
     stepsTaken = 0;
   }
-});
+}
 
 canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
+  const [x, y] = [
+    event.pageX - canvas.canvasElement.offsetLeft,
+    event.pageY - canvas.canvasElement.offsetTop
+  ];
+  pressMove(new Vector2(x, y));
+});
+canvas.canvasElement.addEventListener('touchmove', (event: TouchEvent) => {
+  if (event.cancelable) {
+    event.preventDefault();
+  } else {
+    return;
+  }
 
+  const [x, y] = [
+    event.touches[0].pageX - canvas.canvasElement.offsetLeft,
+    event.touches[0].pageY - canvas.canvasElement.offsetTop
+  ];
+  pressMove(new Vector2(x, y));
+});
+function pressMove(position: Vector2) {
   if (dragStartPosition !== undefined) {
-    const [x, y] = [
-      event.pageX - canvas.canvasElement.offsetLeft,
-      event.pageY - canvas.canvasElement.offsetTop
-    ];
-    const position: Vector2 = new Vector2(x, y);
     const percentage: number = (position.x - dragStartPosition.x) / canvas.canvasBounds.width;
     const steps: number = percentage / 0.01;
     if (steps < 0) {
@@ -187,16 +219,14 @@ canvas.canvasElement.addEventListener('mousemove', (event: MouseEvent) => {
       }
     }
   }
-});
+}
 
-canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
+canvas.canvasElement.addEventListener('mouseup', pressUp);
+canvas.canvasElement.addEventListener('touchend', pressUp);
+
+function pressUp() {
   if (dragStartPosition !== undefined) {
-    const [x, y] = [
-      event.pageX - canvas.canvasElement.offsetLeft,
-      event.pageY - canvas.canvasElement.offsetTop
-    ];
-    const position: Vector2 = new Vector2(x, y);
-    if (Math.abs(position.x - dragStartPosition.x) / canvas.canvasBounds.width > 0.01) {
+    if (stepsTaken !== 0) {
       paused = true;
     } else {
       paused = !paused;
@@ -204,8 +234,6 @@ canvas.canvasElement.addEventListener('mouseup', (event: MouseEvent) => {
   }
   canvas.canvasElement.style.cursor = 'pointer';
   dragStartPosition = undefined;
-});
-
-
+}
 
 })();

@@ -101,6 +101,21 @@ export class Canvas {
         object.draw(this._context, this._bounds, this._canvasBounds);
       }
 
+      if (this._paused) {
+        this._context.fillStyle = Colors.mainColor.withAlpha(0.13).toCSS();
+        this._context.fillRect(this._canvasBounds.topLeft.x, this._canvasBounds.topLeft.y, this._canvasBounds.width, this._canvasBounds.height);
+
+        this._context.textBaseline = 'middle';
+        this._context.textAlign = 'center';
+        this._context.fillStyle = Colors.backgroundColor.toCSS();
+        this._context.font = '24px "Latin Modern Mono"';
+        this._context.shadowColor = Colors.mainColor.toCSS();
+        this._context.shadowBlur = 8;
+        this._context.fillText('EXPERIMENT PAUSED', this._canvasBounds.center.x, this._canvasBounds.center.y);
+        this._context.shadowColor = '';
+        this._context.shadowBlur = 0;
+      }
+
       window.requestAnimationFrame(loop);
     }
     loop();

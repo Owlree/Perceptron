@@ -70,18 +70,27 @@ var Canvas = /** @class */ (function () {
                     }
                     done += 1;
                 }
-                _this._objects.sort(function (a, b) { return (a.zIndex > b.zIndex) ? 1 : -1; });
-                for (var _b = 0, _c = _this._objects; _b < _c.length; _b++) {
-                    var object = _c[_b];
-                    object.draw(_this._context, _this._bounds, _this._canvasBounds);
-                }
             }
             else {
                 sentTime = new Date().getTime() / 1000.0;
             }
-            for (var _d = 0, _e = _this._objects; _d < _e.length; _d++) {
-                var object = _e[_d];
+            _this._objects.sort(function (a, b) { return (a.zIndex > b.zIndex) ? 1 : -1; });
+            for (var _b = 0, _c = _this._objects; _b < _c.length; _b++) {
+                var object = _c[_b];
                 object.draw(_this._context, _this._bounds, _this._canvasBounds);
+            }
+            if (_this._paused) {
+                _this._context.fillStyle = Colors.mainColor.withAlpha(0.13).toCSS();
+                _this._context.fillRect(_this._canvasBounds.topLeft.x, _this._canvasBounds.topLeft.y, _this._canvasBounds.width, _this._canvasBounds.height);
+                _this._context.textBaseline = 'middle';
+                _this._context.textAlign = 'center';
+                _this._context.fillStyle = Colors.backgroundColor.toCSS();
+                _this._context.font = '24px "Latin Modern Mono"';
+                _this._context.shadowColor = Colors.mainColor.toCSS();
+                _this._context.shadowBlur = 8;
+                _this._context.fillText('EXPERIMENT PAUSED', _this._canvasBounds.center.x, _this._canvasBounds.center.y);
+                _this._context.shadowColor = '';
+                _this._context.shadowBlur = 0;
             }
             window.requestAnimationFrame(loop);
         };

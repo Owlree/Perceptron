@@ -128,9 +128,6 @@ class Taylortan extends CanvasObject {
     context.fillText('f(t + Δt)', 0, 24 * sign);
     context.restore();
 
-    context.shadowColor = '';
-    context.shadowBlur = 0;
-
     if (Math.abs(pointCanvas.x - p1c.x) > 50) {
       // Draw f(x) text
       context.textBaseline = 'middle';
