@@ -136,12 +136,14 @@ canvas.addObject(jakobsen);
 let paused: boolean = true;
 
 
-canvas.canvasElement.addEventListener('dblclick', (_: MouseEvent) => {
+canvas.canvasElement.addEventListener('dblclick', reset);
+
+function reset() {
   paused = true;
   canvas.removeOBject(jakobsen);
   jakobsen = new Jakobsen();
   canvas.addObject(jakobsen);
-});
+}
 
 let dragStartPosition: Vector2 | undefined = undefined;
 let stepsTaken: number = 0;
@@ -159,7 +161,6 @@ canvas.canvasElement.addEventListener('touchstart', (event: TouchEvent) => {
   } else {
     return;
   }
-
 
   const [x, y] = [
     event.touches[0].pageX - canvas.canvasElement.offsetLeft,
@@ -224,12 +225,22 @@ function pressMove(position: Vector2) {
 canvas.canvasElement.addEventListener('mouseup', pressUp);
 canvas.canvasElement.addEventListener('touchend', pressUp);
 
+let lastUpTime: number | undefined = undefined;
+
 function pressUp() {
   if (dragStartPosition !== undefined) {
     if (stepsTaken !== 0) {
       paused = true;
     } else {
-      paused = !paused;
+      const now: number = new Date().getTime() / 1000.0;
+      if (lastUpTime !== undefined && now - lastUpTime < 0.5) {
+        reset();
+        lastUpTime = undefined;
+        paused = true;
+      } else {
+        lastUpTime = now;
+        paused = !paused;
+      }
     }
   }
   canvas.canvasElement.style.cursor = 'pointer';
