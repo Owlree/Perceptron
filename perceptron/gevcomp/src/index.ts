@@ -14,6 +14,22 @@ interface ParticleProps {
   velocity: Vector2;
 }
 
+function isGoner(position: Vector2): boolean {
+  const centerCanvas: Vector2 = new Vector2(0, 0).coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+  const positionCanvas: Vector2 = position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+  if (centerCanvas.distance(positionCanvas) <= 15) {
+    return true;
+  }
+  if (position.x < -canvas.bounds.width    ||
+      position.x > 2 * canvas.bounds.width ||
+      position.y < -canvas.bounds.height   ||
+      position.y > 2 * canvas.bounds.height)
+  {
+    return true;
+  }
+  return false;
+}
+
 class VerletParticle extends CanvasObject {
 
   private _active: boolean;
@@ -49,11 +65,11 @@ class VerletParticle extends CanvasObject {
     this._active = false;
   }
 
-  private getAcceleration(): Vector2 {
+  private getAcceleration(position: Vector2 = this._position): Vector2 {
 
     const magnitude: number = G * this._mass * M /
-      Math.pow(this._position.length(), 2);
-    const direction: Vector2 = this._position.normalize().multiply(-1);
+      Math.pow(position.length(), 2);
+    const direction: Vector2 = position.normalize().multiply(-1);
 
     return direction.multiply(magnitude);
   }
@@ -76,17 +92,7 @@ class VerletParticle extends CanvasObject {
       }
     }
 
-    const centerCanvas: Vector2 = new Vector2(0, 0).coordinatesTransform(canvas.bounds, canvas.canvasBounds);
-    const positionCanvas: Vector2 = this._position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
-    if (centerCanvas.distance(positionCanvas) <= 15) {
-      canvas.removeOBject(this);
-    }
-
-    if (this._position.x < -canvas.bounds.width    ||
-        this._position.x > 2 * canvas.bounds.width ||
-        this._position.y < -canvas.bounds.height   ||
-        this._position.y > 2 * canvas.bounds.height)
-    {
+    if (isGoner(this._position)) {
       canvas.removeOBject(this);
     }
   }
@@ -122,6 +128,31 @@ class VerletParticle extends CanvasObject {
       context.lineTo(triangleP1.x, triangleP1.y);
       context.closePath();
       context.fill();
+
+      let position = this._position;
+      let previousPosition = this._previousPosition;
+
+      for (let i = 1; i < 500; ++i) {
+
+        const position2: Vector2 = position;
+        position =
+          position.multiply(2)
+            .subtract(previousPosition)
+            .add(this.getAcceleration(position).multiply(Math.pow(1 / 60, 2)));
+        previousPosition = position2;
+
+        if (isGoner(position)) {
+          break;
+        }
+
+        if (i % 20 === 0) {
+          const positionCanvas: Vector2 = position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+          context.fillStyle = Colors.blueColor.withAlpha((500 - i) / 1000).toCSS();
+          context.beginPath();
+          context.arc(positionCanvas.x, positionCanvas.y, 10, 0, 2 * Math.PI);
+          context.fill();
+        }
+      }
     }
 
     context.fillStyle = Colors.blueColor.toCSS();
@@ -176,11 +207,11 @@ class EulerParticle extends CanvasObject {
     this._active = false;
   }
 
-  private getAcceleration(): Vector2 {
+  private getAcceleration(position: Vector2 = this._position): Vector2 {
 
     const magnitude: number = G * this._mass * M /
-      Math.pow(this._position.length(), 2);
-    const direction: Vector2 = this._position.normalize().multiply(-1);
+      Math.pow(position.length(), 2);
+    const direction: Vector2 = position.normalize().multiply(-1);
 
     return direction.multiply(magnitude);
   }
@@ -200,17 +231,7 @@ class EulerParticle extends CanvasObject {
     this._position = this._position.add(this._velocity.multiply(dt));
     this._velocity = this._velocity.add(acceleration.multiply(dt));
 
-    const centerCanvas: Vector2 = new Vector2(0, 0).coordinatesTransform(canvas.bounds, canvas.canvasBounds);
-    const positionCanvas: Vector2 = this._position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
-    if (centerCanvas.distance(positionCanvas) <= 15) {
-      canvas.removeOBject(this);
-    }
-
-    if (this._position.x < -canvas.bounds.width    ||
-      this._position.x > 2 * canvas.bounds.width ||
-      this._position.y < -canvas.bounds.height   ||
-      this._position.y > 2 * canvas.bounds.height)
-    {
+    if (isGoner(this._position)) {
       canvas.removeOBject(this);
     }
   }
@@ -220,7 +241,7 @@ class EulerParticle extends CanvasObject {
     const positionCanvas: Vector2 = this._position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
 
     if (!this._active) {
-      const velocity: Vector2 = this._velocity;
+      let velocity: Vector2 = this._velocity;
       const plusVelocity: Vector2 = this._position.add(velocity);
       const plusVelocityCanvas: Vector2 = plusVelocity.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
 
@@ -247,6 +268,27 @@ class EulerParticle extends CanvasObject {
       context.lineTo(triangleP1.x, triangleP1.y);
       context.closePath();
       context.fill();
+
+      let position = this._position;
+
+      for (let i = 1; i < 500; ++i) {
+
+        const acceleration: Vector2 = this.getAcceleration(position);
+        position = position.add(velocity.multiply(1 / 60));
+        velocity = velocity.add(acceleration.multiply(1 / 60));
+
+        if (isGoner(position)) {
+          break;
+        }
+
+        if (i % 20 === 0) {
+          const positionCanvas: Vector2 = position.coordinatesTransform(canvas.bounds, canvas.canvasBounds);
+          context.fillStyle = Colors.redColor.withAlpha((500 - i) / 1000).toCSS();
+          context.beginPath();
+          context.arc(positionCanvas.x, positionCanvas.y, 10, 0, 2 * Math.PI);
+          context.fill();
+        }
+      }
     }
 
     context.fillStyle = Colors.redColor.toCSS();

@@ -4,11 +4,14 @@ import { Colors, CanvasObject, Canvas, Rectangle, Vector2 } from 'vima';
 // Script scope
 (function() {
 
+const fn = (x: number) => Math.sin(x) / 2 + Math.sin(2 * x + 2) / 2;
+const fnd = (x: number) => Math.cos(x) / 2 + 2 * Math.cos(2 + 2 * x) / 2;
+
 
 class Taylortan extends CanvasObject {
 
-  private _x: number = -1.25;
-  public dx: number = 1;
+  private _x: number = 0;
+  public dx: number = 0.5;
   public fill: boolean = false;
   public fillError: boolean = false;
 
@@ -37,15 +40,15 @@ class Taylortan extends CanvasObject {
     context.lineWidth = 1;
     context.beginPath();
     for (let i = bounds.left; i <= bounds.right + 0.1; i += 0.1) {
-      const point = new Vector2(i, Math.sin(i)).coordinatesTransform(bounds, canvasBounds);
+      const point = new Vector2(i, fn(i)).coordinatesTransform(bounds, canvasBounds);
       context.lineTo(point.x, point.y);
     }
     context.stroke();
 
-    const point: Vector2 = new Vector2(this.x, Math.sin(this.x));
+    const point: Vector2 = new Vector2(this.x, fn(this.x));
     const pointCanvas: Vector2 = point.coordinatesTransform(bounds, canvasBounds);
 
-    const slope: Vector2 = new Vector2(1, Math.cos(this.x)).multiply(bounds.width);
+    const slope: Vector2 = new Vector2(1, fnd(this.x)).multiply(bounds.width);
 
     const t1: Vector2 = point.subtract(slope).coordinatesTransform(bounds, canvasBounds);
     const t2: Vector2 = point.add(slope).coordinatesTransform(bounds, canvasBounds);
@@ -69,8 +72,8 @@ class Taylortan extends CanvasObject {
     context.fill();
     context.stroke();
 
-    const p1: Vector2 = new Vector2(this.x + this.dx, Math.sin(this.x + this.dx));
-    const p2: Vector2 = new Vector2(this.x + this.dx, Math.sin(this.x) + this.dx * Math.cos(this.x));
+    const p1: Vector2 = new Vector2(this.x + this.dx, fn(this.x + this.dx));
+    const p2: Vector2 = new Vector2(this.x + this.dx, fn(this.x) + this.dx * fnd(this.x));
     const p1c: Vector2 = p1.coordinatesTransform(bounds, canvasBounds);
     const p2c: Vector2 = p2.coordinatesTransform(bounds, canvasBounds);
 
@@ -109,22 +112,22 @@ class Taylortan extends CanvasObject {
 
     context.save();
     context.translate(p2c.x, p2c.y);
-    context.rotate(-Math.atan(Math.cos(this.x)));
+    context.rotate(-Math.atan(fnd(this.x)));
     context.fillStyle = Colors.mainColor.toCSS();
     context.textBaseline = 'middle';
     context.textAlign = 'center';
-    context.font = 'italic 19px "Latin Modern Roman"';
+    context.font = '19px "Latin Modern Roman"';
     context.fillText('f(t) + Δt f\'(t)', 0, -24 * sign);
     context.restore();
 
 
     context.save();
     context.translate(p1c.x, p1c.y);
-    context.rotate(-Math.atan(Math.cos(p1.x)));
+    context.rotate(-Math.atan(fnd(p1.x)));
     context.fillStyle = Colors.mainColor.toCSS();
     context.textBaseline = 'middle';
     context.textAlign = 'center';
-    context.font = 'italic 19px "Latin Modern Roman"';
+    context.font = '19px "Latin Modern Roman"';
     context.fillText('f(t + Δt)', 0, 24 * sign);
     context.restore();
 
@@ -133,21 +136,21 @@ class Taylortan extends CanvasObject {
       context.textBaseline = 'middle';
       context.fillStyle = Colors.mainColor.toCSS();
       context.textAlign = 'center';
-      context.font = 'italic 19px "Latin Modern Roman"';
+      context.font = '19px "Latin Modern Roman"';
       context.fillText('f(t)', pointCanvas.x, pointCanvas.y - 30);
     }
   }
 
   public get point(): Vector2 {
-    return new Vector2(this.x, Math.sin(this.x));
+    return new Vector2(this.x, fn(this.x));
   }
 
   public get errorPoint1(): Vector2 {
-    return new Vector2(this.x + this.dx, Math.sin(this.x + this.dx));
+    return new Vector2(this.x + this.dx, fn(this.x + this.dx));
   }
 
   public get errorPoint2(): Vector2 {
-    return new Vector2(this.x + this.dx, Math.sin(this.x) + this.dx * Math.cos(this.x));
+    return new Vector2(this.x + this.dx, fn(this.x) + this.dx * fnd(this.x));
   }
 
   public matchesError(p1: Vector2): boolean {
