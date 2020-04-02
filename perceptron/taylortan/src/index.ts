@@ -4,14 +4,14 @@ import { Colors, CanvasObject, Canvas, Rectangle, Vector2 } from 'vima';
 // Script scope
 (function() {
 
-const fn = (x: number) => Math.sin(x) / 2 + Math.sin(2 * x + 2) / 2;
-const fnd = (x: number) => Math.cos(x) / 2 + 2 * Math.cos(2 + 2 * x) / 2;
+const fn = (x: number) => Math.cos(x) + x / 5 - 0.5;
+const fnd = (x: number) => -Math.sin(x) + 1 / 5;
 
 
 class Taylortan extends CanvasObject {
 
-  private _x: number = 0;
-  public dx: number = 0.5;
+  private _x: number = -0.1;
+  public dx: number = 1.5;
   public fill: boolean = false;
   public fillError: boolean = false;
 
@@ -161,7 +161,7 @@ class Taylortan extends CanvasObject {
 }
 
 const canvas: Canvas = new Canvas('canvas');
-canvas.scale = 3;
+canvas.scale = 5;
 const taylortan = new Taylortan();
 canvas.addObject(taylortan);
 
