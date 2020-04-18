@@ -1,0 +1,30 @@
+{
+  "version": 0.2,
+  "phases": {
+    "install": {
+      "commands": [
+        "cd vima",
+        "npm install",
+        "cd ..",
+        "cd perceptron",
+        "npm run installAll",
+        "cd .."
+      ]
+    },
+    "build": {
+      "commands": [
+        "cd vima",
+        "npm run build",
+        "cd ..",
+        "cd perceptron",
+        "npm run buildAll"
+      ]
+    }
+  },
+  "artifacts": {
+    "files": [
+      "**/*"
+    ],
+    "base-directory": "perceptron/_dist"
+  }
+}

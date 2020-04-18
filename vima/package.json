@@ -2,14 +2,14 @@
   "name": "vima",
   "version": "0.0.7",
   "description": "Visualising mathematics in the browser",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "",
   "license": "ISC",
   "repository": {
     "url": "https://github.com/Owlree/Perceptron",
     "directory": "vima"
+  },
+  "scripts": {
+    "build": "node_modules/.bin/tsc"
   },
   "keywords": [
     "mathematics",
