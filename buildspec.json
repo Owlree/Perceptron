@@ -7,7 +7,7 @@
         "npm install",
         "cd ..",
         "cd perceptron",
-        "npm run installAll",
+        "npm run installall",
         "cd .."
       ]
     },
@@ -17,7 +17,7 @@
         "npm run build",
         "cd ..",
         "cd perceptron",
-        "npm run buildAll"
+        "npm run buildall"
       ]
     }
   },
