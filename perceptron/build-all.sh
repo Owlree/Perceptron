@@ -2,46 +2,36 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-echo "
-         ______________
-        /             /|
-       /             / |
-      /____________ /  |
-     | ___________ |   |
-     || Building  ||   |
-     ||   all     ||   |
-     ||     demos ||   |
-     ||___________||   |
-     |   _______   |  /
-    /|  (_______)  | /
-   ( |_____________|/
-"
+# Prin empty line for output readability
+echo ""
 
+echo "  Removing _dist directory"
 rm -rf _dist
+echo "    _dist directory removed successfully"
+echo ""
+
+echo "  Building all experiments"
 
 for d in */ ; do
   cd "$d"
-  echo "
-  ♫ building $d ♫
-       _________
-     _|_________|_
-    /             \\
-   | ###       ### |
-   | ###       ### |
-    \_____________/
-"
-  npm run build
+  echo "    Building $d"
+  npm run build > /dev/null # Only print errors
   cd ..
 done
 
-for d in */ ; do
-  mkdir -p "_dist/$d"
-  cp -r "$d/dist/." "_dist/$d/"
+echo "  All experiments build successfully"
+echo ""
+
+echo "  Combining all outputs"
+
+for directory in */ ; do
+  printf "    %-24s to %s\n" "Copying ${directory}dist/" "_dist/$directory"
+  mkdir -p "_dist/$directory"
+  cp -r "${directory}dist/" "_dist/$directory/"
 done
 
-cd _dist
-echo '<h1>Perceptron</h1>' > index.html
+echo "  Outputs combined successfully"
+echo ""
 
-for d in */ ; do
-  echo "<a href='$d'>$d</a>" >> index.html
-done
+echo "  SUCCESS"
+echo ""

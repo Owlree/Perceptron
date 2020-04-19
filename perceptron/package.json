@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "installAll": "./install-all.sh",
-    "buildAll": "./build-all.sh",
+    "installall": "./install-all.sh",
+    "buildall": "./build-all.sh",
     "serve": "python3 -m http.server 8081 --directory _dist"
   },
   "author": "",

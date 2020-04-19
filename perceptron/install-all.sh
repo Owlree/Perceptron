@@ -2,34 +2,20 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-echo "
-         ______________
-        /             /|
-       /             / |
-      /____________ /  |
-     | ___________ |   |
-     ||Installing ||   |
-     ||   all     ||   |
-     ||     demos ||   |
-     ||___________||   |
-     |   _______   |  /
-    /|  (_______)  | /
-   ( |_____________|/
-"
+echo ""
 
-rm -rf _dist
+echo "  Installing dependencies for all experiments"
 
-for d in */ ; do
-  cd "$d"
-  echo "
-  ♫ installing $d ♫
-       _________
-     _|_________|_
-    /             \\
-   | ###       ### |
-   | ###       ### |
-    \_____________/
-"
-  npm install
+for directory in */ ; do
+  cd "$directory"
+  echo "    Installing dependencies in $directory"
+
+  npm install > /dev/null # Only print errors
   cd ..
 done
+
+echo "  All dependencies installes successfully"
+echo ""
+
+echo "  SUCCESS"
+echo ""
