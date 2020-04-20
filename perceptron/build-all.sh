@@ -25,9 +25,9 @@ echo ""
 echo "  Combining all outputs"
 
 for directory in */ ; do
-  printf "    %-24s to %s\n" "Copying ${directory}dist/" "_dist/$directory"
+  printf "    %-24s to %s\n" "Copying ${directory}dist/." "_dist/$directory"
   mkdir -p "_dist/$directory"
-  cp -r "${directory}dist/" "_dist/$directory/"
+  cp -r "${directory}dist/." "_dist/$directory/"
 done
 
 echo "  Outputs combined successfully"
