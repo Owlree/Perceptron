@@ -11,6 +11,8 @@
   "author": "owlree128@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "@types/mathjs": "^6.0.5",
+    "mathjs": "^6.6.4",
     "vima": "file:../../vima"
   },
   "devDependencies": {
