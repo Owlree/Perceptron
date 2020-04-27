@@ -12,15 +12,55 @@
       body {
         overflow: hidden;
         margin: 0;
+        font-family: 'Latin Modern Mono';
       }
       canvas[resize] {
         width: 100vw;
         height: 100vh;
+      }
+
+      #controls {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 3em;
+      }
+
+      @media(prefers-color-scheme: dark) {
+        body {
+          color: white;
+        }
+      }
+
+      td {
+        padding: 0.1em 1em;
+      }
+
+      td:nth-child(2) {
+        text-align: right;
       }
     </style>
 </head>
 
 <body>
   <canvas id='canvas' resize></canvas>
+  <div id='controls'>
+
+    <table>
+
+      <tr><td><input value='-120'  type='range' id='left'   min='-200'  max='200'  step='1'   /></td><td><span id='vleft'  ></span></td><td>Left  </td></tr>
+      <tr><td><input value='120'   type='range' id='right'  min='-200'  max='200'  step='1'   /></td><td><span id='vright' ></span></td><td>Right </td></tr>
+      <tr><td><input value='-120'  type='range' id='bottom' min='-200'  max='200'  step='1'   /></td><td><span id='vbottom'></span></td><td>Bottom</td></tr>
+      <tr><td><input value='120'   type='range' id='top'    min='-200'  max='200'  step='1'   /></td><td><span id='vtop'   ></span></td><td>Top   </td></tr>
+      <tr><td><input value='-117'  type='range' id='near'   min='-400'  max='0'    step='1'   /></td><td><span id='vnear'  ></span></td><td>Near  </td></tr>
+      <tr><td><input value='-1000' type='range' id='far'    min='-1000' max='0'    step='1'   /></td><td><span id='vfar'   ></span></td><td>Far   </td></tr>
+      <tr><td><input value='0'     type='range' id='ea'     min='-3.14' max='3.14' step='0.01'/></td><td><span id='vea'    ></span></td><td>Eye α</td></tr>
+      <tr><td><input value='0'     type='range' id='er'     min='0'     max='100'  step='1'   /></td><td><span id='ver'    ></span></td><td>Eye r</td></tr>
+      <tr><td><input value='50'    type='range' id='ey'     min='-200'  max='200'  step='1'   /></td><td><span id='vey'    ></span></td><td>Eye Y</td></tr>
+
+    </table>
+
+  </div>
 </body>
 </html>
