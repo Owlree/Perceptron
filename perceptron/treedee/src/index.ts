@@ -148,7 +148,7 @@ class Treedee extends CanvasObject {
     const gaze: mj.Matrix = mj.multiply(this._eye, -1);
     const cameraBase = Treedee.makeBase(gaze, this._viewUp);
 
-    const matrixCamera = mj.multiply(
+    const matrixViewport = mj.multiply(
 
       // Change of coordinates
       mj.matrix([
@@ -175,14 +175,23 @@ class Treedee extends CanvasObject {
       [0, 0,     1,      0]
     ]);
 
+    const matrixFlipY = mj.matrix([
+      [ 1,  0, 0, 0 ],
+      [ 0, -1, 0, 0 ],
+      [ 0,  0, 1, 0 ],
+      [ 0,  0, 0, 1 ]
+    ]);
+
     // Final 3D to 2D projection matrix
     const M = mj.multiply(
       mj.multiply(
         mj.multiply(
-          matrixCubeToScreen,
-          matrixOrtographicProjection),
-        matrixPespectiveProjection),
-      matrixCamera);
+          mj.multiply(
+            matrixCubeToScreen,
+            matrixOrtographicProjection),
+          matrixPespectiveProjection),
+        matrixFlipY),
+      matrixViewport);
 
 
     for (let segment of segments) {
@@ -206,11 +215,11 @@ class Treedee extends CanvasObject {
 
       context.moveTo(
         screenPositionFrom.get([0]),
-        canvas.canvasBounds.height - screenPositionFrom.get([1]));
+        screenPositionFrom.get([1]));
 
       context.lineTo(
         screenPositionTo.get([0]),
-        canvas.canvasBounds.height - screenPositionTo.get([1]));
+        screenPositionTo.get([1]));
 
       context.stroke();
 
@@ -220,14 +229,14 @@ class Treedee extends CanvasObject {
         context.beginPath();
         context.arc(
           screenPositionFrom.get([0]),
-          canvas.canvasBounds.height - screenPositionFrom.get([1]),
+          screenPositionFrom.get([1]),
           5, 0, 2 * Math.PI);
         context.fill();
 
         context.beginPath();
         context.arc(
           screenPositionTo.get([0]),
-          canvas.canvasBounds.height - screenPositionTo.get([1]),
+          screenPositionTo.get([1]),
           5, 0, 2 * Math.PI);
         context.fill();
       }
