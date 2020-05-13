@@ -1,7 +1,7 @@
 import { Rectangle } from "./rectangle";
 /**
  * A simple immutable two-dimensional vector class that can represent points,
- * sizes, etc.
+ * directions, sizes, etc.
  */
 export declare class Vector2 {
     readonly x: number;

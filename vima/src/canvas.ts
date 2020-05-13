@@ -155,4 +155,12 @@ export class Canvas {
   public get paused(): boolean {
     return this._paused;
   }
+
+  public btc(v: Vector2) {
+    return v.coordinatesTransform(this.bounds, this.canvasBounds);
+  }
+
+  public ctb(v: Vector2) {
+    return v.coordinatesTransform(this.canvasBounds, this.bounds);
+  }
 }

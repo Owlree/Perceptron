@@ -21,6 +21,16 @@ export let redColor: Color = new Color(250, 128, 114);
 export let blueColor: Color = new Color(30, 144, 255);
 
 /**
+ * A green shade to be used for highlighting various objects.
+ */
+export let greenColor: Color = new Color(95, 173, 86);
+
+/**
+ * A green shade to be used for highlighting various objects.
+ */
+export let yellowColor: Color = new Color(255, 186, 8);
+
+/**
  * Changes all colors to dark their dark mode.
  */
 function activateDarkMode(): void {

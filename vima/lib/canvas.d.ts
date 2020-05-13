@@ -1,5 +1,6 @@
 import { CanvasObject } from './canvasobject';
 import { Rectangle } from './rectangle';
+import { Vector2 } from './vector2';
 export declare class Canvas {
     private _bounds;
     private _canvasBounds;
@@ -21,5 +22,7 @@ export declare class Canvas {
     play(): void;
     pause(): void;
     get paused(): boolean;
+    btc(v: Vector2): Vector2;
+    ctb(v: Vector2): Vector2;
 }
 //# sourceMappingURL=canvas.d.ts.map

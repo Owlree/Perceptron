@@ -18,6 +18,14 @@ exports.redColor = new color_1.Color(250, 128, 114);
  */
 exports.blueColor = new color_1.Color(30, 144, 255);
 /**
+ * A green shade to be used for highlighting various objects.
+ */
+exports.greenColor = new color_1.Color(95, 173, 86);
+/**
+ * A green shade to be used for highlighting various objects.
+ */
+exports.yellowColor = new color_1.Color(255, 186, 8);
+/**
  * Changes all colors to dark their dark mode.
  */
 function activateDarkMode() {

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * A simple immutable two-dimensional vector class that can represent points,
- * sizes, etc.
+ * directions, sizes, etc.
  */
 var Vector2 = /** @class */ (function () {
     function Vector2(x, y) {

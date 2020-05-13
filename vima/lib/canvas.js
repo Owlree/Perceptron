@@ -139,6 +139,12 @@ var Canvas = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Canvas.prototype.btc = function (v) {
+        return v.coordinatesTransform(this.bounds, this.canvasBounds);
+    };
+    Canvas.prototype.ctb = function (v) {
+        return v.coordinatesTransform(this.canvasBounds, this.bounds);
+    };
     return Canvas;
 }());
 exports.Canvas = Canvas;
