@@ -29,6 +29,8 @@ class Raste extends CanvasObject {
   public animating: boolean = true;
   public colorMode: ColorMode = ColorMode.Vertex;
   public drawWireframe: boolean = true;
+  public drawPixelDot: boolean = true;
+  public pixelDotRadius: number = 2;
   public pixelSize: number = 1.0;
   public speed: number = 1;
   public triangles: Array<Array<number>> = [];
@@ -82,21 +84,6 @@ class Raste extends CanvasObject {
   private static Area2(a: Vector2, b: Vector2, c: Vector2) {
     return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
   }
-
-  /**
-   * @param a
-   * @param b
-   * @param u
-   * @param v
-   *
-   * @returns Wether {@param u} and {@param v} are on the same side of the line
-   *          determine by the points {@param a} and {@param b}
-   */
-  // private static SameSide(a: Vector2, b: Vector2, u: Vector2, v: Vector2) {
-  //   const a1 = Raste.Area2(a, b, u);
-  //   const a2 = Raste.Area2(a, b, v);
-  //   return a1 * a2 > 0;
-  // }
 
   private IsTopEdge(t: Array<number>, a: number, b: number) {
     return  this.vertices[t[a]].y === this.vertices[t[b]].y &&
@@ -159,8 +146,6 @@ class Raste extends CanvasObject {
           }
         }
 
-        // draw = (a > 0 && b > 0 && c > 0);
-
         if (draw) { // (is the point strictly inside the triangle?)
 
           // Coordinates of the pixel in canvas space
@@ -208,10 +193,12 @@ class Raste extends CanvasObject {
             Math.ceil(to.x - from.x), Math.ceil(to.y - from.y));
 
           // Draw a dot in the center of the pixel
-          context.fillStyle = color.withAlpha(alpha).toCSS();
-          context.beginPath();
-          context.arc(pixel.x, pixel.y, 3, 0, 2 * Math.PI);
-          context.fill();
+          if (this.drawPixelDot) {
+            context.fillStyle = color.withAlpha(alpha).toCSS();
+            context.beginPath();
+            context.arc(pixel.x, pixel.y, this.pixelDotRadius, 0, 2 * Math.PI);
+            context.fill();
+          }
         }
       }
     }
@@ -278,7 +265,7 @@ class Raste extends CanvasObject {
             if (this.colorMode == ColorMode.Vertex) {
               const W = 100;
               for (let k = 1; k <= W; k += 1) {
-                context.lineWidth = 2;
+                context.lineWidth = 1;
                 if (this.colorMode === ColorMode.Vertex) {
                   context.strokeStyle = Raste.GetColor(triangle[i]).mix(
                     Raste.GetColor(triangle[j]), k / W).toCSS();
@@ -346,7 +333,7 @@ class Raste extends CanvasObject {
 
         if (tris.length === 0) {
           context.strokeStyle = Colors.mainColor.toCSS();
-          context.lineWidth = 2;
+          context.lineWidth = 1;
           context.beginPath();
           context.arc(p.x, p.y, 10, 0, 2 * Math.PI);
           if (this.vertexSelected === i) {
@@ -399,7 +386,7 @@ class Raste extends CanvasObject {
 }
 
 const canvas: Canvas = new Canvas('canvas');
-canvas.scale = 20;
+canvas.scale = 22;
 const raste = new Raste();
 canvas.addObject(raste);
 
@@ -455,6 +442,18 @@ if ('config' in params) {
       vertices.push(new Vector2(v[0], v[1]));
     }
     raste.vertices = vertices;
+  }
+
+  if ('pixelDot' in config && typeof(config['pixelDot'] === 'boolean')) {
+    raste.drawPixelDot = config['pixelDot'];
+  }
+
+  if ('pixelDotRadius' in config && typeof(config['pixelDotRadius'] === 'boolean')) {
+    raste.pixelDotRadius = config['pixelDotRadius'];
+  }
+
+  if ('iscale' in config && typeof(config['iscale'] === 'number')) {
+    canvas.scale = config['iscale'];
   }
 }
 
