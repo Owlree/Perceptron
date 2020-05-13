@@ -30,7 +30,6 @@ class Raste extends CanvasObject {
   public colorMode: ColorMode = ColorMode.Vertex;
   public drawWireframe: boolean = true;
   public pixelSize: number = 1.0;
-  public referencePoint: Vector2 = new Vector2(-7, 7);
   public speed: number = 1;
   public triangles: Array<Array<number>> = [];
   public vertices: Array<Vector2> = [];
@@ -254,12 +253,6 @@ class Raste extends CanvasObject {
   public draw(context: CanvasRenderingContext2D,
               _: Rectangle, __: Rectangle)
   {
-    const rpc = canvas.btc(this.referencePoint);
-    context.strokeStyle = 'black';
-    context.beginPath();
-    context.arc(rpc.x, rpc.y, 10, 0, 2 * Math.PI);
-    context.stroke();
-
     for (let triangle of this.triangles) {
 
       this.Rasterize(context, triangle);
