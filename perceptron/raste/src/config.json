@@ -1,0 +1,28 @@
+{
+  "wireframe": true,
+  "colorMode": "triangle",
+  "pixelSize": 0.75,
+  "pixelDot": true,
+  "pixelDotRadius": 1.3,
+  "iscale": 10,
+  "animation": {
+    "onLoad": false,
+    "speed": 0.5
+  },
+  "vertices": [
+    [ 0,  0],
+    [ 4,  4],
+    [ 4, -4],
+    [-4,  4],
+    [-4, -4],
+    [-4, 0],
+    [-8, 0],
+
+  ],
+  "triangles": [
+    [0, 1, 2],
+    [0, 1, 3],
+    [0, 3, 4],
+    [0, 4, 2]
+  ]
+}

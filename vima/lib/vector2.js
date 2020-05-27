@@ -47,6 +47,9 @@ var Vector2 = /** @class */ (function () {
     Vector2.prototype.subtract = function (v) {
         return new Vector2(this.x - v.x, this.y - v.y);
     };
+    Vector2.prototype.interpolate = function (v, r) {
+        return new Vector2(this.x * (1 - r) + v.x * r, this.y * (1 - r) + v.y * r);
+    };
     Vector2.prototype.coordinatesTransform = function (from, to) {
         var _a = [this.x, this.y], x = _a[0], y = _a[1];
         x -= from.center.x;

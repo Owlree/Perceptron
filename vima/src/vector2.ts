@@ -55,6 +55,13 @@ export class Vector2 {
     return new Vector2(this.x - v.x, this.y - v.y);
   }
 
+  public interpolate(v: Vector2, r: number): Vector2 {
+    return new Vector2(
+      this.x * (1 - r) + v.x * r,
+      this.y * (1 - r) + v.y * r
+    );
+  }
+
   public coordinatesTransform(from: Rectangle, to: Rectangle): Vector2 {
     let [x, y] = [this.x, this.y];
 

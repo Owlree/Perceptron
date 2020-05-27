@@ -25,6 +25,7 @@ export declare class Vector2 {
     normalize(): Vector2;
     length(): number;
     subtract(v: Vector2): Vector2;
+    interpolate(v: Vector2, r: number): Vector2;
     coordinatesTransform(from: Rectangle, to: Rectangle): Vector2;
     middle(to: Vector2): Vector2;
 }
